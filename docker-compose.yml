@@ -1,0 +1,34 @@
+version: '2'
+services:
+  evosim-server:
+    container_name: evosim-server
+    hostname: evosim-server.docker
+    build:
+      context: ./server/evosim-backend/
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - "5000:5000"
+      - "9229:9229"
+    networks:
+      - evosim-net
+    restart: unless-stopped
+  evosim-client:
+    container_name: evosim-client
+    hostname: evosim-client.docker
+    build:
+      context: ./client/evosim-frontend/
+      dockerfile: ./Dockerfile
+    command: npm run start
+    environment:
+      SERVERHOST: evosim-server
+    ports:
+      - "8000:8000"
+    networks:
+      - evosim-net
+    depends_on:
+      - evosim-server
+    restart: unless-stopped
+networks:
+  evosim-net:
+    driver: bridge
