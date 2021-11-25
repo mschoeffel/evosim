@@ -1,0 +1,218 @@
+<template>
+  <div class="h-full grid grid-cols-2 gap-2">
+    <div id="canvasParent" class="h-full w-full border-solid border-4 border-black">
+      <div id="p5Canvas" class="w-full h-full justify-center items-center flex"></div>
+    </div>
+    <div class="h-full w-full grid grid-rows-4 grid-cols-2 grid-flow-row gap-2">
+      <div class="border-solid border-4 border-black container mx-auto px-4 py-4">
+        <GlobalDetailsText></GlobalDetailsText>
+      </div>
+      <div class="border-solid border-4 border-black">
+        <div class="sm:hidden">
+          <label class="sr-only">Select a tab</label>
+          <select id="tabs" v-model="currentTab" class="block w-full focus:ring-black focus:border-black border-gray-300 rounded-md">
+            <option key="GlobalStatsMaxEnergy" :selected="currentTab === 'GlobalStatsMaxEnergy'">Max Energy</option>
+            <option key="GlobalStatsAvgEnergy" :selected="currentTab === 'GlobalStatsAvgEnergy'">Avg Energy</option>
+            <option key="GlobalStatsMaxGeneration" :selected="currentTab === 'GlobalStatsMaxGeneration'">Max
+              Generation
+            </option>
+            <option key="GlobalStatsAvgGeneration" :selected="currentTab === 'GlobalStatsAvgGeneration'">Avg
+              Generation
+            </option>
+          </select>
+        </div>
+        <div class="hidden sm:block">
+          <nav aria-label="Tabs" class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200">
+            <a key="GlobalStatsMaxEnergy" :aria-current="currentTab === 'GlobalStatsMaxEnergy' ? 'page' : undefined"
+               :class="[currentTab === 'GlobalStatsMaxEnergy' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
+               href="#"
+               @click="currentTab = 'GlobalStatsMaxEnergy'">
+              <span>Max Energy</span>
+              <span :class="[currentTab === 'GlobalStatsMaxEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                    aria-hidden="true"/>
+            </a>
+            <a key="GlobalStatsAvgEnergy" :aria-current="currentTab === 'GlobalStatsAvgEnergy' ? 'page' : undefined"
+               :class="[currentTab === 'GlobalStatsAvgEnergy' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
+               href="#"
+               @click="currentTab = 'GlobalStatsAvgEnergy'">
+              <span>Avg Energy</span>
+              <span :class="[currentTab === 'GlobalStatsAvgEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                    aria-hidden="true"/>
+            </a>
+            <a key="GlobalStatsMaxGeneration" :aria-current="currentTab === 'GlobalStatsMaxGeneration' ? 'page' : undefined"
+               :class="[currentTab === 'GlobalStatsMaxGeneration' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
+               href="#"
+               @click="currentTab = 'GlobalStatsMaxGeneration'">
+              <span>Max Generation</span>
+              <span :class="[currentTab === 'GlobalStatsMaxGeneration' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                    aria-hidden="true"/>
+            </a>
+            <a key="GlobalStatsAvgGeneration" :aria-current="currentTab === 'GlobalStatsAvgGeneration' ? 'page' : undefined"
+               :class="[currentTab === 'GlobalStatsAvgGeneration' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
+               href="#"
+               @click="currentTab = 'GlobalStatsAvgGeneration'">
+              <span>Avg Generation</span>
+              <span :class="[currentTab === 'GlobalStatsAvgGeneration' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                    aria-hidden="true"/>
+            </a>
+          </nav>
+        </div>
+        <div>
+          <GlobalStatsMaxEnergy v-if="currentTab === 'GlobalStatsMaxEnergy'" :colors="colors" :creatures="blobs"
+                                :populations="populations"></GlobalStatsMaxEnergy>
+          <GlobalStatsAvgEnergy v-if="currentTab === 'GlobalStatsAvgEnergy'" :colors="colors" :creatures="blobs"
+                                :populations="populations"></GlobalStatsAvgEnergy>
+          <GlobalStatsMaxGeneration v-if="currentTab === 'GlobalStatsMaxGeneration'" :colors="colors" :creatures="blobs"
+                                    :populations="populations"></GlobalStatsMaxGeneration>
+          <GlobalStatsAvgGeneration v-if="currentTab === 'GlobalStatsAvgGeneration'" :colors="colors" :creatures="blobs"
+                                    :populations="populations"></GlobalStatsAvgGeneration>
+        </div>
+      </div>
+      <div class="row-span-2 col-span-2 border-solid border-4 border-black">
+        <CreatureNetDetail :selected-creature="selectedCreature"></CreatureNetDetail>
+      </div>
+      <div class="border-solid border-4 border-black container mx-auto px-4 py-4">
+        <CreatureDetailsText :colors="colors" :creature="selectedCreature"></CreatureDetailsText>
+      </div>
+      <div class="border-solid border-4 border-black container">
+        <CreatureRanking :colors="colors" :creatures="blobs" @selectCreature="setSelectedById"></CreatureRanking>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script lang="ts">
+import {io} from "socket.io-client";
+import Vue from "vue";
+import {MapClient} from "~/models/map.client";
+import {MapClientDto} from "~/models/dto/map.client.dto";
+import {BlobClient} from "~/models/blob.client";
+import {BlobClientDto} from "~/models/dto/blob.client.dto";
+import CreatureDetailsText from "~/components/CreatureDetailsText.vue";
+import GlobalDetailsText from "~/components/GlobalDetailsText.vue";
+import CreatureNetDetail from "~/components/CreatureNetDetail.vue";
+import GlobalStatsMaxGeneration from "~/components/GlobalStatsMaxGeneration.vue";
+import GlobalStatsMaxEnergy from "~/components/GlobalStatsMaxEnergy.vue";
+import GlobalStatsAvgEnergy from "~/components/GlobalStatsAvgEnergy.vue";
+import GlobalStatsAvgGeneration from "~/components/GlobalStatsAvgGeneration.vue";
+import CreatureRanking from "~/components/CreatureRanking.vue";
+
+let pixel: any;
+if (process.browser) {
+  pixel = require("@/js/graphic.js");
+}
+
+export default Vue.extend({
+  name: "Map",
+  components: {
+    CreatureRanking,
+    GlobalStatsAvgEnergy,
+    GlobalStatsMaxEnergy,
+    GlobalStatsAvgGeneration,
+    GlobalStatsMaxGeneration, CreatureNetDetail, GlobalDetailsText, CreatureDetailsText
+  },
+  data(): {
+    message: string,
+    selectedX: number,
+    selectedY: number,
+    selectedId: string,
+    selectedCreature: BlobClient | undefined,
+    map: MapClient | undefined,
+    blobs: Array<BlobClient>,
+    p5: {} | undefined,
+    colors: Array<string>,
+    currentTab: string,
+    populations: number,
+  } {
+    return {
+      message: "",
+      selectedX: 0,
+      selectedY: 0,
+      selectedId: "",
+      selectedCreature: undefined,
+      map: undefined,
+      blobs: [],
+      p5: undefined,
+      colors: [
+        '#F2E205',
+        '#05AFF2',
+        '#F250A9',
+        '#F26E22',
+        '#990FBF'
+      ],
+      currentTab: "GlobalStatsMaxEnergy",
+      populations: 5,
+    };
+  },
+  mounted() {
+    const P5 = require("p5");
+
+
+    // DEBUG: console.log("Starting connection to WebSocket Server");
+    // DEBUG: console.log("Base URL: " + process.env.baseUrl);
+    // DEBUG: console.log("Port: " + process.env.PORT);
+
+    pixel.setUpdateCurrentSelected(this.setSelected)
+
+    const socket = io(`localhost:5000`, {transports: ['websocket']}); // http://evosim-server.herokuapp.com
+
+    socket.on("connect", () => {
+      // DEBUG: console.log("Connected to WebSocket Server!");
+      this.p5 = new P5(pixel.main);
+      pixel.setPopulationColors(this.colors);
+
+      socket.on("state", (payload: { map: MapClientDto, blobs: Array<BlobClientDto> }) => {
+        this.map = MapClient.parseFromDto(payload.map);
+
+        this.blobs = payload.blobs.map<BlobClient>(b => BlobClient.parseFromDto(b));
+
+        pixel.updateState(this.map, this.blobs);
+
+        if (this.blobs.length > 0) {
+          if (this.selectedId !== "") {
+            this.updateSelectedCreature()
+          }
+        }
+      });
+    });
+
+    socket.on("disconnect", () => {
+      pixel.clear();
+      // DEBUG: console.log("Disconnected from WebSocket Server");
+    });
+  },
+  methods: {
+    setSelectedById(id: string) {
+      this.selectedId = id;
+      this.updateSelectedCreature();
+      pixel.setSelectedCreature(id);
+    },
+    setSelected(x: number, y: number, id: string): void {
+      this.selectedX = x;
+      this.selectedY = y;
+      this.selectedId = id;
+      if (id === "") {
+        this.selectedCreature = undefined;
+      } else {
+        this.updateSelectedCreature();
+      }
+    },
+    updateSelectedCreature(): void {
+      const t = this.blobs.find(b => b.id === this.selectedId);
+      if (t !== undefined) {
+        this.selectedCreature = t;
+      } else if (this.selectedCreature !== undefined) {
+        this.selectedCreature.state = 'Died';
+      }
+    },
+    roundToTwoDigits(x: number): number {
+      return Math.round((x + Number.EPSILON) * 1000) / 1000
+    },
+  },
+})
+</script>
+
+<style scoped>
+
+</style>
