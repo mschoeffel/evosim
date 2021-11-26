@@ -1,10 +1,8 @@
-import { TileDto } from './tile/tile.dto';
-
 export class MapDto {
   private _tilesize: number;
   private _width: number;
   private _height: number;
-  private _map: Array<Array<TileDto>>;
+  private _map: Array<Array<number>>;
 
   constructor() {
     this._map = [];
@@ -34,11 +32,11 @@ export class MapDto {
     this._height = value;
   }
 
-  get map(): Array<Array<TileDto>> {
+  get map(): Array<Array<number>> {
     return this._map;
   }
 
-  set map(value: Array<Array<TileDto>>) {
+  set map(value: Array<Array<number>>) {
     this._map = value;
   }
 }

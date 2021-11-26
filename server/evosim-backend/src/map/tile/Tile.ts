@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import { TileDto } from './tile.dto';
 
 export abstract class Tile {
   private readonly _id: string;
@@ -9,14 +8,6 @@ export abstract class Tile {
 
   protected constructor() {
     this._id = uuid();
-  }
-
-  public toDto(): TileDto {
-    const dto = new TileDto();
-    dto.energy = this.energy;
-    dto.type = this.short;
-    dto.id = this.id;
-    return dto;
   }
 
   get energy(): number {

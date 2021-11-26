@@ -9,6 +9,14 @@
       <div class="w-1/3">Creatures per Population</div>
       <div class="w-2/3">10</div>
     </div>
+    <div class="flex">
+      <div class="w-1/3">Game ticks per second</div>
+      <div class="w-2/3">10</div>
+    </div>
+    <div class="flex">
+      <div class="w-1/3">Render ticks per second</div>
+      <div class="w-2/3">10</div>
+    </div>
   </div>
 </template>
 

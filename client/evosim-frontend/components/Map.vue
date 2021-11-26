@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="row-span-2 col-span-2 border-solid border-4 border-black">
-        <CreatureNetDetail :selected-creature="selectedCreature"></CreatureNetDetail>
+        <CreatureNetDetail v-if="selectedCreature !== undefined" :selected-creature="selectedCreature"></CreatureNetDetail>
       </div>
       <div class="border-solid border-4 border-black container mx-auto px-4 py-4">
         <CreatureDetailsText :colors="colors" :creature="selectedCreature"></CreatureDetailsText>
@@ -85,7 +85,6 @@
 <script lang="ts">
 import {io} from "socket.io-client";
 import Vue from "vue";
-import {MapClient} from "~/models/map.client";
 import {MapClientDto} from "~/models/dto/map.client.dto";
 import {BlobClient} from "~/models/blob.client";
 import {BlobClientDto} from "~/models/dto/blob.client.dto";
@@ -118,7 +117,7 @@ export default Vue.extend({
     selectedY: number,
     selectedId: string,
     selectedCreature: BlobClient | undefined,
-    map: MapClient | undefined,
+    map: MapClientDto | undefined,
     blobs: Array<BlobClient>,
     p5: {} | undefined,
     colors: Array<string>,
@@ -163,7 +162,7 @@ export default Vue.extend({
       pixel.setPopulationColors(this.colors);
 
       socket.on("state", (payload: { map: MapClientDto, blobs: Array<BlobClientDto> }) => {
-        this.map = MapClient.parseFromDto(payload.map);
+        this.map = payload.map;
 
         this.blobs = payload.blobs.map<BlobClient>(b => BlobClient.parseFromDto(b));
 

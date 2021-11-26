@@ -8,7 +8,6 @@ export class NodeClient implements ServerParsableInterface<NodeClientDto> {
     this._x = 0;
     this._y = 0;
     this._label = "";
-    this._shape = "circle";
   }
 
   private _id: string;
@@ -51,25 +50,14 @@ export class NodeClient implements ServerParsableInterface<NodeClientDto> {
     this._label = value;
   }
 
-  private _shape: string;
-
-  get shape(): string {
-    return this._shape;
-  }
-
-  set shape(value: string) {
-    this._shape = value;
-  }
-
   parseFromDto(obj: NodeClientDto): void {
     this.id = obj._id;
     this.x = obj._x;
     this.y = obj._y;
     this.label = obj._label;
-    this.shape = obj._shape;
   }
 
   toRenderDto(): NodeRenderDto {
-    return new NodeRenderDto(this.id, this.x, this.y, this.label, this.shape);
+    return new NodeRenderDto(this.id, this.x, this.y, this.label);
   }
 }

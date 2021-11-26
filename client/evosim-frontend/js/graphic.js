@@ -70,7 +70,7 @@ export function main(_p5) {
     p5.image(mapImage, 0, 0);
 
     drawCreatures();
-    drawFPSIndicator();
+    // DEBUG: drawFPSIndicator();
 
   };
   p5.mouseClicked = () => {
@@ -78,10 +78,10 @@ export function main(_p5) {
       const tempX = Math.floor(p5.mouseX / sf - tx);
       const tempY = Math.floor(p5.mouseY / sf - ty);
       const size = 1;
-      const tempXMin = tempX / mapData.tilesize - size / 2;
-      const tempXMax = tempX / mapData.tilesize + size / 2;
-      const tempYMin = tempY / mapData.tilesize - size / 2;
-      const tempYMax = tempY / mapData.tilesize + size / 2;
+      const tempXMin = tempX / mapData._tilesize - size / 2;
+      const tempXMax = tempX / mapData._tilesize + size / 2;
+      const tempYMin = tempY / mapData._tilesize - size / 2;
+      const tempYMax = tempY / mapData._tilesize + size / 2;
       const select = creatureData.filter(c => c.x >= tempXMin && c.x <= tempXMax && c.y >= tempYMin && c.y <= tempYMax).pop()
       if (select !== undefined) {
         if (select.id === selectedCreatureId) {
@@ -155,22 +155,22 @@ export function main(_p5) {
 function drawMap() {
   p5.noSmooth();
   const s = mapData._tilesize;
-  mapImage = p5.createImage(mapData.width * s, mapData.height * s);
+  mapImage = p5.createImage(mapData._width * s, mapData._height * s);
   mapImage.loadPixels();
 
-  const mapColumns = mapData.width;
-  const mapRows = mapData.height;
+  const mapColumns = mapData._width;
+  const mapRows = mapData._height;
 
   let indexH = 0;
   for (let mapY = 0; mapY < mapRows; mapY++) {
     let indexW = 0;
     for (let mapX = 0; mapX < mapColumns; mapX++) {
-      const tile = mapData.map[mapX][mapY];
-      let r = dirtColorRed + (tile.energy / 100) * (grassColorRed - dirtColorRed);
-      let g = dirtColorGreen + (tile.energy / 100) * (grassColorGreen - dirtColorGreen);
-      let b = dirtColorBlue + (tile.energy / 100) * (grassColorBlue - dirtColorBlue);
+      const tileEnergy = mapData._map[mapX][mapY];
+      let r = dirtColorRed + (tileEnergy / 100) * (grassColorRed - dirtColorRed);
+      let g = dirtColorGreen + (tileEnergy / 100) * (grassColorGreen - dirtColorGreen);
+      let b = dirtColorBlue + (tileEnergy / 100) * (grassColorBlue - dirtColorBlue);
       let a = 255;
-      if (tile.type === "W") {
+      if (tileEnergy < 0) {
         r = 35
         g = 74;
         b = 230;
@@ -201,7 +201,7 @@ function drawCreatures() {
 }
 
 function drawCreature(creature) {
-  const tilesize = mapData.tilesize;
+  const tilesize = mapData._tilesize;
   const cx = creature.x * tilesize;
   const cy = creature.y * tilesize;
   const c = populationColors[creature.population];

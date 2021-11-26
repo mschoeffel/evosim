@@ -5,6 +5,6 @@ export class WaterTile extends Tile {
     super();
     this._name = 'water';
     this._short = 'W';
-    this._energy = 0;
+    this._energy = -1;
   }
 }

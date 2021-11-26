@@ -59,7 +59,7 @@ export class MapEntity {
     for (const mapColumn of this.map) {
       let dtoWidth = [];
       for (const mapRowTile of mapColumn) {
-        dtoWidth.push(mapRowTile.toDto());
+        dtoWidth.push(mapRowTile.energy);
       }
       dto.map.push(dtoWidth);
       dtoWidth = [];

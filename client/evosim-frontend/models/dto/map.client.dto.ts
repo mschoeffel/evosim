@@ -1,10 +1,8 @@
-import {TileClientDto} from "~/models/dto/tile.client.dto";
-
 export class MapClientDto {
   _tilesize: number;
   _width: number;
   _height: number;
-  _map: Array<Array<TileClientDto>>;
+  _map: Array<Array<number>>;
 
 
   constructor() {
