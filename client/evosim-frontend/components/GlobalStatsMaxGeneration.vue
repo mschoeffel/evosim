@@ -39,18 +39,36 @@ export default Vue.extend({
     return {
       chartData: [],
       chartOptions: {
+        id: 'GlobalStatsMaxEnergyChart',
         colors: this.colors,
         dataLabels: {
+          enabled: false
+        },
+        tooltip:{
           enabled: false
         },
         chart: {
           toolbar: {
             show: false,
           },
+          selection:{
+            enabled: false,
+          },
+          zoom: {
+            enabled: false
+          },
+          animations:{
+            enabled: false
+          }
         },
         stroke: {
           width: 2,
           curve: 'smooth'
+        },
+        xaxis: {
+          labels: {
+            show: false
+          }
         },
       },
     }
@@ -63,29 +81,37 @@ export default Vue.extend({
   },
   methods: {
     update(newVal: Array<BlobClient> | undefined): void {
+      // TODO: Optimize
       if (newVal !== undefined) {
         const newChartData = [];
-        for (let population = 0; population < this.populations; population++) {
-          const newChartDataPopulation = {id: population, name: `Population ${population}`, data: [] as Array<number>};
-          const blobsOfPopulation = newVal.filter(b => b.population === population);
-          let maxGenerationOfPopulation = 0;
-          for (const blobOfPopulation of blobsOfPopulation) {
-            if (blobOfPopulation.generation > maxGenerationOfPopulation) {
-              maxGenerationOfPopulation = blobOfPopulation.generation;
-            }
-          }
+        let maxOfEachPopulation = [];
 
+        for (let p = 0; p < this.populations; p++) {
+          maxOfEachPopulation[p] = 0;
+        }
+
+        for (const blob of newVal) {
+          if (maxOfEachPopulation[blob.population] < blob.generation) {
+            maxOfEachPopulation[blob.population] = blob.generation;
+          }
+        }
+
+        for (let population = 0; population < this.populations; population++) {
+          const newChartDataPopulation = {
+            id: population,
+            name: `Population ${population}`,
+            data: [] as Array<number>
+          };
           const chartDataPopulationSet = this.chartData.find(d => d.id === population);
           if (chartDataPopulationSet !== undefined) {
             for (const element of chartDataPopulationSet.data) {
               newChartDataPopulation.data.push(element);
             }
+            if (newChartDataPopulation.data.length > 9) {
+              newChartDataPopulation.data.shift();
+            }
           }
-          newChartDataPopulation.data.push(maxGenerationOfPopulation);
-
-          if (newChartDataPopulation.data.length > 10) {
-            newChartDataPopulation.data.shift();
-          }
+          newChartDataPopulation.data.push(maxOfEachPopulation[population]);
           newChartData.push(newChartDataPopulation);
         }
         this.chartData = newChartData;

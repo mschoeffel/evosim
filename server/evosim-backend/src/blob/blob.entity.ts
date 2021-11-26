@@ -69,10 +69,6 @@ export class BlobEntity {
     this.rotate(actions.rotateAmount);
     this.move(actions.moveAmount);
     this.eat(actions.eatAmount);
-    //Get Inputs
-    //Use Brain
-    //Get Brain Outputs
-    //Do Actions
   }
 
   private eat(amount: number): void {
@@ -81,7 +77,7 @@ export class BlobEntity {
         amount = this.MAX_ENERGY - this.energy + amount;
       }
       const tile = this.map.getTileAt(this.positionX, this.positionY);
-      if (tile !== undefined) {
+      if (tile !== undefined && tile.energy > 0) {
         const possibleEnergy = tile.energy;
         if (possibleEnergy < amount) {
           amount = possibleEnergy;

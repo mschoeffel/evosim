@@ -10,9 +10,11 @@ export class AbsoluteRegrow extends MapRegrowStrategy {
   }
 
   regrowTile(tile: Tile): void {
-    tile.energy += this.ABSOLUTE_REGROW_RATE;
-    if (tile.energy > 100) {
-      tile.energy = 100;
+    if(tile.energy > 0) {
+      tile.energy += this.ABSOLUTE_REGROW_RATE;
+      if (tile.energy > 100) {
+        tile.energy = 100;
+      }
     }
   }
 }
