@@ -33,6 +33,8 @@ export default {
   detailSection: {
     heading: 'Kreatur Details',
     state: 'Status',
+    alive: 'Lebend',
+    dead: 'Verstorben',
     id: 'ID',
     x: 'X-Position',
     y: 'Y-Position',

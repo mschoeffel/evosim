@@ -3,7 +3,7 @@
     <h1>{{ $t("detailSection.heading") }}</h1>
     <div class="flex">
       <div class="w-1/3">{{ $t("detailSection.state") }}</div>
-      <div v-if="creature !== undefined" class="w-2/3">{{ creature.state }}</div>
+      <div v-if="creature !== undefined" class="w-2/3">{{ $t(`detailSection.${creature.state}`) }}</div>
     </div>
     <div class="flex">
       <div class="w-1/3">{{ $t("detailSection.id") }}</div>

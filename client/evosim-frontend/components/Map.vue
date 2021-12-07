@@ -219,7 +219,7 @@ export default Vue.extend({
       if (t !== undefined) {
         this.selectedCreature = t;
       } else if (this.selectedCreature !== undefined) {
-        this.selectedCreature.state = 'Died';
+        this.selectedCreature.state = 'dead';
       }
     },
     roundToTwoDigits(x: number): number {

@@ -15,7 +15,7 @@ export class BlobClient implements ServerParsableInterface<BlobClientDto> {
     this._brain = new BrainClient();
     this._population = 0;
     this._generation = 0;
-    this._state = 'Alive';
+    this._state = 'alive';
   }
 
   private _id: string;
