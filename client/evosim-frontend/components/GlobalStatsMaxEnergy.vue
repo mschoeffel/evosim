@@ -91,7 +91,7 @@ export default Vue.extend({
       // TODO: Optimize
       if (newVal !== undefined) {
         const newChartData = [];
-        let maxOfEachPopulation = [];
+        const maxOfEachPopulation = [];
 
         for (let p = 0; p < this.populations; p++) {
           maxOfEachPopulation[p] = 0;
@@ -106,7 +106,7 @@ export default Vue.extend({
         for (let population = 0; population < this.populations; population++) {
           const newChartDataPopulation = {
             id: population,
-            name: `Population ${population}`,
+            name: `${this.$t("statsSection.population")} ${population}`,
             data: [] as Array<number>
           };
           const chartDataPopulationSet = this.chartData.find(d => d.id === population);

@@ -10,7 +10,7 @@ export class PercentageRegrow extends MapRegrowStrategy {
   }
 
   regrowTile(tile: Tile): void {
-    if(tile.energy > 0) {
+    if (tile.energy > 0) {
       tile.energy *= this.PERCENTAGE_REGROW_RATE;
       if (tile.energy > 100) {
         tile.energy = 100;

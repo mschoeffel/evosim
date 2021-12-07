@@ -44,20 +44,20 @@ export default Vue.extend({
         dataLabels: {
           enabled: false
         },
-        tooltip:{
+        tooltip: {
           enabled: false
         },
         chart: {
           toolbar: {
             show: false,
           },
-          selection:{
+          selection: {
             enabled: false,
           },
           zoom: {
             enabled: false
           },
-          animations:{
+          animations: {
             enabled: false
           }
         },
@@ -87,8 +87,8 @@ export default Vue.extend({
       // TODO: Optimize
       if (newVal !== undefined) {
         const newChartData = [];
-        let sumOfEachPopulation = [];
-        let countOfEachPopulation = [];
+        const sumOfEachPopulation = [];
+        const countOfEachPopulation = [];
 
         for (let p = 0; p < this.populations; p++) {
           sumOfEachPopulation[p] = 0;
@@ -103,7 +103,7 @@ export default Vue.extend({
         for (let population = 0; population < this.populations; population++) {
           const newChartDataPopulation = {
             id: population,
-            name: `Population ${population}`,
+            name: `${this.$t("statsSection.population")} ${population}`,
             data: [] as Array<number>
           };
           const chartDataPopulationSet = this.chartData.find(d => d.id === population);
@@ -115,7 +115,7 @@ export default Vue.extend({
               newChartDataPopulation.data.shift();
             }
           }
-          newChartDataPopulation.data.push(this.roundToTwoDigits(sumOfEachPopulation[population]/countOfEachPopulation[population]));
+          newChartDataPopulation.data.push(this.roundToTwoDigits(sumOfEachPopulation[population] / countOfEachPopulation[population]));
           newChartData.push(newChartDataPopulation);
         }
         this.chartData = newChartData;

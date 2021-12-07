@@ -10,12 +10,17 @@
       <div class="border-solid border-4 border-black">
         <div class="sm:hidden">
           <label class="sr-only">Select a tab</label>
-          <select id="tabs" v-model="currentTab" class="block w-full focus:ring-black focus:border-black border-gray-300 rounded-md">
-            <option key="Info" :selected="currentTab === 'Info'">Info</option>
-            <option key="GlobalStatsMaxEnergy" :selected="currentTab === 'GlobalStatsMaxEnergy'">Max Energy</option>
-            <option key="GlobalStatsAvgEnergy" :selected="currentTab === 'GlobalStatsAvgEnergy'">Avg Energy</option>
-            <option key="GlobalStatsMaxGeneration" :selected="currentTab === 'GlobalStatsMaxGeneration'">Max
-              Generation
+          <select id="tabs" v-model="currentTab"
+                  class="block w-full focus:ring-black focus:border-black border-gray-300 rounded-md">
+            <option key="Info" :selected="currentTab === 'Info'">{{ $t("statsSection.headingInfo") }}</option>
+            <option key="GlobalStatsMaxEnergy" :selected="currentTab === 'GlobalStatsMaxEnergy'">
+              {{ $t("statsSection.headingMaxEnergy") }}
+            </option>
+            <option key="GlobalStatsAvgEnergy" :selected="currentTab === 'GlobalStatsAvgEnergy'">
+              {{ $t("statsSection.headingAvgEnergy") }}
+            </option>
+            <option key="GlobalStatsMaxGeneration" :selected="currentTab === 'GlobalStatsMaxGeneration'">
+              {{ $t("statsSection.headingMaxGeneration") }}
             </option>
             <!--<option key="GlobalStatsAvgGeneration" :selected="currentTab === 'GlobalStatsAvgGeneration'">Avg
               Generation
@@ -28,33 +33,38 @@
                :class="[currentTab === 'Info' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
                href="#"
                @click="currentTab = 'Info'">
-              <span>Info</span>
-              <span :class="[currentTab === 'Info' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-                    aria-hidden="true"/>
+              <span>{{ $t("statsSection.headingInfo") }}</span>
+              <span
+                :class="[currentTab === 'Info' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                aria-hidden="true"/>
             </a>
             <a key="GlobalStatsMaxEnergy" :aria-current="currentTab === 'GlobalStatsMaxEnergy' ? 'page' : undefined"
                :class="[currentTab === 'GlobalStatsMaxEnergy' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
                href="#"
                @click="currentTab = 'GlobalStatsMaxEnergy'">
-              <span>Max Energy</span>
-              <span :class="[currentTab === 'GlobalStatsMaxEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-                    aria-hidden="true"/>
+              <span>{{ $t("statsSection.headingMaxEnergy") }}</span>
+              <span
+                :class="[currentTab === 'GlobalStatsMaxEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                aria-hidden="true"/>
             </a>
             <a key="GlobalStatsAvgEnergy" :aria-current="currentTab === 'GlobalStatsAvgEnergy' ? 'page' : undefined"
                :class="[currentTab === 'GlobalStatsAvgEnergy' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
                href="#"
                @click="currentTab = 'GlobalStatsAvgEnergy'">
-              <span>Avg Energy</span>
-              <span :class="[currentTab === 'GlobalStatsAvgEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-                    aria-hidden="true"/>
+              <span>{{ $t("statsSection.headingAvgEnergy") }}</span>
+              <span
+                :class="[currentTab === 'GlobalStatsAvgEnergy' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                aria-hidden="true"/>
             </a>
-            <a key="GlobalStatsMaxGeneration" :aria-current="currentTab === 'GlobalStatsMaxGeneration' ? 'page' : undefined"
+            <a key="GlobalStatsMaxGeneration"
+               :aria-current="currentTab === 'GlobalStatsMaxGeneration' ? 'page' : undefined"
                :class="[currentTab === 'GlobalStatsMaxGeneration' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
                href="#"
                @click="currentTab = 'GlobalStatsMaxGeneration'">
-              <span>Max Generation</span>
-              <span :class="[currentTab === 'GlobalStatsMaxGeneration' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-                    aria-hidden="true"/>
+              <span>{{ $t("statsSection.headingMaxGeneration") }}</span>
+              <span
+                :class="[currentTab === 'GlobalStatsMaxGeneration' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
+                aria-hidden="true"/>
             </a>
             <!--<a key="GlobalStatsAvgGeneration" :aria-current="currentTab === 'GlobalStatsAvgGeneration' ? 'page' : undefined"
                :class="[currentTab === 'GlobalStatsAvgGeneration' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
@@ -67,7 +77,7 @@
           </nav>
         </div>
         <div>
-          <div v-if="currentTab === 'Info'" class="container mx-auto px-4 py-4">Info</div>
+          <div v-if="currentTab === 'Info'" class="container mx-auto px-4 py-4">{{ $t("statsSection.infoText") }}</div>
           <GlobalStatsMaxEnergy v-if="currentTab === 'GlobalStatsMaxEnergy'" :colors="colors" :creatures="blobs"
                                 :populations="populations"></GlobalStatsMaxEnergy>
           <GlobalStatsAvgEnergy v-if="currentTab === 'GlobalStatsAvgEnergy'" :colors="colors" :creatures="blobs"
@@ -79,7 +89,8 @@
         </div>
       </div>
       <div class="row-span-2 col-span-2 border-solid border-4 border-black">
-        <CreatureNetDetail v-if="selectedCreature !== undefined" :selected-creature="selectedCreature"></CreatureNetDetail>
+        <CreatureNetDetail v-if="selectedCreature !== undefined"
+                           :selected-creature="selectedCreature"></CreatureNetDetail>
       </div>
       <div class="border-solid border-4 border-black container mx-auto px-4 py-4">
         <CreatureDetailsText :colors="colors" :creature="selectedCreature"></CreatureDetailsText>
@@ -104,7 +115,6 @@ import CreatureNetDetail from "~/components/CreatureNetDetail.vue";
 import GlobalStatsMaxGeneration from "~/components/GlobalStatsMaxGeneration.vue";
 import GlobalStatsMaxEnergy from "~/components/GlobalStatsMaxEnergy.vue";
 import GlobalStatsAvgEnergy from "~/components/GlobalStatsAvgEnergy.vue";
-import GlobalStatsAvgGeneration from "~/components/GlobalStatsAvgGeneration.vue";
 import CreatureRanking from "~/components/CreatureRanking.vue";
 
 let pixel: any;
@@ -118,7 +128,6 @@ export default Vue.extend({
     CreatureRanking,
     GlobalStatsAvgEnergy,
     GlobalStatsMaxEnergy,
-    GlobalStatsAvgGeneration,
     GlobalStatsMaxGeneration, CreatureNetDetail, GlobalDetailsText, CreatureDetailsText
   },
   data(): {
@@ -156,8 +165,6 @@ export default Vue.extend({
   },
   mounted() {
     const P5 = require("p5");
-
-
     // DEBUG: console.log("Starting connection to WebSocket Server");
     // DEBUG: console.log("Base URL: " + process.env.baseUrl);
     // DEBUG: console.log("Port: " + process.env.PORT);
@@ -221,7 +228,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style scoped>
-
-</style>

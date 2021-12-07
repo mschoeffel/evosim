@@ -218,11 +218,14 @@ function drawCreature(creature) {
   p5.circle(cx, cy, creature.size);
 }
 
+/* DEBUG:
 function drawFPSIndicator() {
   p5.fill('#FFFFFF');
   const fps = p5.frameRate();
   p5.text("FPS: " + fps.toFixed(2), 10, 10);
 }
+*/
+
 
 function notifyCurrentSelect() {
   if (updateCurrentSelected !== undefined) {

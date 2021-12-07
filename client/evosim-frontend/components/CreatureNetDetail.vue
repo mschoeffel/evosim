@@ -58,8 +58,8 @@ export default Vue.extend({
       if (this.nodes.length > 0) {
         const nodesRender = this.nodes;
 
-        const start = ['X', 'Y', 'Direction', 'Energy', 'Energy Tile', 'Energy Ahead']
-        const end = ['Rotation', 'Move', 'Eat']
+        const start = [this.$t("netSection.inputNodeLabels.x"), this.$t("netSection.inputNodeLabels.y"), this.$t("netSection.inputNodeLabels.direction"), this.$t("netSection.inputNodeLabels.energy"), this.$t("netSection.inputNodeLabels.energyCurrentTile"), this.$t("netSection.inputNodeLabels.energyTileAhead")]
+        const end = [this.$t("netSection.outputNodeLabels.rotation"), this.$t("netSection.outputNodeLabels.move"), this.$t("netSection.outputNodeLabels.eat")]
 
         for (let i = 0; i < start.length; i++) {
           nodesRender[i].label = `${start[i]}: ${nodesRender[i].label}`;

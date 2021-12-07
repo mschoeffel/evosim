@@ -45,7 +45,27 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/i18n'
   ],
+
+  i18n: {
+    locales: [{
+      code: 'en',
+      file: 'en.js'
+    },
+      {
+        code: 'de',
+        file: 'de.js'
+      }
+    ],
+    strategy: 'no_prefix',
+    lazy: true,
+    langDir: 'lang/',
+    defaultLocale: 'en',
+    vueI18n: {
+      fallbackLocale: 'en',
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},

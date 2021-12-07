@@ -4,13 +4,13 @@
     <thead class="border-b-2 border-black">
     <tr>
       <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        Top Energy
+        {{ $t("topSection.topEnergy") }}
       </th>
       <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        Population
+        {{ $t("topSection.population") }}
       </th>
       <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        Id
+        {{ $t("topSection.id") }}
       </th>
     </tr>
     </thead>
@@ -21,7 +21,9 @@
       </td>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
         <span :style="'background-color: '+ colors[topCreature.population] "
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100">{{ topCreature.population }}</span>
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100">{{
+            topCreature.population
+          }}</span>
       </td>
       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
         <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{ topCreature.id }}</a>
