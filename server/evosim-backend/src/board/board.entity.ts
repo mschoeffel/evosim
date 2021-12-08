@@ -5,6 +5,7 @@ import { Tile } from '../map/tile/Tile';
 import { PercentageRegrow } from '../map/regrow/percentage-regrow.entity';
 import { MultiLayerNetEntity } from '../blob/brain/net/multi-layer-net.entity';
 import { Utils } from '../utils/utils';
+import {GamestateEntity} from "./gamestate.entity";
 
 export class BoardEntity {
   public readonly MAP_WIDTH = 75;
@@ -26,6 +27,7 @@ export class BoardEntity {
   private _blobs: Array<BlobEntity>;
   private _map: MapEntity;
   private _populationNetSchemas: Array<Array<number>>;
+  private _gamestate: GamestateEntity;
 
   constructor() {
     this._blobs = [];
@@ -39,6 +41,7 @@ export class BoardEntity {
     this._populationNetSchemas = [];
 
     this._map.generateMap();
+    this._gamestate = new GamestateEntity(this.POPULATIONS, this.CREATURES_PER_POPULATION);
     for (let population = 0; population < this.POPULATIONS; population++) {
       const schema = [];
       const hiddenLayer = Utils.randomBetweenInclusive(
@@ -69,7 +72,7 @@ export class BoardEntity {
       );
       if (blobsOfSamePopulation.length > 0) {
         return blobsOfSamePopulation.reduce((a, b) =>
-          a.energy > b.energy ? a : b,
+          a.ticksAlive > b.ticksAlive ? a : b,
         );
       }
     }
@@ -81,9 +84,9 @@ export class BoardEntity {
     const net = new MultiLayerNetEntity();
     if (mostAdvancedBlob === null || mostAdvancedBlob === undefined) {
       net.initializeNet(this.populationNetSchemas[population]);
-      this.addBlob(new BlobEntity(this.map, population, net));
+      this.addBlob(new BlobEntity(this.map, population, net, this.gamestate.currentTick));
     } else {
-      this.addBlob(new BlobEntity(this.map, population, net, mostAdvancedBlob));
+      this.addBlob(new BlobEntity(this.map, population, net, this.gamestate.currentTick, mostAdvancedBlob));
     }
   }
 
@@ -92,8 +95,10 @@ export class BoardEntity {
   }
 
   public runOneTick(): void {
+    this.gamestate.addTick();
     this.map.regenerate();
     for (const blob of this.blobs) {
+      blob.addTickAlive();
       blob.energy -= this.TICK_ENERGY_COST;
       blob.act();
       this.checkBlob(blob);
@@ -140,5 +145,13 @@ export class BoardEntity {
 
   set populationNetSchemas(value: Array<Array<number>>) {
     this._populationNetSchemas = value;
+  }
+
+  get gamestate(): GamestateEntity {
+    return this._gamestate;
+  }
+
+  set gamestate(value: GamestateEntity) {
+    this._gamestate = value;
   }
 }

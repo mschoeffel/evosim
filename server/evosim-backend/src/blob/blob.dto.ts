@@ -12,6 +12,8 @@ export class BlobDto {
   private _brain: BrainDto;
   private _population: number;
   private _generation: number;
+  private _initTick: number;
+  private _ticksAlive: number;
 
   get id(): string {
     return this._id;
@@ -99,5 +101,21 @@ export class BlobDto {
 
   set generation(value: number) {
     this._generation = value;
+  }
+
+  get initTick(): number {
+    return this._initTick;
+  }
+
+  set initTick(value: number) {
+    this._initTick = value;
+  }
+
+  get ticksAlive(): number {
+    return this._ticksAlive;
+  }
+
+  set ticksAlive(value: number) {
+    this._ticksAlive = value;
   }
 }

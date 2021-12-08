@@ -15,29 +15,40 @@
       </div>
     </div>
     <div class="flex">
+      <div class="w-1/3">{{ $t("globalSection.currentTick") }}</div>
+      <div class="w-2/3">{{gamestate._currentTick}}</div>
+    </div>
+    <div class="flex">
       <div class="w-1/3">{{ $t("globalSection.populations") }}</div>
-      <div class="w-2/3">5</div>
+      <div class="w-2/3">{{gamestate._populations}}</div>
     </div>
     <div class="flex">
       <div class="w-1/3">{{ $t("globalSection.creaturesPerPopulation") }}</div>
-      <div class="w-2/3">10</div>
+      <div class="w-2/3">{{gamestate._creaturesPerPopulation}}</div>
     </div>
     <div class="flex">
       <div class="w-1/3">{{ $t("globalSection.gameTicksPerSecond") }}</div>
-      <div class="w-2/3">10</div>
+      <div class="w-2/3">{{gamestate._ticksPerSecond}}</div>
     </div>
     <div class="flex">
       <div class="w-1/3">{{ $t("globalSection.renderTicksPerSecond") }}</div>
-      <div class="w-2/3">10</div>
+      <div class="w-2/3">{{gamestate._ticksPerSecond}}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import {GamestateClientDto} from "~/models/dto/gamestate.client.dto";
 
 export default Vue.extend({
   name: "GlobalDetailsText",
+  props: {
+    gamestate: {
+      type: GamestateClientDto,
+      default: () => {return new GamestateClientDto()}
+    }
+  },
   data() {
     return {
       lang: 'en'

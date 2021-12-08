@@ -43,6 +43,14 @@
       <div class="w-1/3">{{ $t("detailSection.generation") }}</div>
       <div v-if="creature !== undefined" class="w-2/3">{{ creature.generation }}</div>
     </div>
+    <div class="flex">
+      <div class="w-1/3">{{ $t("detailSection.initTick") }}</div>
+      <div v-if="creature !== undefined" class="w-2/3">{{ creature.initTick }}</div>
+    </div>
+    <div class="flex">
+      <div class="w-1/3">{{ $t("detailSection.ticksAlive") }}</div>
+      <div v-if="creature !== undefined" class="w-2/3">{{ creature.ticksAlive }}</div>
+    </div>
   </div>
 </template>
 
@@ -56,15 +64,15 @@ export default Vue.extend({
     creature: {
       type: BlobClient,
       default: () => {
-        return undefined
+        return undefined;
       }
     },
     colors: {
       type: Array,
       default: () => {
-        return []
+        return [];
       }
-    },
+    }
   },
   methods: {
     roundToTwoDigits(n: number): number {

@@ -16,6 +16,8 @@ export class BlobEntity {
   private _generation: number;
   private _population: number;
   private _map: MapEntity;
+  private _initTick: number;
+  private _ticksAlive: number;
 
   private readonly INIT_ENERGY = 40;
   private readonly EYE_DISTANCE = 1;
@@ -28,7 +30,8 @@ export class BlobEntity {
     map: MapEntity,
     population: number,
     initializedNet: MultiLayerNetEntity,
-    blobToEvolveFrom?: BlobEntity,
+    initTick: number,
+    blobToEvolveFrom?: BlobEntity
   ) {
     this._id = uuid();
     this._population = population;
@@ -44,6 +47,8 @@ export class BlobEntity {
     this._positionX = Math.random() * map.width;
     this._positionY = Math.random() * map.height;
     this._direction = Math.random() * 360;
+    this._initTick = initTick;
+    this._ticksAlive = 0;
   }
 
   public act(): void {
@@ -132,7 +137,13 @@ export class BlobEntity {
     dto.brain = this.brain.toDto();
     dto.population = this.population;
     dto.generation = this.generation;
+    dto.initTick = this.initTick;
+    dto.ticksAlive = this.ticksAlive;
     return dto;
+  }
+
+  public addTickAlive(): void {
+    this.ticksAlive++;
   }
 
   get id(): string {
@@ -201,5 +212,21 @@ export class BlobEntity {
 
   set map(value: MapEntity) {
     this._map = value;
+  }
+
+  get initTick(): number {
+    return this._initTick;
+  }
+
+  set initTick(value: number) {
+    this._initTick = value;
+  }
+
+  get ticksAlive(): number {
+    return this._ticksAlive;
+  }
+
+  set ticksAlive(value: number) {
+    this._ticksAlive = value;
   }
 }

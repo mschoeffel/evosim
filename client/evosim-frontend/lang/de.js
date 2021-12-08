@@ -6,6 +6,7 @@ export default {
     creaturesPerPopulation: 'Kreaturen pro Population',
     renderTicksPerSecond: 'Darstellungsupdates pro Sekunde',
     gameTicksPerSecond: 'Spielschritte pro Sekunde',
+    currentTick: 'Aktueller Tick',
   },
   statsSection: {
     headingMaxEnergy: 'Max Energie',
@@ -42,6 +43,8 @@ export default {
     energy: 'Energie',
     population: 'Population',
     generation: 'Generation',
+    initTick: 'Erstellt mit Tick',
+    ticksAlive: 'Ticks am leben'
   },
   topSection: {
     id: 'ID',

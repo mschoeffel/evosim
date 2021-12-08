@@ -13,6 +13,8 @@ export class BlobClientDto {
   _brain: BrainClientDto;
   _population: number;
   _generation: number;
+  _initTick: number;
+  _ticksAlive: number;
 
   constructor() {
     this._id = "";
@@ -26,5 +28,7 @@ export class BlobClientDto {
     this._brain = new BrainClientDto();
     this._population = 0;
     this._generation = 0;
+    this._initTick = 0;
+    this._ticksAlive = 0;
   }
 }

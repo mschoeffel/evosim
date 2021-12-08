@@ -5,7 +5,7 @@
     </div>
     <div class="h-full w-full grid grid-rows-4 grid-cols-2 grid-flow-row gap-2">
       <div class="border-solid border-4 border-black container mx-auto px-4 py-4">
-        <GlobalDetailsText></GlobalDetailsText>
+        <GlobalDetailsText :gamestate="gamestate"></GlobalDetailsText>
       </div>
       <div class="border-solid border-4 border-black">
         <div class="sm:hidden">
@@ -79,11 +79,11 @@
         <div>
           <div v-if="currentTab === 'Info'" class="container mx-auto px-4 py-4">{{ $t("statsSection.infoText") }}</div>
           <GlobalStatsMaxEnergy v-if="currentTab === 'GlobalStatsMaxEnergy'" :colors="colors" :creatures="blobs"
-                                :populations="populations"></GlobalStatsMaxEnergy>
+                                :populations="gamestate._populations"></GlobalStatsMaxEnergy>
           <GlobalStatsAvgEnergy v-if="currentTab === 'GlobalStatsAvgEnergy'" :colors="colors" :creatures="blobs"
-                                :populations="populations"></GlobalStatsAvgEnergy>
+                                :populations="gamestate._populations"></GlobalStatsAvgEnergy>
           <GlobalStatsMaxGeneration v-if="currentTab === 'GlobalStatsMaxGeneration'" :colors="colors" :creatures="blobs"
-                                    :populations="populations"></GlobalStatsMaxGeneration>
+                                    :populations="gamestate._populations"></GlobalStatsMaxGeneration>
           <!--<GlobalStatsAvgGeneration v-if="currentTab === 'GlobalStatsAvgGeneration'" :colors="colors" :creatures="blobs"
                                     :populations="populations"></GlobalStatsAvgGeneration>-->
         </div>
@@ -116,6 +116,7 @@ import GlobalStatsMaxGeneration from "~/components/GlobalStatsMaxGeneration.vue"
 import GlobalStatsMaxEnergy from "~/components/GlobalStatsMaxEnergy.vue";
 import GlobalStatsAvgEnergy from "~/components/GlobalStatsAvgEnergy.vue";
 import CreatureRanking from "~/components/CreatureRanking.vue";
+import {GamestateClientDto} from "~/models/dto/gamestate.client.dto";
 
 let pixel: any;
 if (process.browser) {
@@ -131,7 +132,6 @@ export default Vue.extend({
     GlobalStatsMaxGeneration, CreatureNetDetail, GlobalDetailsText, CreatureDetailsText
   },
   data(): {
-    message: string,
     selectedX: number,
     selectedY: number,
     selectedId: string,
@@ -142,9 +142,9 @@ export default Vue.extend({
     colors: Array<string>,
     currentTab: string,
     populations: number,
+    gamestate: GamestateClientDto,
   } {
     return {
-      message: "",
       selectedX: 0,
       selectedY: 0,
       selectedId: "",
@@ -161,6 +161,7 @@ export default Vue.extend({
       ],
       currentTab: "Info",
       populations: 5,
+      gamestate: new GamestateClientDto(),
     };
   },
   mounted() {
@@ -178,10 +179,10 @@ export default Vue.extend({
       this.p5 = new P5(pixel.main);
       pixel.setPopulationColors(this.colors);
 
-      socket.on("state", (payload: { map: MapClientDto, blobs: Array<BlobClientDto> }) => {
+      socket.on("state", (payload: { map: MapClientDto, blobs: Array<BlobClientDto>, gamestate: GamestateClientDto }) => {
         this.map = payload.map;
-
         this.blobs = payload.blobs.map<BlobClient>(b => BlobClient.parseFromDto(b));
+        this.gamestate = payload.gamestate;
 
         pixel.updateState(this.map, this.blobs);
 
