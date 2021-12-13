@@ -1,7 +1,7 @@
 import { MapGeneratorStrategy } from './map-generator-strategy.interface';
 import SimplexNoise = require('simplex-noise');
 
-export class SimplexNoiseGeneratorEntity implements MapGeneratorStrategy {
+export class SimplexNoiseGenerator implements MapGeneratorStrategy {
   private simplex;
 
   constructor() {

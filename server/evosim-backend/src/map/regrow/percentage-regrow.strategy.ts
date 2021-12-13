@@ -1,7 +1,7 @@
-import { MapRegrowStrategy } from './map-regrow-strategy.interface';
+import { MapRegrowStrategy } from './map-regrow.strategy';
 import { Tile } from '../tile/Tile';
 
-export class PercentageRegrow extends MapRegrowStrategy {
+export class PercentageRegrowStrategy extends MapRegrowStrategy {
   private readonly PERCENTAGE_REGROW_RATE;
 
   constructor(regrowRate: number) {

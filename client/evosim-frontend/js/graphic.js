@@ -1,7 +1,7 @@
 let mapData = {
   _width: 1,
   _height: 1,
-  _map: [[{_energy: 0}]],
+  _map: [[{ _energy: 0 }]],
   _tilesize: 20,
 };
 let mapImage;
@@ -13,7 +13,7 @@ const selectedCoordinates = {
   x: null,
   y: null,
 };
-let selectedCreatureId = "";
+let selectedCreatureId = '';
 
 let locked = false;
 let sf = 1;
@@ -39,9 +39,9 @@ export function main(_p5) {
   const backgroundColor = p5.color(255, 255, 255);
 
   p5.setup = () => {
-    const canvasDiv = document.getElementById("p5Canvas");
+    const canvasDiv = document.getElementById('p5Canvas');
     canvas = p5.createCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
-    canvas.parent("p5Canvas");
+    canvas.parent('p5Canvas');
     canvas.style('display', 'block');
 
     p5.noSmooth();
@@ -55,7 +55,6 @@ export function main(_p5) {
     p5.translate(tx, ty);
     p5.noSmooth();
     p5.image(mapImage, 0, 0);
-
   };
 
   p5.draw = () => {
@@ -71,7 +70,6 @@ export function main(_p5) {
 
     drawCreatures();
     // DEBUG: drawFPSIndicator();
-
   };
   p5.mouseClicked = () => {
     if (!locked) {
@@ -82,12 +80,20 @@ export function main(_p5) {
       const tempXMax = tempX / mapData._tilesize + size / 2;
       const tempYMin = tempY / mapData._tilesize - size / 2;
       const tempYMax = tempY / mapData._tilesize + size / 2;
-      const select = creatureData.filter(c => c.x >= tempXMin && c.x <= tempXMax && c.y >= tempYMin && c.y <= tempYMax).pop()
+      const select = creatureData
+        .filter(
+          (c) =>
+            c.x >= tempXMin &&
+            c.x <= tempXMax &&
+            c.y >= tempYMin &&
+            c.y <= tempYMax,
+        )
+        .pop();
       if (select !== undefined) {
         if (select.id === selectedCreatureId) {
           selectedCoordinates.x = 0;
           selectedCoordinates.y = 0;
-          selectedCreatureId = "";
+          selectedCreatureId = '';
         } else {
           selectedCoordinates.x = tempX;
           selectedCoordinates.y = tempY;
@@ -124,7 +130,7 @@ export function main(_p5) {
     p5.redraw();
   };
 
-  window.addEventListener("wheel", function (e) {
+  window.addEventListener('wheel', function (e) {
     if (
       p5.mouseX < p5.width &&
       p5.mouseX > 0 &&
@@ -136,15 +142,15 @@ export function main(_p5) {
   });
 
   p5.keyPressed = () => {
-    if (p5.key === "-") {
+    if (p5.key === '-') {
       p5.applyScale(0.95);
-    } else if (p5.key === "+") {
+    } else if (p5.key === '+') {
       p5.applyScale(1.05);
     }
   };
 
   p5.windowResized = () => {
-    const canvasDiv = document.getElementById("p5Canvas");
+    const canvasDiv = document.getElementById('p5Canvas');
     p5.resizeCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
     sf = canvasDiv.offsetWidth / 400;
     tx = canvasDiv.offsetWidth / 100;
@@ -165,13 +171,17 @@ function drawMap() {
   for (let mapY = 0; mapY < mapRows; mapY++) {
     let indexW = 0;
     for (let mapX = 0; mapX < mapColumns; mapX++) {
-      const tileEnergy = mapData._map[mapX][mapY];
-      let r = dirtColorRed + (tileEnergy / 100) * (grassColorRed - dirtColorRed);
-      let g = dirtColorGreen + (tileEnergy / 100) * (grassColorGreen - dirtColorGreen);
-      let b = dirtColorBlue + (tileEnergy / 100) * (grassColorBlue - dirtColorBlue);
+      const tileEnergy = mapData._map[mapY][mapX];
+      let r =
+        dirtColorRed + (tileEnergy / 100) * (grassColorRed - dirtColorRed);
+      let g =
+        dirtColorGreen +
+        (tileEnergy / 100) * (grassColorGreen - dirtColorGreen);
+      let b =
+        dirtColorBlue + (tileEnergy / 100) * (grassColorBlue - dirtColorBlue);
       let a = 255;
       if (tileEnergy < 0) {
-        r = 35
+        r = 35;
         g = 74;
         b = 230;
         a = 255;
@@ -196,7 +206,7 @@ function drawMap() {
 
 function drawCreatures() {
   for (const creature of creatureData) {
-    drawCreature(creature)
+    drawCreature(creature);
   }
 }
 
@@ -210,7 +220,7 @@ function drawCreature(creature) {
   p5.strokeWeight(1);
   p5.line(cx, cy, creature.eyeX * tilesize, creature.eyeY * tilesize);
   if (creature.id === selectedCreatureId) {
-    p5.fill("#FFFFFF");
+    p5.fill('#FFFFFF');
   } else {
     p5.fill(c);
     p5.noStroke();
@@ -226,10 +236,13 @@ function drawFPSIndicator() {
 }
 */
 
-
 function notifyCurrentSelect() {
   if (updateCurrentSelected !== undefined) {
-    updateCurrentSelected(selectedCoordinates.x, selectedCoordinates.y, selectedCreatureId);
+    updateCurrentSelected(
+      selectedCoordinates.x,
+      selectedCoordinates.y,
+      selectedCreatureId,
+    );
   }
 }
 

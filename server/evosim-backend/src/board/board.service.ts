@@ -14,14 +14,14 @@ export class BoardService {
     this._board = new BoardEntity();
   }
 
-  @Interval(1000/BoardService.TICKS_PER_SECOND)
+  @Interval(1000 / BoardService.TICKS_PER_SECOND)
   private runGameTick(): void {
     this.board.runOneTick();
     if (this.socketService.connectedClients.length > 0) {
       this.socketService.sendAllWs('state', {
         map: this.board.map.toDto(),
         blobs: this.board.blobs.map<BlobDto>((b) => b.toDto()),
-        gamestate: this.board.gamestate.toDto()
+        gamestate: this.board.gamestate.toDto(),
       });
     }
   }

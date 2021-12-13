@@ -1,21 +1,12 @@
 import { BlobEntity } from '../blob/blob.entity';
-import { MapEntity } from '../map/map.entity';
-import { PerlinNoiseGeneratorEntity } from '../map/generaror/perlin-noise-generator.entity';
 import { Tile } from '../map/tile/Tile';
-import { PercentageRegrow } from '../map/regrow/percentage-regrow.entity';
 import { MultiLayerNetEntity } from '../blob/brain/net/multi-layer-net.entity';
 import { Utils } from '../utils/utils';
-import {GamestateEntity} from "./gamestate.entity";
+import { GamestateEntity } from './gamestate.entity';
+import { SimpleMapEntity } from '../map/predefined/simple-map.entity';
+import { MapEntity } from '../map/map.entity';
 
 export class BoardEntity {
-  public readonly MAP_WIDTH = 75;
-  public readonly MAP_HEIGHT = 75;
-  public readonly MAP_TILE_SIZE = 5;
-  public readonly MAP_GENERATOR = new PerlinNoiseGeneratorEntity();
-  public readonly PERCENTAGE_REGROW = 1.0005;
-  public readonly MAP_REGROW_STRATEGY = new PercentageRegrow(
-    this.PERCENTAGE_REGROW,
-  );
   public readonly POPULATIONS = 5;
   public readonly CREATURES_PER_POPULATION = 10;
   public readonly TICK_ENERGY_COST = 0.5;
@@ -31,17 +22,14 @@ export class BoardEntity {
 
   constructor() {
     this._blobs = [];
-    this._map = new MapEntity(
-      this.MAP_GENERATOR,
-      this.MAP_REGROW_STRATEGY,
-      this.MAP_WIDTH,
-      this.MAP_HEIGHT,
-      this.MAP_TILE_SIZE,
-    );
     this._populationNetSchemas = [];
 
-    this._map.generateMap();
-    this._gamestate = new GamestateEntity(this.POPULATIONS, this.CREATURES_PER_POPULATION);
+    //this._map.generateMap();
+    this._map = new SimpleMapEntity();
+    this._gamestate = new GamestateEntity(
+      this.POPULATIONS,
+      this.CREATURES_PER_POPULATION,
+    );
     for (let population = 0; population < this.POPULATIONS; population++) {
       const schema = [];
       const hiddenLayer = Utils.randomBetweenInclusive(
@@ -65,7 +53,7 @@ export class BoardEntity {
     return this.map.getTileAt(x, y);
   }
 
-  private getBlobWithMostEnergyOfPopulation(population: number): BlobEntity {
+  private getBlobToCopyFrom(population: number): BlobEntity {
     if (this.blobs.length > 0) {
       const blobsOfSamePopulation = this.blobs.filter(
         (b) => b.population === population,
@@ -80,13 +68,23 @@ export class BoardEntity {
   }
 
   public addNewBlob(population: number): void {
-    const mostAdvancedBlob = this.getBlobWithMostEnergyOfPopulation(population);
+    const mostAdvancedBlob = this.getBlobToCopyFrom(population);
     const net = new MultiLayerNetEntity();
     if (mostAdvancedBlob === null || mostAdvancedBlob === undefined) {
       net.initializeNet(this.populationNetSchemas[population]);
-      this.addBlob(new BlobEntity(this.map, population, net, this.gamestate.currentTick));
+      this.addBlob(
+        new BlobEntity(this.map, population, net, this.gamestate.currentTick),
+      );
     } else {
-      this.addBlob(new BlobEntity(this.map, population, net, this.gamestate.currentTick, mostAdvancedBlob));
+      this.addBlob(
+        new BlobEntity(
+          this.map,
+          population,
+          net,
+          this.gamestate.currentTick,
+          mostAdvancedBlob,
+        ),
+      );
     }
   }
 

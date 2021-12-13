@@ -1,40 +1,46 @@
 <template>
   <div id="chart">
-    <ApexChart ref="c" :options="chartOptions" :series="chartData" height="200" type="line"></apexchart>
+    <ApexChart
+      ref="c"
+      :options="chartOptions"
+      :series="chartData"
+      height="200"
+      type="line"
+    ></ApexChart>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {BlobClient} from "~/models/blob.client";
+import Vue from 'vue';
+import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: "GlobalStatsMaxGeneration",
+  name: 'GlobalStatsMaxGeneration',
   props: {
     creatures: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     colors: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     populations: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data(): {
     chartData: Array<{
-      id: number,
-      name: string,
-      data: Array<number>
-    }>,
-    chartOptions: {}
+      id: number;
+      name: string;
+      data: Array<number>;
+    }>;
+    chartOptions: {};
   } {
     return {
       chartData: [],
@@ -42,10 +48,10 @@ export default Vue.extend({
         id: 'GlobalStatsMaxEnergyChart',
         colors: this.colors,
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         tooltip: {
-          enabled: false
+          enabled: false,
         },
         chart: {
           toolbar: {
@@ -55,29 +61,29 @@ export default Vue.extend({
             enabled: false,
           },
           zoom: {
-            enabled: false
+            enabled: false,
           },
           animations: {
-            enabled: false
-          }
+            enabled: false,
+          },
         },
         stroke: {
           width: 2,
-          curve: 'smooth'
+          curve: 'smooth',
         },
         xaxis: {
           labels: {
-            show: false
-          }
+            show: false,
+          },
         },
       },
-    }
+    };
   },
   watch: {
     creatures: {
       immediate: true,
-      handler: 'update'
-    }
+      handler: 'update',
+    },
   },
   methods: {
     update(newVal: Array<BlobClient> | undefined): void {
@@ -99,10 +105,12 @@ export default Vue.extend({
         for (let population = 0; population < this.populations; population++) {
           const newChartDataPopulation = {
             id: population,
-            name: `${this.$t("statsSection.population")} ${population}`,
-            data: [] as Array<number>
+            name: `${this.$t('statsSection.population')} ${population}`,
+            data: [] as Array<number>,
           };
-          const chartDataPopulationSet = this.chartData.find(d => d.id === population);
+          const chartDataPopulationSet = this.chartData.find(
+            (d) => d.id === population,
+          );
           if (chartDataPopulationSet !== undefined) {
             for (const element of chartDataPopulationSet.data) {
               newChartDataPopulation.data.push(element);
@@ -116,11 +124,9 @@ export default Vue.extend({
         }
         this.chartData = newChartData;
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

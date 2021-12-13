@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { BlobDto } from './blob.dto';
 import { Utils } from '../utils/utils';
 import { BlobSenses } from './blob-senses.entity';
-import { MapEntity } from '../map/map.entity';
 import { MultiLayerNetEntity } from './brain/net/multi-layer-net.entity';
+import { MapEntity } from '../map/map.entity';
 
 export class BlobEntity {
   private readonly _id: string;
@@ -31,7 +31,7 @@ export class BlobEntity {
     population: number,
     initializedNet: MultiLayerNetEntity,
     initTick: number,
-    blobToEvolveFrom?: BlobEntity
+    blobToEvolveFrom?: BlobEntity,
   ) {
     this._id = uuid();
     this._population = population;

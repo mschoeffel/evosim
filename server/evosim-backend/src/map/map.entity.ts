@@ -1,44 +1,35 @@
-import { MapGeneratorStrategy } from './generaror/map-generator-strategy.interface';
-import { TileMapper } from './mapper/TileMapper';
+import { MapRegrowStrategy } from './regrow/map-regrow.strategy';
 import { Tile } from './tile/Tile';
 import { MapDto } from './map.dto';
-import { MapRegrowStrategy } from './regrow/map-regrow-strategy.interface';
 
-export class MapEntity {
+export abstract class MapEntity {
   private readonly _width: number;
   private readonly _height: number;
-  private readonly _tilesize: number;
-  private _generator: MapGeneratorStrategy;
-  private _regrow: MapRegrowStrategy;
+  private readonly _tileSize: number;
+  private readonly _regrowStrategy: MapRegrowStrategy;
   private _map: Array<Array<Tile>>;
 
-  constructor(
-    generator: MapGeneratorStrategy,
-    regrow: MapRegrowStrategy,
+  protected constructor(
     width: number,
     height: number,
-    tilesize: number,
+    tileSize: number,
+    regrowStrategy: MapRegrowStrategy,
   ) {
-    this._generator = generator;
-    this._regrow = regrow;
     this._width = width;
     this._height = height;
-    this._tilesize = tilesize;
-    this.generateMap();
+    this._tileSize = tileSize;
+    this._regrowStrategy = regrowStrategy;
+    this._map = this.generateMap();
   }
 
-  public generateMap(): void {
-    this._map = TileMapper.map(
-      this._generator.generate(this._width, this._height),
-    );
-  }
+  protected abstract generateMap(): Array<Array<Tile>>;
 
   public getTileAt(x: number, y: number): Tile {
     x = Math.floor(x);
     y = Math.floor(y);
-    const mapColumn = this.map.at(x);
+    const mapColumn = this.map.at(y);
     if (mapColumn !== undefined) {
-      return mapColumn.at(y);
+      return mapColumn.at(x);
     }
     return undefined;
   }
@@ -46,14 +37,14 @@ export class MapEntity {
   public regenerate(): void {
     for (const mapColumn of this.map) {
       for (const mapRowTile of mapColumn) {
-        this.regrow.regrowTile(mapRowTile, this.map);
+        this.regrowStrategy.regrowTile(mapRowTile, this);
       }
     }
   }
 
   public toDto(): MapDto {
     const dto = new MapDto();
-    dto.tilesize = this.tilesize;
+    dto.tilesize = this.tileSize;
     dto.width = this.width;
     dto.height = this.height;
     for (const mapColumn of this.map) {
@@ -67,6 +58,10 @@ export class MapEntity {
     return dto;
   }
 
+  get tileSize(): number {
+    return this._tileSize;
+  }
+
   get width(): number {
     return this._width;
   }
@@ -75,12 +70,8 @@ export class MapEntity {
     return this._height;
   }
 
-  get generator(): MapGeneratorStrategy {
-    return this._generator;
-  }
-
-  set generator(value: MapGeneratorStrategy) {
-    this._generator = value;
+  get regrowStrategy(): MapRegrowStrategy {
+    return this._regrowStrategy;
   }
 
   get map(): Array<Array<Tile>> {
@@ -89,17 +80,5 @@ export class MapEntity {
 
   set map(value: Array<Array<Tile>>) {
     this._map = value;
-  }
-
-  get tilesize(): number {
-    return this._tilesize;
-  }
-
-  get regrow(): MapRegrowStrategy {
-    return this._regrow;
-  }
-
-  set regrow(value: MapRegrowStrategy) {
-    this._regrow = value;
   }
 }

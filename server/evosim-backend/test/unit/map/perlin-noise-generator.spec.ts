@@ -1,10 +1,10 @@
-import { PerlinNoiseGeneratorEntity } from '../../../src/map/generaror/perlin-noise-generator.entity';
+import { PerlinNoiseGenerator } from '../../../src/map/generaror/perlin-noise.generator';
 
 describe('PerlinNoiseGenerator', () => {
-  let perlinNoiseGenerator: PerlinNoiseGeneratorEntity;
+  let perlinNoiseGenerator: PerlinNoiseGenerator;
 
   beforeEach(() => {
-    perlinNoiseGenerator = new PerlinNoiseGeneratorEntity();
+    perlinNoiseGenerator = new PerlinNoiseGenerator();
   });
 
   it.each([

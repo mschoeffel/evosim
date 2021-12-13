@@ -28,8 +28,8 @@ export default {
     outputNodeLabels: {
       rotation: 'Drehung',
       move: 'Bewegen',
-      eat: 'Essen'
-    }
+      eat: 'Essen',
+    },
   },
   detailSection: {
     heading: 'Kreatur Details',
@@ -44,11 +44,11 @@ export default {
     population: 'Population',
     generation: 'Generation',
     initTick: 'Erstellt mit Tick',
-    ticksAlive: 'Ticks am leben'
+    ticksAlive: 'Ticks am leben',
   },
   topSection: {
     id: 'ID',
     topEnergy: 'Top Energie',
-    population: 'Population'
-  }
-}
+    population: 'Population',
+  },
+};

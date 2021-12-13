@@ -1,36 +1,37 @@
 <template>
-  <Network ref="network"
-           :edges="renderEdges"
-           :nodes="renderNodes"
-           :options="options"
-           class="w-full h-full"
-           @select-node="selectNode"
-           @deselect-node="deselectNode"
+  <Network
+    ref="network"
+    :edges="renderEdges"
+    :nodes="renderNodes"
+    :options="options"
+    class="w-full h-full"
+    @select-node="selectNode"
+    @deselect-node="deselectNode"
   >
   </Network>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import {NodeRenderDto} from "~/models/dto/node.render.dto";
-import {EdgeRenderDto} from "~/models/dto/edge.render.dto";
-import {BlobClient} from "~/models/blob.client";
+import Vue from 'vue';
+import { NodeRenderDto } from '~/models/dto/node.render.dto';
+import { EdgeRenderDto } from '~/models/dto/edge.render.dto';
+import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: "CreatureNetDetail",
+  name: 'CreatureNetDetail',
   props: {
     selectedCreature: {
       type: BlobClient,
       default: () => {
-        return new BlobClient()
-      }
-    }
+        return new BlobClient();
+      },
+    },
   },
   data(): {
-    nodes: Array<NodeRenderDto>,
-    edges: Array<EdgeRenderDto>,
-    options: {},
-    nodeSelected: boolean,
-    selectedEdgeIds: Array<string>,
+    nodes: Array<NodeRenderDto>;
+    edges: Array<EdgeRenderDto>;
+    options: {};
+    nodeSelected: boolean;
+    selectedEdgeIds: Array<string>;
   } {
     return {
       nodes: [],
@@ -45,12 +46,12 @@ export default Vue.extend({
           fixed: true,
         },
         edges: {
-          color: 'lightgray'
-        }
+          color: 'lightgray',
+        },
       },
       nodeSelected: false,
       selectedEdgeIds: [],
-    }
+    };
   },
   computed: {
     renderNodes(): Array<NodeRenderDto> {
@@ -58,8 +59,19 @@ export default Vue.extend({
       if (this.nodes.length > 0) {
         const nodesRender = this.nodes;
 
-        const start = [this.$t("netSection.inputNodeLabels.x"), this.$t("netSection.inputNodeLabels.y"), this.$t("netSection.inputNodeLabels.direction"), this.$t("netSection.inputNodeLabels.energy"), this.$t("netSection.inputNodeLabels.energyCurrentTile"), this.$t("netSection.inputNodeLabels.energyTileAhead")]
-        const end = [this.$t("netSection.outputNodeLabels.rotation"), this.$t("netSection.outputNodeLabels.move"), this.$t("netSection.outputNodeLabels.eat")]
+        const start = [
+          this.$t('netSection.inputNodeLabels.x'),
+          this.$t('netSection.inputNodeLabels.y'),
+          this.$t('netSection.inputNodeLabels.direction'),
+          this.$t('netSection.inputNodeLabels.energy'),
+          this.$t('netSection.inputNodeLabels.energyCurrentTile'),
+          this.$t('netSection.inputNodeLabels.energyTileAhead'),
+        ];
+        const end = [
+          this.$t('netSection.outputNodeLabels.rotation'),
+          this.$t('netSection.outputNodeLabels.move'),
+          this.$t('netSection.outputNodeLabels.eat'),
+        ];
 
         for (let i = 0; i < start.length; i++) {
           nodesRender[i].label = `${start[i]}: ${nodesRender[i].label}`;
@@ -67,7 +79,11 @@ export default Vue.extend({
         }
 
         let index = 0;
-        for (let i = nodesRender.length - end.length; i < nodesRender.length; i++) {
+        for (
+          let i = nodesRender.length - end.length;
+          i < nodesRender.length;
+          i++
+        ) {
           nodesRender[i].label = `${end[index]}: ${nodesRender[i].label}`;
           nodesRender[i].shape = 'dot';
           index++;
@@ -84,10 +100,14 @@ export default Vue.extend({
         const edgesRender = this.edges;
 
         if (this.nodeSelected) {
-          for (const edge of edgesRender.filter(e => !this.selectedEdgeIds.includes(e.id))) {
+          for (const edge of edgesRender.filter(
+            (e) => !this.selectedEdgeIds.includes(e.id),
+          )) {
             edge.width = 0.1;
           }
-          for (const edge of edgesRender.filter(e => this.selectedEdgeIds.includes(e.id))) {
+          for (const edge of edgesRender.filter((e) =>
+            this.selectedEdgeIds.includes(e.id),
+          )) {
             edge.width = edge.widthHidden;
           }
         } else {
@@ -100,13 +120,13 @@ export default Vue.extend({
       } else {
         return this.edges;
       }
-    }
+    },
   },
   watch: {
     selectedCreature: {
       immediate: true,
-      handler: 'update'
-    }
+      handler: 'update',
+    },
   },
   methods: {
     update(newVal: BlobClient | undefined): void {
@@ -136,7 +156,7 @@ export default Vue.extend({
       this.nodeSelected = true;
       this.selectedEdgeIds = e.edges;
       for (const edgeId of e.edges) {
-        const connectedEdges = this.edges.filter(e => e.id === edgeId);
+        const connectedEdges = this.edges.filter((e) => e.id === edgeId);
         for (const connectedEdge of connectedEdges) {
           connectedEdge.label = connectedEdge.labelHidden;
         }
@@ -145,13 +165,13 @@ export default Vue.extend({
     deselectNode(): void {
       this.nodeSelected = false;
       for (const edgeId of this.selectedEdgeIds) {
-        const edge = this.edges.find(e => e.id === edgeId);
+        const edge = this.edges.find((e) => e.id === edgeId);
         if (edge !== undefined) {
           edge.labelHidden = edge.label;
-          edge.label = " ";
+          edge.label = ' ';
         }
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>

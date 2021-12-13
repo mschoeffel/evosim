@@ -1,10 +1,10 @@
-import { SimplexNoiseGeneratorEntity } from '../../../src/map/generaror/simplex-noise-generator.entity';
+import { SimplexNoiseGenerator } from '../../../src/map/generaror/simplex-noise.generator';
 
 describe('SimplexNoiseGenerator', () => {
-  let simplexNoiseGeneratorEntity: SimplexNoiseGeneratorEntity;
+  let simplexNoiseGeneratorEntity: SimplexNoiseGenerator;
 
   beforeEach(() => {
-    simplexNoiseGeneratorEntity = new SimplexNoiseGeneratorEntity();
+    simplexNoiseGeneratorEntity = new SimplexNoiseGenerator();
   });
 
   it.each([

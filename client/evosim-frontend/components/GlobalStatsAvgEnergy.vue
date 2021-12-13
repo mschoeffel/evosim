@@ -1,40 +1,46 @@
 <template>
   <div id="chart">
-    <ApexChart ref="c" :options="chartOptions" :series="chartData" height="200" type="line"></ApexChart>
+    <ApexChart
+      ref="c"
+      :options="chartOptions"
+      :series="chartData"
+      height="200"
+      type="line"
+    ></ApexChart>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {BlobClient} from "~/models/blob.client";
+import Vue from 'vue';
+import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: "GlobalStatsAvgEnergy",
+  name: 'GlobalStatsAvgEnergy',
   props: {
     creatures: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     colors: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     populations: {
       type: Number,
       default: 0,
-    }
+    },
   },
   data(): {
     chartData: Array<{
-      id: number,
-      name: string,
-      data: Array<number>
-    }>,
-    chartOptions: {}
+      id: number;
+      name: string;
+      data: Array<number>;
+    }>;
+    chartOptions: {};
   } {
     return {
       chartData: [],
@@ -42,10 +48,10 @@ export default Vue.extend({
         id: 'GlobalStatsMaxEnergyChart',
         colors: this.colors,
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         tooltip: {
-          enabled: false
+          enabled: false,
         },
         chart: {
           toolbar: {
@@ -55,20 +61,20 @@ export default Vue.extend({
             enabled: false,
           },
           zoom: {
-            enabled: false
+            enabled: false,
           },
           animations: {
-            enabled: false
-          }
+            enabled: false,
+          },
         },
         stroke: {
           width: 2,
-          curve: 'smooth'
+          curve: 'smooth',
         },
         xaxis: {
           labels: {
-            show: false
-          }
+            show: false,
+          },
         },
         yaxis: {
           min: 0,
@@ -76,17 +82,17 @@ export default Vue.extend({
           tickAmount: 11,
         },
       },
-    }
+    };
   },
   watch: {
     creatures: {
       immediate: true,
-      handler: 'update'
-    }
+      handler: 'update',
+    },
   },
   methods: {
     roundToTwoDigits(x: number): number {
-      return Math.round((x + Number.EPSILON) * 100) / 100
+      return Math.round((x + Number.EPSILON) * 100) / 100;
     },
     update(newVal: Array<BlobClient> | undefined): void {
       // TODO: Optimize
@@ -108,10 +114,12 @@ export default Vue.extend({
         for (let population = 0; population < this.populations; population++) {
           const newChartDataPopulation = {
             id: population,
-            name: `${this.$t("statsSection.population")} ${population}`,
-            data: [] as Array<number>
+            name: `${this.$t('statsSection.population')} ${population}`,
+            data: [] as Array<number>,
           };
-          const chartDataPopulationSet = this.chartData.find(d => d.id === population);
+          const chartDataPopulationSet = this.chartData.find(
+            (d) => d.id === population,
+          );
           if (chartDataPopulationSet !== undefined) {
             for (const element of chartDataPopulationSet.data) {
               newChartDataPopulation.data.push(element);
@@ -120,16 +128,19 @@ export default Vue.extend({
               newChartDataPopulation.data.shift();
             }
           }
-          newChartDataPopulation.data.push(this.roundToTwoDigits(sumOfEachPopulation[population] / countOfEachPopulation[population]));
+          newChartDataPopulation.data.push(
+            this.roundToTwoDigits(
+              sumOfEachPopulation[population] /
+                countOfEachPopulation[population],
+            ),
+          );
           newChartData.push(newChartDataPopulation);
         }
         this.chartData = newChartData;
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

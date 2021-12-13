@@ -1,79 +1,126 @@
 <template>
-
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="border-b-2 border-black">
-    <tr>
-      <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        {{ $t("topSection.topEnergy") }}
-      </th>
-      <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        {{ $t("topSection.population") }}
-      </th>
-      <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 tracking-wider" scope="col">
-        {{ $t("topSection.id") }}
-      </th>
-    </tr>
+      <tr>
+        <th
+          class="
+            px-6
+            py-3
+            text-left text-sm
+            font-medium
+            text-gray-900
+            tracking-wider
+          "
+          scope="col"
+        >
+          {{ $t('topSection.topEnergy') }}
+        </th>
+        <th
+          class="
+            px-6
+            py-3
+            text-left text-sm
+            font-medium
+            text-gray-900
+            tracking-wider
+          "
+          scope="col"
+        >
+          {{ $t('topSection.population') }}
+        </th>
+        <th
+          class="
+            px-6
+            py-3
+            text-left text-sm
+            font-medium
+            text-gray-900
+            tracking-wider
+          "
+          scope="col"
+        >
+          {{ $t('topSection.id') }}
+        </th>
+      </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-    <tr v-for="topCreature in topCreatures" :key="topCreature.id">
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-        {{ roundToTwoDigits(topCreature.energy) }}
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-        <span :style="'background-color: '+ colors[topCreature.population] "
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100">{{
-            topCreature.population
-          }}</span>
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-        <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{ topCreature.id }}</a>
-      </td>
-    </tr>
+      <tr v-for="topCreature in topCreatures" :key="topCreature.id">
+        <td
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+        >
+          {{ roundToTwoDigits(topCreature.energy) }}
+        </td>
+        <td
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+        >
+          <span
+            :style="'background-color: ' + colors[topCreature.population]"
+            class="
+              inline-flex
+              items-center
+              px-2.5
+              py-0.5
+              rounded-full
+              text-xs
+              font-medium
+              bg-blue-100
+            "
+            >{{ topCreature.population }}</span
+          >
+        </td>
+        <td
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+        >
+          <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{
+            topCreature.id
+          }}</a>
+        </td>
+      </tr>
     </tbody>
   </table>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import {BlobClient} from "~/models/blob.client";
+import Vue from 'vue';
+import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: "CreatureRanking",
+  name: 'CreatureRanking',
   props: {
     creatures: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     colors: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
   },
   data(): {
-    topCreatures: Array<BlobClient>,
-    updateschedule: number,
+    topCreatures: Array<BlobClient>;
+    updateschedule: number;
   } {
     return {
       topCreatures: [],
-      updateschedule: 10
-    }
+      updateschedule: 10,
+    };
   },
   watch: {
     creatures: {
       immediate: true,
-      handler: 'update'
-    }
+      handler: 'update',
+    },
   },
   methods: {
     roundToTwoDigits(x: number): number {
-      return Math.round((x + Number.EPSILON) * 100) / 100
+      return Math.round((x + Number.EPSILON) * 100) / 100;
     },
     emitSelect(id: string): void {
-      this.$emit('selectCreature', id)
+      this.$emit('selectCreature', id);
     },
     update(newVal: Array<BlobClient> | undefined): void {
       if (newVal !== undefined) {
@@ -86,14 +133,14 @@ export default Vue.extend({
             top5Creature.push(blob);
           }
           top5Energy = top5Energy.sort((a, b) => {
-            return a - b
+            return a - b;
           });
           top5Creature = top5Creature.sort((a, b) => {
-            return a.energy - b.energy
+            return a.energy - b.energy;
           });
 
           if (top5Energy.length > top) {
-            top5Energy.shift()
+            top5Energy.shift();
           }
           if (top5Creature.length > top) {
             top5Creature.shift();
@@ -101,11 +148,9 @@ export default Vue.extend({
         }
         this.topCreatures = top5Creature.reverse();
       }
-    }
+    },
   },
-})
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
