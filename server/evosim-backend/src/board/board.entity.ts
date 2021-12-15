@@ -1,23 +1,20 @@
 import { BlobEntity } from '../blob/blob.entity';
 import { Tile } from '../map/tile/Tile';
 import { GamestateEntity } from './gamestate.entity';
-import { SimpleMapEntity } from '../map/predefined/simple-map.entity';
 import { MapEntity } from '../map/map.entity';
 import { BoardConfig } from './board.config';
 import { PopulationEntity } from '../population/population.entity';
+import { RandomPerlinNoiseMapEntity } from '../map/predefined/random-perlin-noise-map.entity';
 
 export class BoardEntity {
   public readonly TICK_ENERGY_COST = 0.5;
 
-  private _map: MapEntity;
-  private _populationNetSchemas: Array<Array<number>>;
-  private _gamestate: GamestateEntity;
-  private _populations: Array<PopulationEntity>;
+  private readonly _map: MapEntity;
+  private readonly _gamestate: GamestateEntity;
+  private readonly _populations: Array<PopulationEntity>;
 
   constructor() {
-    this._populationNetSchemas = [];
-
-    this._map = new SimpleMapEntity();
+    this._map = new RandomPerlinNoiseMapEntity();
     this._gamestate = new GamestateEntity(
       BoardConfig.NUMBER_OF_POPULATIONS,
       BoardConfig.CREATURES_PER_POPULATION,
@@ -25,23 +22,20 @@ export class BoardEntity {
 
     this._populations = [];
     for (
-      let population = 0;
-      population < BoardConfig.NUMBER_OF_POPULATIONS;
-      population++
+      let populationIndex = 0;
+      populationIndex < BoardConfig.NUMBER_OF_POPULATIONS;
+      populationIndex++
     ) {
-      const pop = BoardConfig.POPULATIONS_DATA.at(population);
-      const p = new PopulationEntity(
-        population,
-        pop.optimization,
-        pop.activationFunction,
-        this._map,
-        pop.netSchema,
+      const populationData = BoardConfig.POPULATIONS_DATA.at(populationIndex);
+      const population = new PopulationEntity(
+        populationIndex,
+        populationData.optimization,
+        populationData.activationFunction,
+        populationData.netSchema,
+        BoardConfig.CREATURES_PER_POPULATION,
       );
-      this._populations.push(p);
-
-      for (let i = 0; i < BoardConfig.CREATURES_PER_POPULATION; i++) {
-        this.addNewBlobToPopulation(p);
-      }
+      population.initialize(this._map);
+      this._populations.push(population);
     }
   }
 
@@ -49,14 +43,21 @@ export class BoardEntity {
     return this.map.getTileAt(x, y);
   }
 
-  public addNewBlobToPopulation(population: PopulationEntity): void {
-    population.spawnNewBlob(this.gamestate.currentTick);
+  public addNewBlobToPopulation(
+    blobDied: BlobEntity,
+    population: PopulationEntity,
+  ): void {
+    population.addEvolvedNewBlobToPopulation(
+      blobDied,
+      this.map,
+      this.gamestate.currentTick,
+    );
   }
 
   public runOneTick(): void {
     this.gamestate.addTick();
     this.map.regenerate();
-    for (const population of this._populations) {
+    for (const population of this.populations) {
       for (const blob of population.blobs) {
         blob.addTickAlive();
         blob.energy -= this.TICK_ENERGY_COST;
@@ -68,20 +69,20 @@ export class BoardEntity {
 
   private checkBlob(blob: BlobEntity, population: PopulationEntity): void {
     if (blob.energy <= 0) {
-      this.addNewBlobToPopulation(population);
-      population.removeBlob(blob);
+      this.addNewBlobToPopulation(blob, population);
+      population.removeBlobFromPopultaion(blob);
     } else {
       const tile = this.getTileOfBlobPosition(blob.positionX, blob.positionY);
       if (tile === undefined || tile.short === 'W') {
-        this.addNewBlobToPopulation(population);
-        population.removeBlob(blob)
+        this.addNewBlobToPopulation(blob, population);
+        population.removeBlobFromPopultaion(blob);
       }
     }
   }
 
   public blobs(): Array<BlobEntity> {
     const blobs = [];
-    for (const population of this._populations) {
+    for (const population of this.populations) {
       for (const blob of population.blobs) {
         blobs.push(blob);
       }
@@ -89,27 +90,15 @@ export class BoardEntity {
     return blobs;
   }
 
+  get populations(): Array<PopulationEntity> {
+    return this._populations;
+  }
+
   get map(): MapEntity {
     return this._map;
   }
 
-  set map(value: MapEntity) {
-    this._map = value;
-  }
-
-  get populationNetSchemas(): Array<Array<number>> {
-    return this._populationNetSchemas;
-  }
-
-  set populationNetSchemas(value: Array<Array<number>>) {
-    this._populationNetSchemas = value;
-  }
-
   get gamestate(): GamestateEntity {
     return this._gamestate;
-  }
-
-  set gamestate(value: GamestateEntity) {
-    this._gamestate = value;
   }
 }

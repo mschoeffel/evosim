@@ -6,30 +6,34 @@ import { ConnectionEntity } from './connection.entity';
 import { BlobSenses } from '../../blob-senses.entity';
 import { BlobActions } from '../../blob-actions.entity';
 import { NodeEntity } from './nodes/node.entity';
-import { SigmoidActivationStrategy } from './nodes/activation/sigmoid-activation.strategy';
+import { ActivationStrategyInterface } from './nodes/activation/activation-strategy.interface';
 
 export class MultiLayerNetEntity extends NetInterface {
-  private _inputNodes: Array<InputNodeEntity>;
-  private _outputNodes: Array<OutputNodeEntity>;
-  private _hiddenNodes: Array<Array<HiddenNodeEntity>>;
-  private _nodes: Array<NodeEntity>;
-  private _edges: Array<ConnectionEntity>;
-  private _hiddenSchema: Array<number>;
+  private readonly _inputNodes: Array<InputNodeEntity>;
+  private readonly _outputNodes: Array<OutputNodeEntity>;
+  private readonly _hiddenNodes: Array<Array<HiddenNodeEntity>>;
+  private readonly _nodes: Array<NodeEntity>;
+  private readonly _edges: Array<ConnectionEntity>;
+  private readonly _hiddenSchema: Array<number>;
+  private readonly _activationStrategy: ActivationStrategyInterface;
 
-  public readonly ACTIVATION_STRATEGY = new SigmoidActivationStrategy();
-
-  constructor() {
+  constructor(
+    hiddenSchema: Array<number>,
+    activationStrategy: ActivationStrategyInterface,
+  ) {
     super();
     this._inputNodes = [];
     this._outputNodes = [];
     this._hiddenNodes = [];
     this._nodes = [];
     this._edges = [];
-  }
-
-  public initializeNet(hiddenSchema: Array<number>): void {
-    this.hiddenSchema = hiddenSchema;
-    this.initializeNetDetail(this.INPUT_NODES, this.OUTPUT_NODES, hiddenSchema);
+    this._activationStrategy = activationStrategy;
+    this._hiddenSchema = hiddenSchema;
+    this.initializeNetDetail(
+      this.INPUT_NODES,
+      this.OUTPUT_NODES,
+      this.hiddenSchema,
+    );
   }
 
   private initializeNetDetail(
@@ -38,7 +42,7 @@ export class MultiLayerNetEntity extends NetInterface {
     hiddenSchema: Array<number>,
   ): void {
     for (let i = 0; i < inputs; i++) {
-      const node = new InputNodeEntity(0, i, this.ACTIVATION_STRATEGY);
+      const node = new InputNodeEntity(0, i, this.activationStrategy);
       this.inputNodes.push(node);
       this.nodes.push(node);
     }
@@ -51,7 +55,7 @@ export class MultiLayerNetEntity extends NetInterface {
         const hiddenNode = new HiddenNodeEntity(
           hiddenLayer,
           nodeIndex,
-          this.ACTIVATION_STRATEGY,
+          this.activationStrategy,
         );
         this.setConnections(prevNodeLayer, hiddenNode);
         hiddenNodeLayer.push(hiddenNode);
@@ -66,7 +70,7 @@ export class MultiLayerNetEntity extends NetInterface {
       const node = new OutputNodeEntity(
         hiddenLayer,
         i,
-        this.ACTIVATION_STRATEGY,
+        this.activationStrategy,
       );
       this.setConnections(prevNodeLayer, node);
       this.outputNodes.push(node);
@@ -122,47 +126,27 @@ export class MultiLayerNetEntity extends NetInterface {
     return this._inputNodes;
   }
 
-  set inputNodes(value: Array<InputNodeEntity>) {
-    this._inputNodes = value;
-  }
-
   get outputNodes(): Array<OutputNodeEntity> {
     return this._outputNodes;
-  }
-
-  set outputNodes(value: Array<OutputNodeEntity>) {
-    this._outputNodes = value;
   }
 
   get hiddenNodes(): Array<Array<HiddenNodeEntity>> {
     return this._hiddenNodes;
   }
 
-  set hiddenNodes(value: Array<Array<HiddenNodeEntity>>) {
-    this._hiddenNodes = value;
-  }
-
   get nodes(): Array<NodeEntity> {
     return this._nodes;
-  }
-
-  set nodes(value: Array<NodeEntity>) {
-    this._nodes = value;
   }
 
   get edges(): Array<ConnectionEntity> {
     return this._edges;
   }
 
-  set edges(value: Array<ConnectionEntity>) {
-    this._edges = value;
-  }
-
   get hiddenSchema(): Array<number> {
     return this._hiddenSchema;
   }
 
-  set hiddenSchema(value: Array<number>) {
-    this._hiddenSchema = value;
+  get activationStrategy(): ActivationStrategyInterface {
+    return this._activationStrategy;
   }
 }

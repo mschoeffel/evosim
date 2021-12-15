@@ -3,75 +3,71 @@ import { OptimizationStrategy } from '../blob/brain/net/optimization/optimizatio
 import { ActivationStrategyInterface } from '../blob/brain/net/nodes/activation/activation-strategy.interface';
 import { MapEntity } from '../map/map.entity';
 import { MultiLayerNetEntity } from '../blob/brain/net/multi-layer-net.entity';
+import { BrainEntity } from '../blob/brain/brain.entity';
 
 export class PopulationEntity {
-  private readonly num: number;
-  private _blobs: Array<BlobEntity>;
-  private readonly optimizationStrategy: OptimizationStrategy;
-  private readonly activationStrategy: ActivationStrategyInterface;
-  private readonly map: MapEntity;
-  private readonly netSchema: Array<number>;
+  private readonly _index: number;
+  private readonly _blobs: Array<BlobEntity>;
+  private readonly _optimizationStrategy: OptimizationStrategy;
+  private readonly _activationStrategy: ActivationStrategyInterface;
+  private readonly _netSchema: Array<number>;
+  private readonly _size: number;
 
   constructor(
-    num: number,
+    index: number,
     optimizationStrategy: OptimizationStrategy,
     activationStrategy: ActivationStrategyInterface,
-    map: MapEntity,
     netSchema: Array<number>,
+    size: number,
   ) {
-    this.num = num;
-    this.optimizationStrategy = optimizationStrategy;
-    this.activationStrategy = activationStrategy;
-    this.map = map;
-    this.netSchema = netSchema;
+    this._index = index;
+    this._optimizationStrategy = optimizationStrategy;
+    this._activationStrategy = activationStrategy;
+    this._netSchema = netSchema;
+    this._size = size;
     this._blobs = [];
   }
 
-  public spawnNewBlob(tick: number): BlobEntity {
-    const mostAdvancedBlob = this.getFittestBlobOfPopulation();
-    const net = new MultiLayerNetEntity();
-    let blob;
-    if (mostAdvancedBlob === null || mostAdvancedBlob === undefined) {
-      net.initializeNet(this.netSchema);
-      blob = new BlobEntity(
-        this.map,
-        this.num,
-        net,
-        this.optimizationStrategy,
-        tick,
+  public initialize(map: MapEntity): void {
+    for (let i = 0; i < this.size; i++) {
+      const brain = new BrainEntity(
+        new MultiLayerNetEntity(this.netSchema, this.activationStrategy),
       );
-    } else {
-      blob = new BlobEntity(
-        this.map,
-        this.num,
-        net,
-        this.optimizationStrategy,
-        tick,
-        mostAdvancedBlob,
-      );
+      this.blobs.push(new BlobEntity(map, this.index, brain, 0, 0));
     }
-    this.addDirectBlob(blob);
+  }
+
+  public addEvolvedNewBlobToPopulation(
+    blobDied: BlobEntity,
+    map: MapEntity,
+    tick: number,
+  ): BlobEntity {
+    const net = this.optimizationStrategy.evolve(blobDied, this);
+    const brain = new BrainEntity(net);
+
+    const blob = new BlobEntity(
+      map,
+      this.index,
+      brain,
+      tick,
+      blobDied.generation + 1,
+    );
+    this.addNewBlobToPopulation(blob);
     return blob;
   }
 
-  public addDirectBlob(blob: BlobEntity): void {
-    this._blobs.push(blob);
+  private addNewBlobToPopulation(blob: BlobEntity): void {
+    this.blobs.push(blob);
   }
 
   public getFittestBlobOfPopulation(): BlobEntity | undefined {
-    if (this._blobs.length > 0) {
-      return this._blobs.reduce((a, b) =>
-        a.ticksAlive > b.ticksAlive ? a : b,
-      );
+    if (this.blobs.length > 0) {
+      return this.blobs.reduce((a, b) => (a.ticksAlive > b.ticksAlive ? a : b));
     }
     return undefined;
   }
 
-  public size(): number {
-    return this._blobs.length;
-  }
-
-  public removeBlob(blob: BlobEntity): void {
+  public removeBlobFromPopultaion(blob: BlobEntity): void {
     const i = this.blobs.findIndex((b) => b.id == blob.id);
     this.blobs.splice(i, 1);
   }
@@ -80,7 +76,23 @@ export class PopulationEntity {
     return this._blobs;
   }
 
-  set blobs(value: Array<BlobEntity>) {
-    this._blobs = value;
+  get index(): number {
+    return this._index;
+  }
+
+  get size(): number {
+    return this._size;
+  }
+
+  get optimizationStrategy(): OptimizationStrategy {
+    return this._optimizationStrategy;
+  }
+
+  get activationStrategy(): ActivationStrategyInterface {
+    return this._activationStrategy;
+  }
+
+  get netSchema(): Array<number> {
+    return this._netSchema;
   }
 }

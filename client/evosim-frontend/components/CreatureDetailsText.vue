@@ -3,7 +3,11 @@
     <h1>{{ $t('detailSection.heading') }}</h1>
     <div class="flex">
       <div class="w-1/3">{{ $t('detailSection.state') }}</div>
-      <div v-if="creature !== undefined" class="w-2/3">
+      <div
+        v-if="creature !== undefined"
+        class="w-2/3"
+        :class="creature.state === 'alive' ? 'text-green-600' : 'text-red-600'"
+      >
         {{ $t(`detailSection.${creature.state}`) }}
       </div>
     </div>

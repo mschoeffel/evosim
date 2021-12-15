@@ -1,20 +1,22 @@
 import { MapRegrowStrategy } from './map-regrow.strategy';
 import { Tile } from '../tile/Tile';
+import { MapConfig } from '../map.config';
 
 export class AbsoluteRegrowStrategy extends MapRegrowStrategy {
-  private readonly ABSOLUTE_REGROW_RATE;
+  private readonly regrowRate;
 
   constructor(regrowRate: number) {
     super();
-    this.ABSOLUTE_REGROW_RATE = regrowRate;
+    this.regrowRate = regrowRate;
   }
 
   regrowTile(tile: Tile): void {
-    if (tile.energy > 0) {
-      tile.energy += this.ABSOLUTE_REGROW_RATE;
-      if (tile.energy > 100) {
-        tile.energy = 100;
+    if (tile.energy >= 0) {
+      let amount = this.regrowRate;
+      if (tile.energy + amount > MapConfig.MAX_ENERGY_OF_TILE) {
+        amount = MapConfig.MAX_ENERGY_OF_TILE - tile.energy;
       }
+      tile.energy += amount;
     }
   }
 }

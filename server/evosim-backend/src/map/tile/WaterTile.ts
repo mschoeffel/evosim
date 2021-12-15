@@ -1,10 +1,8 @@
 import { Tile } from './Tile';
 
 export class WaterTile extends Tile {
-  constructor() {
-    super();
-    this._name = 'water';
-    this._short = 'W';
+  constructor(x: number, y: number) {
+    super(x, y, 'water', 'W');
     this._energy = -1;
   }
 }

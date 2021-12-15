@@ -3,21 +3,19 @@ import { v4 as uuid } from 'uuid';
 import { BlobDto } from './blob.dto';
 import { Utils } from '../utils/utils';
 import { BlobSenses } from './blob-senses.entity';
-import { MultiLayerNetEntity } from './brain/net/multi-layer-net.entity';
 import { MapEntity } from '../map/map.entity';
-import { OptimizationStrategy } from './brain/net/optimization/optimization.strategy';
 
 export class BlobEntity {
   private readonly _id: string;
+  private readonly _generation: number;
+  private readonly _population: number;
+  private readonly _map: MapEntity;
+  private readonly _initTick: number;
+  private readonly _brain: BrainEntity;
   private _positionX: number;
   private _positionY: number;
-  private _brain: BrainEntity;
   private _energy: number;
   private _direction: number;
-  private _generation: number;
-  private _population: number;
-  private _map: MapEntity;
-  private _initTick: number;
   private _ticksAlive: number;
 
   private readonly INIT_ENERGY = 40;
@@ -33,22 +31,17 @@ export class BlobEntity {
   constructor(
     map: MapEntity,
     population: number,
-    initializedNet: MultiLayerNetEntity,
-    brainOptimizationStrategy: OptimizationStrategy,
+    brain: BrainEntity,
     initTick: number,
-    blobToEvolveFrom?: BlobEntity,
+    generation: number,
   ) {
     this._id = uuid();
     this._population = population;
-    if (blobToEvolveFrom !== null && blobToEvolveFrom !== undefined) {
-      this._brain = blobToEvolveFrom.brain.evolve();
-      this._generation = blobToEvolveFrom.generation + 1;
-    } else {
-      this._brain = new BrainEntity(initializedNet, brainOptimizationStrategy);
-      this._generation = 0;
-    }
+    this._brain = brain;
+    this._generation = generation;
     this._energy = this.INIT_ENERGY;
     this._map = map;
+    //TODO: Rework that blobs only spawn on grass tiles:
     this._positionX = Math.random() * map.width;
     this._positionY = Math.random() * map.height;
     this._direction = Math.random() * 360;
@@ -188,10 +181,6 @@ export class BlobEntity {
     return this._brain;
   }
 
-  set brain(value: BrainEntity) {
-    this._brain = value;
-  }
-
   get energy(): number {
     return this._energy;
   }
@@ -212,32 +201,16 @@ export class BlobEntity {
     return this._generation;
   }
 
-  set generation(value: number) {
-    this._generation = value;
-  }
-
   get population(): number {
     return this._population;
-  }
-
-  set population(value: number) {
-    this._population = value;
   }
 
   get map(): MapEntity {
     return this._map;
   }
 
-  set map(value: MapEntity) {
-    this._map = value;
-  }
-
   get initTick(): number {
     return this._initTick;
-  }
-
-  set initTick(value: number) {
-    this._initTick = value;
   }
 
   get ticksAlive(): number {
