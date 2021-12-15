@@ -2,7 +2,6 @@ import { NodeEntity } from './nodes/node.entity';
 import { EdgeDto } from '../edge.dto';
 import { v4 as uuid } from 'uuid';
 import { Utils } from '../../../utils/utils';
-import { SigmoidEntity } from './nodes/activation/sigmoid.entity';
 
 export class ConnectionEntity {
   private _id: string;
@@ -11,9 +10,6 @@ export class ConnectionEntity {
   private _weight: number;
   private _mutation: number;
 
-  public readonly MAXIMUM_WEIGHT = 10;
-  public readonly MUTATION_RATE_MUTABILITY = 0.01;
-  public readonly MAXIMUM_MUTATION_RATE = 0.1;
   public readonly INIT_MUTATION = 0.005;
 
   constructor() {
@@ -31,34 +27,6 @@ export class ConnectionEntity {
     dto.id = this.id;
     dto.width = Utils.roundToTwoDigits((this.weight + 1) * 2);
     return dto;
-  }
-
-  public mutate(): ConnectionEntity {
-    const newWeight = this.calcMutation(
-      this.weight,
-      this.mutation,
-      this.MAXIMUM_WEIGHT,
-    );
-    const newMutation = this.calcMutation(
-      this.mutation,
-      this.MUTATION_RATE_MUTABILITY,
-      this.MAXIMUM_MUTATION_RATE,
-    );
-    const connection = new ConnectionEntity();
-    connection.weight = newWeight;
-    connection.mutation = newMutation;
-    return connection;
-  }
-
-  private calcMutation(input: number, rate: number, max: number): number {
-    let mutatedOutput = input;
-    if (Math.random() < rate) {
-      mutatedOutput *= Math.random() * 2 - 1;
-    }
-    if (Math.abs(mutatedOutput) > max) {
-      mutatedOutput = new SigmoidEntity().evaluate(mutatedOutput) * max;
-    }
-    return mutatedOutput;
   }
 
   public get source(): NodeEntity {

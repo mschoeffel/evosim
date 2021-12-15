@@ -1,7 +1,6 @@
-import {BrainClientDto} from "~/models/dto/brain.client.dto";
+import { BrainClientDto } from '~/models/dto/brain.client.dto';
 
 export class BlobClientDto {
-
   _id: string;
   _x: number;
   _y: number;
@@ -17,7 +16,7 @@ export class BlobClientDto {
   _ticksAlive: number;
 
   constructor() {
-    this._id = "";
+    this._id = '';
     this._x = 0;
     this._y = 0;
     this._direction = 0;

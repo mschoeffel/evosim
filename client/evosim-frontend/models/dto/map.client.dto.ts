@@ -4,7 +4,6 @@ export class MapClientDto {
   _height: number;
   _map: Array<Array<number>>;
 
-
   constructor() {
     this._tilesize = 0;
     this._width = 0;

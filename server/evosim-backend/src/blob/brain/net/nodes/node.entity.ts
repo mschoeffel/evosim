@@ -1,19 +1,19 @@
-import { ActivationInterface } from './activation/activation.interface';
+import { ActivationStrategyInterface } from './activation/activation-strategy.interface';
 import { v4 as uuid } from 'uuid';
 import { NodeDto } from '../../node.dto';
 import { Utils } from '../../../../utils/utils';
 
 export abstract class NodeEntity {
   protected _value: number;
-  protected _id: string;
-  private _activationFunction: ActivationInterface;
-  private _layer: number;
-  private _index: number;
+  protected readonly _id: string;
+  private readonly _activationFunction: ActivationStrategyInterface;
+  private readonly _layer: number;
+  private readonly _index: number;
 
   protected constructor(
     layer: number,
     index: number,
-    activation: ActivationInterface,
+    activation: ActivationStrategyInterface,
   ) {
     this._id = uuid();
     this._value = 0;
@@ -25,6 +25,7 @@ export abstract class NodeEntity {
   public toDto(): NodeDto {
     const dto = new NodeDto();
     dto.id = this.id;
+    //TODO: Rework Label -> Value
     dto.label = String(Utils.roundToTwoDigits(this.value));
     dto.x = this.layer * 100;
     dto.y = this.index * 100;
@@ -45,31 +46,15 @@ export abstract class NodeEntity {
     return this._id;
   }
 
-  public set id(value: string) {
-    this._id = value;
-  }
-
-  public get activationFunction(): ActivationInterface {
+  public get activationFunction(): ActivationStrategyInterface {
     return this._activationFunction;
-  }
-
-  public set activationFunction(value: ActivationInterface) {
-    this._activationFunction = value;
   }
 
   get layer(): number {
     return this._layer;
   }
 
-  set layer(value: number) {
-    this._layer = value;
-  }
-
   get index(): number {
     return this._index;
-  }
-
-  set index(value: number) {
-    this._index = value;
   }
 }

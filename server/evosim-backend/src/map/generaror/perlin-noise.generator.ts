@@ -1,4 +1,4 @@
-import { MapGeneratorStrategy } from './map-generator-strategy.interface';
+import { MapGeneratorStrategy } from './map-generator.interface';
 import PerlinNoise = require('perlin-noise');
 
 export class PerlinNoiseGenerator implements MapGeneratorStrategy {

@@ -112,7 +112,7 @@ export default Vue.extend({
           }
         } else {
           for (const edge of edgesRender) {
-            edge.width = edge.widthHidden;
+            edge.width = edge.widthHidden + 1;
           }
         }
 

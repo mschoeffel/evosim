@@ -1,10 +1,10 @@
-import {BrainClient} from "~/models/brain.client";
-import {ServerParsableInterface} from "~/models/serverparsable.interface";
-import {BlobClientDto} from "~/models/dto/blob.client.dto";
+import { BrainClient } from '~/models/brain.client';
+import { ServerParsableInterface } from '~/models/serverparsable.interface';
+import { BlobClientDto } from '~/models/dto/blob.client.dto';
 
 export class BlobClient implements ServerParsableInterface<BlobClientDto> {
   constructor() {
-    this._id = "";
+    this._id = '';
     this._x = 0;
     this._y = 0;
     this._direction = 0;

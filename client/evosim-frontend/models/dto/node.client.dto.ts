@@ -6,10 +6,10 @@ export class NodeClientDto {
   _shape: string;
 
   constructor() {
-    this._id = "";
+    this._id = '';
     this._x = 0;
     this._y = 0;
-    this._label = "";
-    this._shape = "circle";
+    this._label = '';
+    this._shape = 'circle';
   }
 }

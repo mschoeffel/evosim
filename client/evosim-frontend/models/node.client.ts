@@ -1,13 +1,13 @@
-import {ServerParsableInterface} from "~/models/serverparsable.interface";
-import {NodeClientDto} from "~/models/dto/node.client.dto";
-import {NodeRenderDto} from "~/models/dto/node.render.dto";
+import { ServerParsableInterface } from '~/models/serverparsable.interface';
+import { NodeClientDto } from '~/models/dto/node.client.dto';
+import { NodeRenderDto } from '~/models/dto/node.render.dto';
 
 export class NodeClient implements ServerParsableInterface<NodeClientDto> {
   constructor() {
-    this._id = "";
+    this._id = '';
     this._x = 0;
     this._y = 0;
-    this._label = "";
+    this._label = '';
   }
 
   private _id: string;

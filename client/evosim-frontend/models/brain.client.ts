@@ -1,7 +1,7 @@
-import {NodeClient} from "~/models/node.client";
-import {EdgeClient} from "~/models/edge.client";
-import {ServerParsableInterface} from "~/models/serverparsable.interface";
-import {BrainClientDto} from "~/models/dto/brain.client.dto";
+import { NodeClient } from '~/models/node.client';
+import { EdgeClient } from '~/models/edge.client';
+import { ServerParsableInterface } from '~/models/serverparsable.interface';
+import { BrainClientDto } from '~/models/dto/brain.client.dto';
 
 export class BrainClient implements ServerParsableInterface<BrainClientDto> {
   constructor() {

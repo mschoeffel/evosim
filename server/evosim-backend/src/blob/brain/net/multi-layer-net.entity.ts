@@ -6,7 +6,7 @@ import { ConnectionEntity } from './connection.entity';
 import { BlobSenses } from '../../blob-senses.entity';
 import { BlobActions } from '../../blob-actions.entity';
 import { NodeEntity } from './nodes/node.entity';
-import { SigmoidEntity } from './nodes/activation/sigmoid.entity';
+import { SigmoidActivationStrategy } from './nodes/activation/sigmoid-activation.strategy';
 
 export class MultiLayerNetEntity extends NetInterface {
   private _inputNodes: Array<InputNodeEntity>;
@@ -15,6 +15,8 @@ export class MultiLayerNetEntity extends NetInterface {
   private _nodes: Array<NodeEntity>;
   private _edges: Array<ConnectionEntity>;
   private _hiddenSchema: Array<number>;
+
+  public readonly ACTIVATION_STRATEGY = new SigmoidActivationStrategy();
 
   constructor() {
     super();
@@ -30,26 +32,13 @@ export class MultiLayerNetEntity extends NetInterface {
     this.initializeNetDetail(this.INPUT_NODES, this.OUTPUT_NODES, hiddenSchema);
   }
 
-  public evolve(): MultiLayerNetEntity {
-    const net = new MultiLayerNetEntity();
-    net.initializeNet(this.hiddenSchema);
-    for (let i = 0; i < net.edges.length; i++) {
-      let targetNode = net.edges.at(i);
-      const srcNode = this.edges.at(i);
-      if (targetNode !== undefined && srcNode !== undefined) {
-        targetNode = srcNode.mutate();
-      }
-    }
-    return net;
-  }
-
   private initializeNetDetail(
     inputs: number,
     outputs: number,
     hiddenSchema: Array<number>,
   ): void {
     for (let i = 0; i < inputs; i++) {
-      const node = new InputNodeEntity(0, i, new SigmoidEntity());
+      const node = new InputNodeEntity(0, i, this.ACTIVATION_STRATEGY);
       this.inputNodes.push(node);
       this.nodes.push(node);
     }
@@ -62,7 +51,7 @@ export class MultiLayerNetEntity extends NetInterface {
         const hiddenNode = new HiddenNodeEntity(
           hiddenLayer,
           nodeIndex,
-          new SigmoidEntity(),
+          this.ACTIVATION_STRATEGY,
         );
         this.setConnections(prevNodeLayer, hiddenNode);
         hiddenNodeLayer.push(hiddenNode);
@@ -74,7 +63,11 @@ export class MultiLayerNetEntity extends NetInterface {
     }
 
     for (let i = 0; i < outputs; i++) {
-      const node = new OutputNodeEntity(hiddenLayer, i, new SigmoidEntity());
+      const node = new OutputNodeEntity(
+        hiddenLayer,
+        i,
+        this.ACTIVATION_STRATEGY,
+      );
       this.setConnections(prevNodeLayer, node);
       this.outputNodes.push(node);
       this.nodes.push(node);

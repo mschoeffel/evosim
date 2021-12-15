@@ -1,5 +1,5 @@
-import {NodeClientDto} from "~/models/dto/node.client.dto";
-import {EdgeClientDto} from "~/models/dto/edge.client.dto";
+import { NodeClientDto } from '~/models/dto/node.client.dto';
+import { EdgeClientDto } from '~/models/dto/edge.client.dto';
 
 export class BrainClientDto {
   _nodes: Array<NodeClientDto>;

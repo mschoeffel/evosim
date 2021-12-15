@@ -5,13 +5,13 @@
       <div class="w-1/3">{{ $t('globalSection.selectedLanguage') }}</div>
       <div class="w-2/3">
         <a
-          :class="lang === 'en' ? 'underline' : ''"
+          :class="lang === 'en' ? 'underline text-blue-600' : 'text-blue-600'"
           href="#"
           @click.prevent.stop="changeLanguage('en')"
           >English</a
         >
         <a
-          :class="lang === 'de' ? 'underline' : ''"
+          :class="lang === 'de' ? 'underline text-blue-600' : 'text-blue-600'"
           href="#"
           @click.prevent.stop="changeLanguage('de')"
           >Deutsch</a
@@ -43,15 +43,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { GamestateClientDto } from '~/models/dto/gamestate.client.dto';
 
 export default Vue.extend({
   name: 'GlobalDetailsText',
   props: {
     gamestate: {
-      type: GamestateClientDto,
+      type: Object,
       default: () => {
-        return new GamestateClientDto();
+        return {};
       },
     },
   },

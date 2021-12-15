@@ -1,21 +1,23 @@
 <template>
-  <div id="chart">
-    <ApexChart
-      ref="c"
+  <div class="pt-1">
+    <line-chart
+      :height="150"
+      :chart-data="chartData"
       :options="chartOptions"
-      :series="chartData"
-      height="200"
-      type="line"
-    ></ApexChart>
+    ></line-chart>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import LineChart from './../js/linechart.js';
 import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
   name: 'GlobalStatsAvgEnergy',
+  components: {
+    LineChart,
+  },
   props: {
     creatures: {
       type: Array,
@@ -35,51 +37,64 @@ export default Vue.extend({
     },
   },
   data(): {
-    chartData: Array<{
-      id: number;
-      name: string;
-      data: Array<number>;
-    }>;
+    chartData: {
+      labels: Array<number>;
+      datasets: Array<{
+        label: string;
+        data: Array<number>;
+      }>;
+    };
     chartOptions: {};
   } {
     return {
-      chartData: [],
+      chartData: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Population 0',
+            data: [],
+          },
+          {
+            label: 'Population 1',
+            data: [],
+          },
+          {
+            label: 'Population 2',
+            data: [],
+          },
+          {
+            label: 'Population 3',
+            data: [],
+          },
+          {
+            label: 'Population 4',
+            data: [],
+          },
+        ],
+      },
       chartOptions: {
-        id: 'GlobalStatsMaxEnergyChart',
-        colors: this.colors,
-        dataLabels: {
+        tooltips: {
           enabled: false,
         },
-        tooltip: {
-          enabled: false,
-        },
-        chart: {
-          toolbar: {
-            show: false,
-          },
-          selection: {
-            enabled: false,
-          },
-          zoom: {
-            enabled: false,
-          },
-          animations: {
-            enabled: false,
-          },
-        },
-        stroke: {
-          width: 2,
-          curve: 'smooth',
-        },
-        xaxis: {
+        legend: {
+          position: 'bottom',
           labels: {
-            show: false,
+            usePointStyle: true,
+            boxWidth: 10,
           },
         },
-        yaxis: {
-          min: 0,
-          max: 110,
-          tickAmount: 11,
+        scales: {
+          yAxes: [
+            {
+              display: true,
+              ticks: {
+                beginAtZero: true,
+                steps: 10,
+                stepValue: 5,
+                max: 100,
+              },
+            },
+          ],
         },
       },
     };
@@ -91,11 +106,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    roundToTwoDigits(x: number): number {
-      return Math.round((x + Number.EPSILON) * 100) / 100;
-    },
     update(newVal: Array<BlobClient> | undefined): void {
-      // TODO: Optimize
       if (newVal !== undefined) {
         const newChartData = [];
         const sumOfEachPopulation = [];
@@ -114,12 +125,12 @@ export default Vue.extend({
         for (let population = 0; population < this.populations; population++) {
           const newChartDataPopulation = {
             id: population,
-            name: `${this.$t('statsSection.population')} ${population}`,
+            label: `${this.$t('statsSection.population')} ${population}`,
+            borderColor: this.colors[population],
+            fill: false,
             data: [] as Array<number>,
           };
-          const chartDataPopulationSet = this.chartData.find(
-            (d) => d.id === population,
-          );
+          const chartDataPopulationSet = this.chartData.datasets[population];
           if (chartDataPopulationSet !== undefined) {
             for (const element of chartDataPopulationSet.data) {
               newChartDataPopulation.data.push(element);
@@ -136,11 +147,18 @@ export default Vue.extend({
           );
           newChartData.push(newChartDataPopulation);
         }
-        this.chartData = newChartData;
+        this.chartData = {
+          labels: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0],
+          datasets: newChartData,
+        };
       }
+    },
+    getRandomInt() {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+    },
+    roundToTwoDigits(x: number): number {
+      return Math.round((x + Number.EPSILON) * 100) / 100;
     },
   },
 });
 </script>
-
-<style scoped></style>

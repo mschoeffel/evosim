@@ -14,7 +14,7 @@ import LineChart from './../js/linechart.js';
 import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: 'GlobalStatsAvgGeneration',
+  name: 'GlobalStatsAvgLife',
   components: {
     LineChart,
   },
@@ -105,7 +105,7 @@ export default Vue.extend({
         }
 
         for (const blob of newVal) {
-          sumOfEachPopulation[blob.population] += blob.generation;
+          sumOfEachPopulation[blob.population] += blob.ticksAlive;
           countOfEachPopulation[blob.population]++;
         }
 

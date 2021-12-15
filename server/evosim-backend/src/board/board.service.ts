@@ -20,7 +20,7 @@ export class BoardService {
     if (this.socketService.connectedClients.length > 0) {
       this.socketService.sendAllWs('state', {
         map: this.board.map.toDto(),
-        blobs: this.board.blobs.map<BlobDto>((b) => b.toDto()),
+        blobs: this.board.blobs().map<BlobDto>((b) => b.toDto()),
         gamestate: this.board.gamestate.toDto(),
       });
     }

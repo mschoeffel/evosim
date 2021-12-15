@@ -5,6 +5,7 @@ import { Utils } from '../utils/utils';
 import { BlobSenses } from './blob-senses.entity';
 import { MultiLayerNetEntity } from './brain/net/multi-layer-net.entity';
 import { MapEntity } from '../map/map.entity';
+import { OptimizationStrategy } from './brain/net/optimization/optimization.strategy';
 
 export class BlobEntity {
   private readonly _id: string;
@@ -25,11 +26,15 @@ export class BlobEntity {
   private readonly MOVE_ENERGY_MULTIPLIER = 2;
   private readonly ROTATE_ENERGY_MULTIPIER = 1;
   private readonly MAX_ENERGY = 100;
+  private readonly MAX_MOVE = 3;
+  private readonly MAX_EAT = 5;
+  private readonly MAX_ROTATE = 30;
 
   constructor(
     map: MapEntity,
     population: number,
     initializedNet: MultiLayerNetEntity,
+    brainOptimizationStrategy: OptimizationStrategy,
     initTick: number,
     blobToEvolveFrom?: BlobEntity,
   ) {
@@ -39,7 +44,7 @@ export class BlobEntity {
       this._brain = blobToEvolveFrom.brain.evolve();
       this._generation = blobToEvolveFrom.generation + 1;
     } else {
-      this._brain = new BrainEntity(initializedNet);
+      this._brain = new BrainEntity(initializedNet, brainOptimizationStrategy);
       this._generation = 0;
     }
     this._energy = this.INIT_ENERGY;
@@ -77,9 +82,12 @@ export class BlobEntity {
   }
 
   private eat(amount: number): void {
+    if (amount > this.MAX_EAT) {
+      amount = this.MAX_EAT;
+    }
     if (amount > 0.0) {
       if (this.energy + amount > this.MAX_ENERGY) {
-        amount = this.MAX_ENERGY - this.energy + amount;
+        amount = this.MAX_ENERGY - this.energy;
       }
       const tile = this.map.getTileAt(this.positionX, this.positionY);
       if (tile !== undefined && tile.energy > 0) {
@@ -94,6 +102,11 @@ export class BlobEntity {
   }
 
   private rotate(amount: number): void {
+    if (amount > this.MAX_ROTATE) {
+      amount = this.MAX_ROTATE;
+    } else if (amount < -this.MAX_ROTATE) {
+      amount = -this.MAX_ROTATE;
+    }
     let newRotation = (this.direction += amount);
     while (newRotation >= 360) {
       newRotation -= 360;
@@ -107,6 +120,11 @@ export class BlobEntity {
   }
 
   public move(amount: number): void {
+    if (amount > this.MAX_MOVE) {
+      amount = this.MAX_MOVE;
+    } else if (amount < -this.MAX_MOVE) {
+      amount = -this.MAX_MOVE;
+    }
     this.positionX += amount * Utils.sinDegree(this.direction);
     if (this.positionX < 0) {
       this.positionX = 0;

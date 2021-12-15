@@ -1,4 +1,4 @@
-import { MapGeneratorStrategy } from './map-generator-strategy.interface';
+import { MapGeneratorStrategy } from './map-generator.interface';
 
 export class RandomGenerator implements MapGeneratorStrategy {
   generate(width: number, height: number): Array<Array<number>> {

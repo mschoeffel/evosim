@@ -1,6 +1,6 @@
-import { ActivationInterface } from './activation.interface';
+import { ActivationStrategyInterface } from './activation-strategy.interface';
 
-export class SigmoidEntity implements ActivationInterface {
+export class SigmoidActivationStrategy implements ActivationStrategyInterface {
   private DEFAULT_EXP_PRECISION = 12;
 
   public evaluate(n: number): number {

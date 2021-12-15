@@ -7,11 +7,11 @@ export class EdgeClientDto {
   _label: string;
 
   constructor() {
-    this._id = "";
-    this._from = "";
-    this._to = "";
-    this._title = "";
+    this._id = '';
+    this._from = '';
+    this._to = '';
+    this._title = '';
     this._width = 0;
-    this._label = "";
+    this._label = '';
   }
 }

@@ -12,7 +12,8 @@ export default {
     headingMaxEnergy: 'Max Energie',
     headingInfo: 'Info',
     headingAvgEnergy: 'Avg Energie',
-    headingMaxGeneration: 'Max Generation',
+    headingAvgGeneration: 'Avg Generation',
+    headingAvgLife: 'Avg Lebenszeit',
     population: 'Population',
     infoText: 'Test DE',
   },
@@ -48,7 +49,7 @@ export default {
   },
   topSection: {
     id: 'ID',
-    topEnergy: 'Top Energie',
+    topTicks: 'Top Lebenszeit',
     population: 'Population',
   },
 };

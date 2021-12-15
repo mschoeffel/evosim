@@ -32,24 +32,15 @@
             <option key="Info">
               {{ $t('statsSection.headingInfo') }}
             </option>
-            <option
-              key="GlobalStatsMaxEnergy"
-            >
-              {{ $t('statsSection.headingMaxEnergy') }}
+            <option key="GlobalStatsMaxEnergy">
+              {{ $t('statsSection.headingAvgLife') }}
             </option>
-            <option
-              key="GlobalStatsAvgEnergy"
-            >
+            <option key="GlobalStatsAvgEnergy">
               {{ $t('statsSection.headingAvgEnergy') }}
             </option>
-            <option
-              key="GlobalStatsMaxGeneration"
-            >
-              {{ $t('statsSection.headingMaxGeneration') }}
+            <option key="GlobalStatsMaxGeneration">
+              {{ $t('statsSection.headingAvgGeneration') }}
             </option>
-            <!--<option key="GlobalStatsAvgGeneration" :selected="currentTab === 'GlobalStatsAvgGeneration'">Avg
-              Generation
-            </option>-->
           </select>
         </div>
         <div class="hidden sm:block">
@@ -81,21 +72,21 @@
             <a
               key="GlobalStatsMaxEnergy"
               :aria-current="
-                currentTab === 'GlobalStatsMaxEnergy' ? 'page' : undefined
+                currentTab === 'GlobalStatsAvgLife' ? 'page' : undefined
               "
               :class="[
-                currentTab === 'GlobalStatsMaxEnergy'
+                currentTab === 'GlobalStatsAvgLife'
                   ? 'text-gray-900'
                   : 'text-gray-500 hover:text-gray-700',
                 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
               ]"
               href="#"
-              @click="currentTab = 'GlobalStatsMaxEnergy'"
+              @click="currentTab = 'GlobalStatsAvgLife'"
             >
-              <span>{{ $t('statsSection.headingMaxEnergy') }}</span>
+              <span>{{ $t('statsSection.headingAvgLife') }}</span>
               <span
                 :class="[
-                  currentTab === 'GlobalStatsMaxEnergy'
+                  currentTab === 'GlobalStatsAvgLife'
                     ? 'bg-black'
                     : 'bg-transparent',
                   'absolute inset-x-0 bottom-0 h-0.5',
@@ -129,23 +120,23 @@
               />
             </a>
             <a
-              key="GlobalStatsMaxGeneration"
+              key="GlobalStatsAvgGeneration"
               :aria-current="
-                currentTab === 'GlobalStatsMaxGeneration' ? 'page' : undefined
+                currentTab === 'GlobalStatsAvgGeneration' ? 'page' : undefined
               "
               :class="[
-                currentTab === 'GlobalStatsMaxGeneration'
+                currentTab === 'GlobalStatsAvgGeneration'
                   ? 'text-gray-900'
                   : 'text-gray-500 hover:text-gray-700',
                 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
               ]"
               href="#"
-              @click="currentTab = 'GlobalStatsMaxGeneration'"
+              @click="currentTab = 'GlobalStatsAvgGeneration'"
             >
-              <span>{{ $t('statsSection.headingMaxGeneration') }}</span>
+              <span>{{ $t('statsSection.headingAvgGeneration') }}</span>
               <span
                 :class="[
-                  currentTab === 'GlobalStatsMaxGeneration'
+                  currentTab === 'GlobalStatsAvgGeneration'
                     ? 'bg-black'
                     : 'bg-transparent',
                   'absolute inset-x-0 bottom-0 h-0.5',
@@ -153,40 +144,30 @@
                 aria-hidden="true"
               />
             </a>
-            <!--<a key="GlobalStatsAvgGeneration" :aria-current="currentTab === 'GlobalStatsAvgGeneration' ? 'page' : undefined"
-               :class="[currentTab === 'GlobalStatsAvgGeneration' ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700', 'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10']"
-               href="#"
-               @click="currentTab = 'GlobalStatsAvgGeneration'">
-              <span>Avg Generation</span>
-              <span :class="[currentTab === 'GlobalStatsAvgGeneration' ? 'bg-black' : 'bg-transparent', 'absolute inset-x-0 bottom-0 h-0.5']"
-                    aria-hidden="true"/>
-            </a>-->
           </nav>
         </div>
         <div>
           <div v-if="currentTab === 'Info'" class="container mx-auto px-4 py-4">
             {{ $t('statsSection.infoText') }}
           </div>
-          <GlobalStatsMaxEnergy
-            v-if="currentTab === 'GlobalStatsMaxEnergy'"
+          <GlobalStatsAvgLife
+            v-if="currentTab === 'GlobalStatsAvgLife'"
             :colors="colors"
             :creatures="blobs"
             :populations="gamestate._populations"
-          ></GlobalStatsMaxEnergy>
+          ></GlobalStatsAvgLife>
           <GlobalStatsAvgEnergy
             v-if="currentTab === 'GlobalStatsAvgEnergy'"
             :colors="colors"
             :creatures="blobs"
             :populations="gamestate._populations"
           ></GlobalStatsAvgEnergy>
-          <GlobalStatsMaxGeneration
-            v-if="currentTab === 'GlobalStatsMaxGeneration'"
+          <GlobalStatsAvgGeneration
+            v-if="currentTab === 'GlobalStatsAvgGeneration'"
             :colors="colors"
             :creatures="blobs"
             :populations="gamestate._populations"
-          ></GlobalStatsMaxGeneration>
-          <!--<GlobalStatsAvgGeneration v-if="currentTab === 'GlobalStatsAvgGeneration'" :colors="colors" :creatures="blobs"
-                                    :populations="populations"></GlobalStatsAvgGeneration>-->
+          ></GlobalStatsAvgGeneration>
         </div>
       </div>
       <div class="row-span-2 col-span-2 border-solid border-4 border-black">
@@ -223,11 +204,11 @@ import { BlobClientDto } from '~/models/dto/blob.client.dto';
 import CreatureDetailsText from '~/components/CreatureDetailsText.vue';
 import GlobalDetailsText from '~/components/GlobalDetailsText.vue';
 import CreatureNetDetail from '~/components/CreatureNetDetail.vue';
-import GlobalStatsMaxGeneration from '~/components/GlobalStatsMaxGeneration.vue';
-import GlobalStatsMaxEnergy from '~/components/GlobalStatsMaxEnergy.vue';
 import GlobalStatsAvgEnergy from '~/components/GlobalStatsAvgEnergy.vue';
 import CreatureRanking from '~/components/CreatureRanking.vue';
 import { GamestateClientDto } from '~/models/dto/gamestate.client.dto';
+import GlobalStatsAvgLife from '~/components/GlobalStatsAvgLife.vue';
+import GlobalStatsAvgGeneration from '~/components/GlobalStatsAvgGeneration.vue';
 
 let pixel: any;
 if (process.browser) {
@@ -237,10 +218,10 @@ if (process.browser) {
 export default Vue.extend({
   name: 'Map',
   components: {
+    GlobalStatsAvgGeneration,
+    GlobalStatsAvgLife,
     CreatureRanking,
     GlobalStatsAvgEnergy,
-    GlobalStatsMaxEnergy,
-    GlobalStatsMaxGeneration,
     CreatureNetDetail,
     GlobalDetailsText,
     CreatureDetailsText,
@@ -269,7 +250,7 @@ export default Vue.extend({
       colors: ['#F2E205', '#05AFF2', '#F250A9', '#F26E22', '#990FBF'],
       currentTab: 'Info',
       populations: 5,
-      gamestate: new GamestateClientDto(),
+      gamestate: {} as GamestateClientDto,
     };
   },
   mounted() {
@@ -298,7 +279,7 @@ export default Vue.extend({
           this.blobs = payload.blobs.map<BlobClient>((b) =>
             BlobClient.parseFromDto(b),
           );
-          this.gamestate = payload.gamestate;
+          this.gamestate = payload.gamestate as GamestateClientDto;
 
           pixel.updateState(this.map, this.blobs);
 

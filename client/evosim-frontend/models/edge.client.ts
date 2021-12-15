@@ -1,16 +1,15 @@
-import {ServerParsableInterface} from "~/models/serverparsable.interface";
-import {EdgeClientDto} from "~/models/dto/edge.client.dto";
-import {EdgeRenderDto} from "~/models/dto/edge.render.dto";
+import { ServerParsableInterface } from '~/models/serverparsable.interface';
+import { EdgeClientDto } from '~/models/dto/edge.client.dto';
+import { EdgeRenderDto } from '~/models/dto/edge.render.dto';
 
 export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
-
   constructor() {
-    this._id = "";
-    this._from = "";
-    this._to = "";
-    this._title = "";
+    this._id = '';
+    this._from = '';
+    this._to = '';
+    this._title = '';
     this._width = 0;
-    this._label = "";
+    this._label = '';
   }
 
   private _id: string;
@@ -83,6 +82,13 @@ export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
   }
 
   toRenderDto(): EdgeRenderDto {
-    return new EdgeRenderDto(this.id, this.from, this.to, this.title, this.width, this.label);
+    return new EdgeRenderDto(
+      this.id,
+      this.from,
+      this.to,
+      this.title,
+      this.width,
+      this.label,
+    );
   }
 }

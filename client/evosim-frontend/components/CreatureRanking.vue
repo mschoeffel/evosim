@@ -13,7 +13,7 @@
           "
           scope="col"
         >
-          {{ $t('topSection.topEnergy') }}
+          {{ $t('topSection.topTicks') }}
         </th>
         <th
           class="
@@ -48,7 +48,7 @@
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
         >
-          {{ roundToTwoDigits(topCreature.energy) }}
+          {{ roundToTwoDigits(topCreature.ticksAlive) }}
         </td>
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
@@ -69,7 +69,7 @@
           >
         </td>
         <td
-          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600"
         >
           <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{
             topCreature.id
@@ -124,23 +124,23 @@ export default Vue.extend({
     },
     update(newVal: Array<BlobClient> | undefined): void {
       if (newVal !== undefined) {
-        let top5Energy = [0];
+        let top5LongestAlive = [0];
         let top5Creature = [] as Array<BlobClient>;
         const top = 4;
         for (const blob of newVal) {
-          if (blob.energy > top5Energy[0]) {
-            top5Energy.push(blob.energy);
+          if (blob.ticksAlive > top5LongestAlive[0]) {
+            top5LongestAlive.push(blob.ticksAlive);
             top5Creature.push(blob);
           }
-          top5Energy = top5Energy.sort((a, b) => {
+          top5LongestAlive = top5LongestAlive.sort((a, b) => {
             return a - b;
           });
           top5Creature = top5Creature.sort((a, b) => {
-            return a.energy - b.energy;
+            return a.ticksAlive - b.ticksAlive;
           });
 
-          if (top5Energy.length > top) {
-            top5Energy.shift();
+          if (top5LongestAlive.length > top) {
+            top5LongestAlive.shift();
           }
           if (top5Creature.length > top) {
             top5Creature.shift();
