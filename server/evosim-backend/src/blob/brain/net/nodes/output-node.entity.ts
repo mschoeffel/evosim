@@ -1,15 +1,11 @@
 import { NodeEntity } from './node.entity';
 import { ConnectionEntity } from '../connection.entity';
-import { ActivationStrategyInterface } from './activation/activation-strategy.interface';
+import { ActivationStrategy } from './activation/activation.strategy';
 
 export class OutputNodeEntity extends NodeEntity {
   private _incomingConnections: Array<ConnectionEntity>;
 
-  constructor(
-    layer: number,
-    index: number,
-    activation: ActivationStrategyInterface,
-  ) {
+  constructor(layer: number, index: number, activation: ActivationStrategy) {
     super(layer, index, activation);
     this._incomingConnections = [];
   }

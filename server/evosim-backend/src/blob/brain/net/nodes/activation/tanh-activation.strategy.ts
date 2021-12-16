@@ -1,6 +1,10 @@
-import { ActivationStrategyInterface } from './activation-strategy.interface';
+import { ActivationStrategy } from './activation.strategy';
 
-export class TanhActivationStrategy implements ActivationStrategyInterface {
+export class TanhActivationStrategy extends ActivationStrategy {
+  constructor() {
+    super('Tanh');
+  }
+
   evaluate(n: number): number {
     return Math.tanh(n);
   }

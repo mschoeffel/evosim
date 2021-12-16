@@ -30,13 +30,16 @@
     "@nestjs/platform-socket.io": "^8.1.1",
     "@nestjs/schedule": "^1.0.1",
     "@nestjs/serve-static": "^2.2.2",
+    "@nestjs/typeorm": "^8.0.2",
     "@nestjs/websockets": "^8.1.1",
     "class-transformer": "^0.4.0",
+    "mysql2": "^2.3.3",
     "perlin-noise": "^0.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "simplex-noise": "^3.0.0",
+    "typeorm": "^0.2.41",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

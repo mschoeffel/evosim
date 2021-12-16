@@ -14,6 +14,8 @@ export class BlobClientDto {
   _generation: number;
   _initTick: number;
   _ticksAlive: number;
+  _algorithm: string;
+  _activation: string;
 
   constructor() {
     this._id = '';
@@ -29,5 +31,7 @@ export class BlobClientDto {
     this._generation = 0;
     this._initTick = 0;
     this._ticksAlive = 0;
+    this._algorithm = '';
+    this._activation = '';
   }
 }

@@ -9,6 +9,10 @@ export class RandomOptimizationStrategy extends OptimizationStrategy {
   public readonly MUTATION_RATE_MUTABILITY = 0.01;
   public readonly MAXIMUM_MUTATION_RATE = 0.1;
 
+  constructor() {
+    super('RandomPermutation');
+  }
+
   evolve(
     blobDied: BlobEntity,
     populationBlobDied: PopulationEntity,

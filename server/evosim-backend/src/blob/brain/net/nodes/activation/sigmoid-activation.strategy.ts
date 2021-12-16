@@ -1,7 +1,11 @@
-import { ActivationStrategyInterface } from './activation-strategy.interface';
+import { ActivationStrategy } from './activation.strategy';
 
-export class SigmoidActivationStrategy implements ActivationStrategyInterface {
+export class SigmoidActivationStrategy extends ActivationStrategy {
   private DEFAULT_EXP_PRECISION = 12;
+
+  constructor() {
+    super('Sigmoid');
+  }
 
   public evaluate(n: number): number {
     return 1.0 / (1.0 + this.fastExp(-n));

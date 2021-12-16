@@ -27,9 +27,9 @@ export abstract class MapEntity {
   public getTileAt(x: number, y: number): Tile {
     x = Math.floor(x);
     y = Math.floor(y);
-    const mapColumn = this.map.at(y);
+    const mapColumn = this.map[y];
     if (mapColumn !== undefined) {
-      return mapColumn.at(x);
+      return mapColumn[x];
     }
     return undefined;
   }

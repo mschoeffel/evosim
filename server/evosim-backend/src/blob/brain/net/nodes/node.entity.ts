@@ -1,4 +1,4 @@
-import { ActivationStrategyInterface } from './activation/activation-strategy.interface';
+import { ActivationStrategy } from './activation/activation.strategy';
 import { v4 as uuid } from 'uuid';
 import { NodeDto } from '../../node.dto';
 import { Utils } from '../../../../utils/utils';
@@ -6,14 +6,14 @@ import { Utils } from '../../../../utils/utils';
 export abstract class NodeEntity {
   protected _value: number;
   protected readonly _id: string;
-  private readonly _activationFunction: ActivationStrategyInterface;
+  private readonly _activationFunction: ActivationStrategy;
   private readonly _layer: number;
   private readonly _index: number;
 
   protected constructor(
     layer: number,
     index: number,
-    activation: ActivationStrategyInterface,
+    activation: ActivationStrategy,
   ) {
     this._id = uuid();
     this._value = 0;
@@ -46,7 +46,7 @@ export abstract class NodeEntity {
     return this._id;
   }
 
-  public get activationFunction(): ActivationStrategyInterface {
+  public get activationFunction(): ActivationStrategy {
     return this._activationFunction;
   }
 

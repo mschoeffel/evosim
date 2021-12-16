@@ -12,6 +12,8 @@ export class BlobEntity {
   private readonly _map: MapEntity;
   private readonly _initTick: number;
   private readonly _brain: BrainEntity;
+  private readonly _algorithm: string;
+  private readonly _activation: string;
   private _positionX: number;
   private _positionY: number;
   private _energy: number;
@@ -21,8 +23,8 @@ export class BlobEntity {
   private readonly INIT_ENERGY = 40;
   private readonly EYE_DISTANCE = 1;
   private readonly SIZE = 2;
-  private readonly MOVE_ENERGY_MULTIPLIER = 2;
-  private readonly ROTATE_ENERGY_MULTIPIER = 1;
+  private readonly MOVE_ENERGY_MULTIPLIER = 1;
+  private readonly ROTATE_ENERGY_MULTIPIER = 0.1;
   private readonly MAX_ENERGY = 100;
   private readonly MAX_MOVE = 3;
   private readonly MAX_EAT = 5;
@@ -34,6 +36,8 @@ export class BlobEntity {
     brain: BrainEntity,
     initTick: number,
     generation: number,
+    algorithm: string,
+    activation: string,
   ) {
     this._id = uuid();
     this._population = population;
@@ -42,11 +46,13 @@ export class BlobEntity {
     this._energy = this.INIT_ENERGY;
     this._map = map;
     //TODO: Rework that blobs only spawn on grass tiles:
-    this._positionX = Math.random() * map.width;
-    this._positionY = Math.random() * map.height;
+    this._positionX = Math.random() * (map.width - 1);
+    this._positionY = Math.random() * (map.height - 1);
     this._direction = Math.random() * 360;
     this._initTick = initTick;
     this._ticksAlive = 0;
+    this._algorithm = algorithm;
+    this._activation = activation;
   }
 
   public act(): void {
@@ -69,16 +75,16 @@ export class BlobEntity {
       senses.energyOfTileAhead = eyeTile.energy;
     }
     const actions = this.brain.useBrain(senses);
-    this.rotate(actions.rotateAmount);
-    this.move(actions.moveAmount);
     this.eat(actions.eatAmount);
+    this.move(actions.moveAmount);
+    this.rotate(actions.rotateAmount);
   }
 
   private eat(amount: number): void {
-    if (amount > this.MAX_EAT) {
-      amount = this.MAX_EAT;
-    }
     if (amount > 0.0) {
+      if (amount > this.MAX_EAT) {
+        amount = this.MAX_EAT;
+      }
       if (this.energy + amount > this.MAX_ENERGY) {
         amount = this.MAX_ENERGY - this.energy;
       }
@@ -118,6 +124,7 @@ export class BlobEntity {
     } else if (amount < -this.MAX_MOVE) {
       amount = -this.MAX_MOVE;
     }
+
     this.positionX += amount * Utils.sinDegree(this.direction);
     if (this.positionX < 0) {
       this.positionX = 0;
@@ -150,6 +157,8 @@ export class BlobEntity {
     dto.generation = this.generation;
     dto.initTick = this.initTick;
     dto.ticksAlive = this.ticksAlive;
+    dto.algorithm = this._algorithm;
+    dto.activation = this._activation;
     return dto;
   }
 
@@ -219,5 +228,13 @@ export class BlobEntity {
 
   set ticksAlive(value: number) {
     this._ticksAlive = value;
+  }
+
+  get algorithm(): string {
+    return this._algorithm;
+  }
+
+  get activation(): string {
+    return this._activation;
   }
 }

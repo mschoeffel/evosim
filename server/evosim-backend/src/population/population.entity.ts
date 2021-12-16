@@ -1,6 +1,6 @@
 import { BlobEntity } from '../blob/blob.entity';
 import { OptimizationStrategy } from '../blob/brain/net/optimization/optimization.strategy';
-import { ActivationStrategyInterface } from '../blob/brain/net/nodes/activation/activation-strategy.interface';
+import { ActivationStrategy } from '../blob/brain/net/nodes/activation/activation.strategy';
 import { MapEntity } from '../map/map.entity';
 import { MultiLayerNetEntity } from '../blob/brain/net/multi-layer-net.entity';
 import { BrainEntity } from '../blob/brain/brain.entity';
@@ -9,14 +9,14 @@ export class PopulationEntity {
   private readonly _index: number;
   private readonly _blobs: Array<BlobEntity>;
   private readonly _optimizationStrategy: OptimizationStrategy;
-  private readonly _activationStrategy: ActivationStrategyInterface;
+  private readonly _activationStrategy: ActivationStrategy;
   private readonly _netSchema: Array<number>;
   private readonly _size: number;
 
   constructor(
     index: number,
     optimizationStrategy: OptimizationStrategy,
-    activationStrategy: ActivationStrategyInterface,
+    activationStrategy: ActivationStrategy,
     netSchema: Array<number>,
     size: number,
   ) {
@@ -33,7 +33,17 @@ export class PopulationEntity {
       const brain = new BrainEntity(
         new MultiLayerNetEntity(this.netSchema, this.activationStrategy),
       );
-      this.blobs.push(new BlobEntity(map, this.index, brain, 0, 0));
+      this.blobs.push(
+        new BlobEntity(
+          map,
+          this.index,
+          brain,
+          0,
+          0,
+          this.optimizationStrategy.name,
+          this.activationStrategy.name,
+        ),
+      );
     }
   }
 
@@ -51,6 +61,8 @@ export class PopulationEntity {
       brain,
       tick,
       blobDied.generation + 1,
+      this.optimizationStrategy.name,
+      this.activationStrategy.name,
     );
     this.addNewBlobToPopulation(blob);
     return blob;
@@ -67,7 +79,11 @@ export class PopulationEntity {
     return undefined;
   }
 
-  public removeBlobFromPopultaion(blob: BlobEntity): void {
+  public getRandomBlobOfPopulation(): BlobEntity {
+    return this.blobs.at(Math.round(Math.random() * (this.blobs.length - 1)));
+  }
+
+  public removeBlobFromPopulation(blob: BlobEntity): void {
     const i = this.blobs.findIndex((b) => b.id == blob.id);
     this.blobs.splice(i, 1);
   }
@@ -88,7 +104,7 @@ export class PopulationEntity {
     return this._optimizationStrategy;
   }
 
-  get activationStrategy(): ActivationStrategyInterface {
+  get activationStrategy(): ActivationStrategy {
     return this._activationStrategy;
   }
 

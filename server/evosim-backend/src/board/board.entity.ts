@@ -4,7 +4,7 @@ import { GamestateEntity } from './gamestate.entity';
 import { MapEntity } from '../map/map.entity';
 import { BoardConfig } from './board.config';
 import { PopulationEntity } from '../population/population.entity';
-import { RandomPerlinNoiseMapEntity } from '../map/predefined/random-perlin-noise-map.entity';
+import { MapConfig } from '../map/map.config';
 
 export class BoardEntity {
   public readonly TICK_ENERGY_COST = 0.5;
@@ -14,7 +14,7 @@ export class BoardEntity {
   private readonly _populations: Array<PopulationEntity>;
 
   constructor() {
-    this._map = new RandomPerlinNoiseMapEntity();
+    this._map = MapConfig.MAP;
     this._gamestate = new GamestateEntity(
       BoardConfig.NUMBER_OF_POPULATIONS,
       BoardConfig.CREATURES_PER_POPULATION,
@@ -60,22 +60,22 @@ export class BoardEntity {
     for (const population of this.populations) {
       for (const blob of population.blobs) {
         blob.addTickAlive();
-        blob.energy -= this.TICK_ENERGY_COST;
         blob.act();
+        blob.energy -= this.TICK_ENERGY_COST;
         this.checkBlob(blob, population);
       }
     }
   }
 
   private checkBlob(blob: BlobEntity, population: PopulationEntity): void {
-    if (blob.energy <= 0) {
+    if (Number.isNaN(blob.energy) || blob.energy <= 0) {
+      population.removeBlobFromPopulation(blob);
       this.addNewBlobToPopulation(blob, population);
-      population.removeBlobFromPopultaion(blob);
     } else {
       const tile = this.getTileOfBlobPosition(blob.positionX, blob.positionY);
       if (tile === undefined || tile.short === 'W') {
+        population.removeBlobFromPopulation(blob);
         this.addNewBlobToPopulation(blob, population);
-        population.removeBlobFromPopultaion(blob);
       }
     }
   }

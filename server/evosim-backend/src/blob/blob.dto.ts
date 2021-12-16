@@ -14,6 +14,8 @@ export class BlobDto {
   private _generation: number;
   private _initTick: number;
   private _ticksAlive: number;
+  private _algorithm: string;
+  private _activation: string;
 
   get id(): string {
     return this._id;
@@ -117,5 +119,21 @@ export class BlobDto {
 
   set ticksAlive(value: number) {
     this._ticksAlive = value;
+  }
+
+  get algorithm(): string {
+    return this._algorithm;
+  }
+
+  set algorithm(value: string) {
+    this._algorithm = value;
+  }
+
+  get activation(): string {
+    return this._activation;
+  }
+
+  set activation(value: string) {
+    this._activation = value;
   }
 }

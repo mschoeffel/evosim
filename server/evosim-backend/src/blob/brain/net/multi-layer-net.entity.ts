@@ -6,7 +6,7 @@ import { ConnectionEntity } from './connection.entity';
 import { BlobSenses } from '../../blob-senses.entity';
 import { BlobActions } from '../../blob-actions.entity';
 import { NodeEntity } from './nodes/node.entity';
-import { ActivationStrategyInterface } from './nodes/activation/activation-strategy.interface';
+import { ActivationStrategy } from './nodes/activation/activation.strategy';
 
 export class MultiLayerNetEntity extends NetInterface {
   private readonly _inputNodes: Array<InputNodeEntity>;
@@ -15,11 +15,11 @@ export class MultiLayerNetEntity extends NetInterface {
   private readonly _nodes: Array<NodeEntity>;
   private readonly _edges: Array<ConnectionEntity>;
   private readonly _hiddenSchema: Array<number>;
-  private readonly _activationStrategy: ActivationStrategyInterface;
+  private readonly _activationStrategy: ActivationStrategy;
 
   constructor(
     hiddenSchema: Array<number>,
-    activationStrategy: ActivationStrategyInterface,
+    activationStrategy: ActivationStrategy,
   ) {
     super();
     this._inputNodes = [];
@@ -146,7 +146,7 @@ export class MultiLayerNetEntity extends NetInterface {
     return this._hiddenSchema;
   }
 
-  get activationStrategy(): ActivationStrategyInterface {
+  get activationStrategy(): ActivationStrategy {
     return this._activationStrategy;
   }
 }

@@ -46,6 +46,8 @@ export default {
     generation: 'Generation',
     initTick: 'Generated at Tick',
     ticksAlive: 'Ticks alive',
+    algorithm: 'Algorithm',
+    activation: 'Activation',
   },
   topSection: {
     id: 'ID',
