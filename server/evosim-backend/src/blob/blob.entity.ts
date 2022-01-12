@@ -11,14 +11,15 @@ export class BlobEntity {
   private readonly _population: number;
   private readonly _map: MapEntity;
   private readonly _initTick: number;
-  private readonly _brain: BrainEntity;
   private readonly _algorithm: string;
   private readonly _activation: string;
+  private _brain: BrainEntity;
   private _positionX: number;
   private _positionY: number;
   private _energy: number;
   private _direction: number;
   private _ticksAlive: number;
+  private _alive: boolean;
 
   private readonly INIT_ENERGY = 40;
   private readonly EYE_DISTANCE = 1;
@@ -45,20 +46,26 @@ export class BlobEntity {
     this._generation = generation;
     this._energy = this.INIT_ENERGY;
     this._map = map;
-    //TODO: Rework that blobs only spawn on grass tiles:
-    this._positionX = Math.random() * (map.width - 1);
-    this._positionY = Math.random() * (map.height - 1);
+    let x = Math.random() * (map.width - 1);
+    let y = Math.random() * (map.width - 1);
+    let tile = map.getTileAt(x, y);
+    while (tile.energy < 0) {
+      x = Math.random() * (map.width - 1);
+      y = Math.random() * (map.width - 1);
+      tile = map.getTileAt(x, y);
+    }
+    this._positionX = x;
+    this._positionY = y;
     this._direction = Math.random() * 360;
     this._initTick = initTick;
     this._ticksAlive = 0;
     this._algorithm = algorithm;
     this._activation = activation;
+    this._alive = true;
   }
 
   public act(): void {
     const senses = new BlobSenses();
-    senses.currentPositionX = this.positionX;
-    senses.currentPositionY = this.positionY;
     senses.currentDirection = this.direction;
     senses.currentEnergy = this.energy;
     senses.energyOfCurrentTile = this.map.getTileAt(
@@ -70,7 +77,7 @@ export class BlobEntity {
       this.positionY - Utils.cosDegree(this.direction) * this.EYE_DISTANCE,
     );
     if (eyeTile === undefined) {
-      senses.energyOfTileAhead = -1;
+      senses.energyOfTileAhead = 0;
     } else {
       senses.energyOfTileAhead = eyeTile.energy;
     }
@@ -140,6 +147,10 @@ export class BlobEntity {
     this.energy -= Math.abs(amount) * this.MOVE_ENERGY_MULTIPLIER;
   }
 
+  public score(): number {
+    return this.ticksAlive;
+  }
+
   public toDto(): BlobDto {
     const dto = new BlobDto();
     dto.id = this.id;
@@ -157,8 +168,9 @@ export class BlobEntity {
     dto.generation = this.generation;
     dto.initTick = this.initTick;
     dto.ticksAlive = this.ticksAlive;
-    dto.algorithm = this._algorithm;
-    dto.activation = this._activation;
+    dto.algorithm = this.algorithm;
+    dto.activation = this.activation;
+    dto.alive = this.alive;
     return dto;
   }
 
@@ -168,42 +180,6 @@ export class BlobEntity {
 
   get id(): string {
     return this._id;
-  }
-
-  get positionX(): number {
-    return this._positionX;
-  }
-
-  set positionX(value: number) {
-    this._positionX = value;
-  }
-
-  get positionY(): number {
-    return this._positionY;
-  }
-
-  set positionY(value: number) {
-    this._positionY = value;
-  }
-
-  get brain(): BrainEntity {
-    return this._brain;
-  }
-
-  get energy(): number {
-    return this._energy;
-  }
-
-  set energy(value: number) {
-    this._energy = value;
-  }
-
-  get direction(): number {
-    return this._direction;
-  }
-
-  set direction(value: number) {
-    this._direction = value;
   }
 
   get generation(): number {
@@ -222,6 +198,54 @@ export class BlobEntity {
     return this._initTick;
   }
 
+  get algorithm(): string {
+    return this._algorithm;
+  }
+
+  get activation(): string {
+    return this._activation;
+  }
+
+  get brain(): BrainEntity {
+    return this._brain;
+  }
+
+  set brain(value: BrainEntity) {
+    this._brain = value;
+  }
+
+  get positionX(): number {
+    return this._positionX;
+  }
+
+  set positionX(value: number) {
+    this._positionX = value;
+  }
+
+  get positionY(): number {
+    return this._positionY;
+  }
+
+  set positionY(value: number) {
+    this._positionY = value;
+  }
+
+  get energy(): number {
+    return this._energy;
+  }
+
+  set energy(value: number) {
+    this._energy = value;
+  }
+
+  get direction(): number {
+    return this._direction;
+  }
+
+  set direction(value: number) {
+    this._direction = value;
+  }
+
   get ticksAlive(): number {
     return this._ticksAlive;
   }
@@ -230,11 +254,11 @@ export class BlobEntity {
     this._ticksAlive = value;
   }
 
-  get algorithm(): string {
-    return this._algorithm;
+  get alive(): boolean {
+    return this._alive;
   }
 
-  get activation(): string {
-    return this._activation;
+  set alive(value: boolean) {
+    this._alive = value;
   }
 }

@@ -1,14 +1,15 @@
 import { BlobEntity } from '../blob/blob.entity';
-import { Tile } from '../map/tile/Tile';
 import { GamestateEntity } from './gamestate.entity';
 import { MapEntity } from '../map/map.entity';
 import { BoardConfig } from './board.config';
 import { PopulationEntity } from '../population/population.entity';
 import { MapConfig } from '../map/map.config';
+import { PopulationNeatEntity } from '../population/population-neat.entity';
+import { NeatOptimizationStrategy } from '../blob/brain/net/optimization/neat-optimization.strategy';
+import { SigmoidActivationStrategy } from '../blob/brain/net/nodes/activation/sigmoid-activation.strategy';
+import { PopulationTypeEnum } from '../population/population-type.enum';
 
 export class BoardEntity {
-  public readonly TICK_ENERGY_COST = 0.5;
-
   private readonly _map: MapEntity;
   private readonly _gamestate: GamestateEntity;
   private readonly _populations: Array<PopulationEntity>;
@@ -16,67 +17,51 @@ export class BoardEntity {
   constructor() {
     this._map = MapConfig.MAP;
     this._gamestate = new GamestateEntity(
-      BoardConfig.NUMBER_OF_POPULATIONS,
+      BoardConfig.POPULATIONS_DATA.length,
       BoardConfig.CREATURES_PER_POPULATION,
     );
 
     this._populations = [];
     for (
       let populationIndex = 0;
-      populationIndex < BoardConfig.NUMBER_OF_POPULATIONS;
+      populationIndex < BoardConfig.POPULATIONS_DATA.length;
       populationIndex++
     ) {
       const populationData = BoardConfig.POPULATIONS_DATA.at(populationIndex);
-      const population = new PopulationEntity(
-        populationIndex,
-        populationData.optimization,
-        populationData.activationFunction,
-        populationData.netSchema,
-        BoardConfig.CREATURES_PER_POPULATION,
-      );
-      population.initialize(this._map);
+      let population;
+      switch (populationData.type) {
+        case PopulationTypeEnum.SIMPLE:
+          population = new PopulationEntity(
+            populationIndex,
+            populationData.optimization,
+            populationData.activationFunction,
+            populationData.netSchema,
+            BoardConfig.CREATURES_PER_POPULATION,
+            this._map,
+            this._gamestate,
+          );
+          break;
+        case PopulationTypeEnum.NEAT:
+          population = new PopulationNeatEntity(
+            populationIndex,
+            new NeatOptimizationStrategy(),
+            new SigmoidActivationStrategy(),
+            [],
+            BoardConfig.CREATURES_PER_POPULATION,
+            this._map,
+            this._gamestate,
+          );
+          break;
+      }
       this._populations.push(population);
     }
-  }
-
-  public getTileOfBlobPosition(x: number, y: number): Tile {
-    return this.map.getTileAt(x, y);
-  }
-
-  public addNewBlobToPopulation(
-    blobDied: BlobEntity,
-    population: PopulationEntity,
-  ): void {
-    population.addEvolvedNewBlobToPopulation(
-      blobDied,
-      this.map,
-      this.gamestate.currentTick,
-    );
   }
 
   public runOneTick(): void {
     this.gamestate.addTick();
     this.map.regenerate();
     for (const population of this.populations) {
-      for (const blob of population.blobs) {
-        blob.addTickAlive();
-        blob.act();
-        blob.energy -= this.TICK_ENERGY_COST;
-        this.checkBlob(blob, population);
-      }
-    }
-  }
-
-  private checkBlob(blob: BlobEntity, population: PopulationEntity): void {
-    if (Number.isNaN(blob.energy) || blob.energy <= 0) {
-      population.removeBlobFromPopulation(blob);
-      this.addNewBlobToPopulation(blob, population);
-    } else {
-      const tile = this.getTileOfBlobPosition(blob.positionX, blob.positionY);
-      if (tile === undefined || tile.short === 'W') {
-        population.removeBlobFromPopulation(blob);
-        this.addNewBlobToPopulation(blob, population);
-      }
+      population.tick();
     }
   }
 

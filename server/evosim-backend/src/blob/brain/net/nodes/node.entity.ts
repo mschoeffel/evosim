@@ -7,7 +7,7 @@ export abstract class NodeEntity {
   protected _value: number;
   protected readonly _id: string;
   private readonly _activationFunction: ActivationStrategy;
-  private readonly _layer: number;
+  private _layer: number;
   private readonly _index: number;
 
   protected constructor(
@@ -52,6 +52,10 @@ export abstract class NodeEntity {
 
   get layer(): number {
     return this._layer;
+  }
+
+  set layer(value: number) {
+    this._layer = value;
   }
 
   get index(): number {

@@ -15,11 +15,11 @@ export class BlobClient implements ServerParsableInterface<BlobClientDto> {
     this._brain = new BrainClient();
     this._population = 0;
     this._generation = 0;
-    this._state = 'alive';
     this._initTick = 0;
     this._ticksAlive = 0;
     this._algorithm = '';
     this._activation = '';
+    this._alive = true;
   }
 
   private _id: string;
@@ -132,16 +132,6 @@ export class BlobClient implements ServerParsableInterface<BlobClientDto> {
     this._generation = value;
   }
 
-  private _state: string;
-
-  get state(): string {
-    return this._state;
-  }
-
-  set state(value: string) {
-    this._state = value;
-  }
-
   private _initTick: number;
 
   get initTick(): number {
@@ -182,6 +172,16 @@ export class BlobClient implements ServerParsableInterface<BlobClientDto> {
     this._activation = value;
   }
 
+  private _alive: boolean;
+
+  get alive(): boolean {
+    return this._alive;
+  }
+
+  set alive(value: boolean) {
+    this._alive = value;
+  }
+
   static parseFromDto(obj: BlobClientDto): BlobClient {
     const o = new BlobClient();
     o.parseFromDto(obj);
@@ -204,5 +204,6 @@ export class BlobClient implements ServerParsableInterface<BlobClientDto> {
     this.ticksAlive = obj._ticksAlive;
     this.algorithm = obj._algorithm;
     this.activation = obj._activation;
+    this.alive = obj._alive;
   }
 }

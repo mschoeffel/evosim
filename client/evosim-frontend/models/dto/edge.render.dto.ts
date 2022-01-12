@@ -7,7 +7,9 @@ export class EdgeRenderDto {
   widthHidden: number;
   label: string;
   labelHidden: string;
-  smooth: {};
+  smooth = {};
+  color: string;
+  dashes: boolean;
 
   constructor(
     id: string,
@@ -16,6 +18,7 @@ export class EdgeRenderDto {
     title: string,
     width: number,
     label: string,
+    enabled: boolean,
   ) {
     this.id = id;
     this.from = from;
@@ -30,5 +33,14 @@ export class EdgeRenderDto {
       type: 'horizontal',
       roundness: 0.5,
     };
+    if (enabled) {
+      this.color = '#d3d3d3';
+      this.dashes = false;
+      this.widthHidden = width;
+    } else {
+      this.color = '#ff0000';
+      this.dashes = true;
+      this.widthHidden = 0.1;
+    }
   }
 }

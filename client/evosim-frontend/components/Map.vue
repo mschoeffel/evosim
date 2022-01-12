@@ -281,7 +281,10 @@ export default Vue.extend({
           );
           this.gamestate = payload.gamestate as GamestateClientDto;
 
-          pixel.updateState(this.map, this.blobs);
+          pixel.updateState(
+            this.map,
+            this.blobs.filter((b) => b.alive),
+          );
 
           if (this.blobs.length > 0) {
             if (this.selectedId !== '') {
@@ -318,7 +321,7 @@ export default Vue.extend({
       if (t !== undefined) {
         this.selectedCreature = t;
       } else if (this.selectedCreature !== undefined) {
-        this.selectedCreature.state = 'dead';
+        this.selectedCreature.alive = false;
       }
     },
     roundToTwoDigits(x: number): number {

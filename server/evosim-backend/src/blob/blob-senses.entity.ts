@@ -1,25 +1,11 @@
 export class BlobSenses {
-  private _currentPositionX: number;
-  private _currentPositionY: number;
   private _currentDirection: number;
   private _currentEnergy: number;
   private _energyOfCurrentTile: number;
   private _energyOfTileAhead: number;
 
-  get currentPositionX(): number {
-    return this._currentPositionX;
-  }
-
-  set currentPositionX(value: number) {
-    this._currentPositionX = value;
-  }
-
-  get currentPositionY(): number {
-    return this._currentPositionY;
-  }
-
-  set currentPositionY(value: number) {
-    this._currentPositionY = value;
+  public static count(): number {
+    return 4;
   }
 
   get currentDirection(): number {

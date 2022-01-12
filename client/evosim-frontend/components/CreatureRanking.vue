@@ -128,6 +128,9 @@ export default Vue.extend({
         let top5Creature = [] as Array<BlobClient>;
         const top = 4;
         for (const blob of newVal) {
+          if (!blob.alive) {
+            continue;
+          }
           if (blob.ticksAlive > top5LongestAlive[0]) {
             top5LongestAlive.push(blob.ticksAlive);
             top5Creature.push(blob);

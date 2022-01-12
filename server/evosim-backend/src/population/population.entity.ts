@@ -2,16 +2,21 @@ import { BlobEntity } from '../blob/blob.entity';
 import { OptimizationStrategy } from '../blob/brain/net/optimization/optimization.strategy';
 import { ActivationStrategy } from '../blob/brain/net/nodes/activation/activation.strategy';
 import { MapEntity } from '../map/map.entity';
-import { MultiLayerNetEntity } from '../blob/brain/net/multi-layer-net.entity';
 import { BrainEntity } from '../blob/brain/brain.entity';
+import { MultiLayerNetFactory } from '../blob/brain/net/multi-layer-net.factory';
+import { BoardConfig } from '../board/board.config';
+import { GamestateEntity } from '../board/gamestate.entity';
+import { PopulationStatsEntity } from './population-stats.entity';
 
 export class PopulationEntity {
-  private readonly _index: number;
-  private readonly _blobs: Array<BlobEntity>;
-  private readonly _optimizationStrategy: OptimizationStrategy;
-  private readonly _activationStrategy: ActivationStrategy;
-  private readonly _netSchema: Array<number>;
-  private readonly _size: number;
+  protected readonly _index: number;
+  protected readonly _blobs: Array<BlobEntity>;
+  protected readonly _optimizationStrategy: OptimizationStrategy;
+  protected readonly _activationStrategy: ActivationStrategy;
+  protected readonly _netSchema: Array<number>;
+  protected readonly _size: number;
+  protected readonly _map: MapEntity;
+  protected readonly _gamestate: GamestateEntity;
 
   constructor(
     index: number,
@@ -19,6 +24,8 @@ export class PopulationEntity {
     activationStrategy: ActivationStrategy,
     netSchema: Array<number>,
     size: number,
+    map: MapEntity,
+    gamestate: GamestateEntity,
   ) {
     this._index = index;
     this._optimizationStrategy = optimizationStrategy;
@@ -26,40 +33,66 @@ export class PopulationEntity {
     this._netSchema = netSchema;
     this._size = size;
     this._blobs = [];
-  }
-
-  public initialize(map: MapEntity): void {
+    this._map = map;
+    this._gamestate = gamestate;
     for (let i = 0; i < this.size; i++) {
       const brain = new BrainEntity(
-        new MultiLayerNetEntity(this.netSchema, this.activationStrategy),
+        MultiLayerNetFactory.newMultiLayerNet(
+          this._netSchema,
+          this._activationStrategy,
+        ),
       );
-      this.blobs.push(
+      this.addNewBlobToPopulation(
         new BlobEntity(
-          map,
-          this.index,
+          this._map,
+          this._index,
           brain,
           0,
           0,
-          this.optimizationStrategy.name,
-          this.activationStrategy.name,
+          this._optimizationStrategy.name,
+          this._activationStrategy.name,
         ),
       );
     }
   }
 
-  public addEvolvedNewBlobToPopulation(
-    blobDied: BlobEntity,
-    map: MapEntity,
-    tick: number,
-  ): BlobEntity {
+  public getStats(): PopulationStatsEntity {
+    let generationSum = 0;
+    let energySum = 0;
+    let energyMax = 0;
+    let tickSum = 0;
+    let tickMax = 0;
+    let blobCount = 0;
+    for (const blob of this.blobs) {
+      generationSum += blob.generation;
+      energySum += blob.energy;
+      tickSum += blob.ticksAlive;
+      if (blob.ticksAlive > tickMax) {
+        tickMax = blob.ticksAlive;
+      }
+      if (blob.energy > energyMax) {
+        energyMax = blob.energy;
+      }
+      blobCount++;
+    }
+    const stats = new PopulationStatsEntity();
+    stats.avgGeneration = Math.round(generationSum / blobCount);
+    stats.avgEnergy = Math.round(energySum / blobCount);
+    stats.maxEnergy = energyMax;
+    stats.avgLifetime = Math.round(tickSum / blobCount);
+    stats.maxLifetime = tickMax;
+    return stats;
+  }
+
+  public addEvolvedNewBlobToPopulation(blobDied: BlobEntity): BlobEntity {
     const net = this.optimizationStrategy.evolve(blobDied, this);
     const brain = new BrainEntity(net);
 
     const blob = new BlobEntity(
-      map,
+      this.map,
       this.index,
       brain,
-      tick,
+      this.gamestate.currentTick,
       blobDied.generation + 1,
       this.optimizationStrategy.name,
       this.activationStrategy.name,
@@ -68,15 +101,44 @@ export class PopulationEntity {
     return blob;
   }
 
-  private addNewBlobToPopulation(blob: BlobEntity): void {
+  protected addNewBlobToPopulation(blob: BlobEntity): void {
     this.blobs.push(blob);
   }
 
   public getFittestBlobOfPopulation(): BlobEntity | undefined {
-    if (this.blobs.length > 0) {
-      return this.blobs.reduce((a, b) => (a.ticksAlive > b.ticksAlive ? a : b));
+    let score = 0;
+    let fittestBlob = null;
+    for (const blob of this.blobs) {
+      if (blob.score() > score) {
+        score = blob.score();
+        fittestBlob = blob;
+      }
     }
-    return undefined;
+    return fittestBlob;
+  }
+
+  public tick(): void {
+    for (const blob of this.blobs) {
+      blob.addTickAlive();
+      blob.act();
+      blob.energy -= BoardConfig.TICK_ENERGY_COST;
+      this.checkBlob(blob);
+    }
+  }
+
+  protected checkBlob(blob: BlobEntity): void {
+    if (Number.isNaN(blob.energy) || blob.energy <= 0) {
+      blob.alive = false;
+      this.removeBlobFromPopulation(blob);
+      this.addEvolvedNewBlobToPopulation(blob);
+    } else {
+      const tile = this.map.getTileAt(blob.positionX, blob.positionY);
+      if (tile === undefined || tile.short === 'W') {
+        blob.alive = false;
+        this.removeBlobFromPopulation(blob);
+        this.addEvolvedNewBlobToPopulation(blob);
+      }
+    }
   }
 
   public getRandomBlobOfPopulation(): BlobEntity {
@@ -110,5 +172,13 @@ export class PopulationEntity {
 
   get netSchema(): Array<number> {
     return this._netSchema;
+  }
+
+  get map(): MapEntity {
+    return this._map;
+  }
+
+  get gamestate(): GamestateEntity {
+    return this._gamestate;
   }
 }

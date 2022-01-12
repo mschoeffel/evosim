@@ -60,8 +60,6 @@ export default Vue.extend({
         const nodesRender = this.nodes;
 
         const start = [
-          this.$t('netSection.inputNodeLabels.x'),
-          this.$t('netSection.inputNodeLabels.y'),
           this.$t('netSection.inputNodeLabels.direction'),
           this.$t('netSection.inputNodeLabels.energy'),
           this.$t('netSection.inputNodeLabels.energyCurrentTile'),

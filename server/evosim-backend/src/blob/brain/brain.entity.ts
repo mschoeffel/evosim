@@ -19,10 +19,10 @@ export class BrainEntity {
   public toDto(): BrainDto {
     const dto = new BrainDto();
 
-    for (const edge of this.net.edges) {
+    for (const edge of this.net.edges()) {
       dto.addEdge(edge.toDto());
     }
-    for (const node of this.net.nodes) {
+    for (const node of this.net.nodes()) {
       dto.addNode(node.toDto());
     }
 

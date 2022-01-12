@@ -5,6 +5,7 @@ export class EdgeDto {
   private _title: string;
   private _width: number;
   private _label: string;
+  private _enabled: boolean;
 
   get id(): string {
     return this._id;
@@ -52,5 +53,13 @@ export class EdgeDto {
 
   set label(value: string) {
     this._label = value;
+  }
+
+  get enabled(): boolean {
+    return this._enabled;
+  }
+
+  set enabled(value: boolean) {
+    this._enabled = value;
   }
 }

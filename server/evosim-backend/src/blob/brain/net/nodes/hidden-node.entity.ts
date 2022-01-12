@@ -31,7 +31,9 @@ export class HiddenNodeEntity extends NodeEntity {
   calculateValue(): number {
     let value = 0;
     for (const incomingConnection of this.incomingConnections) {
-      value += incomingConnection.weight * incomingConnection.source.value;
+      if (incomingConnection.enabled) {
+        value += incomingConnection.weight * incomingConnection.source.value;
+      }
     }
     this.value = this.activationFunction.evaluate(value);
     return value;

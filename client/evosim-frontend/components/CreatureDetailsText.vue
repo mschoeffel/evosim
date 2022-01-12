@@ -8,11 +8,9 @@
       <div class="sm:col-span-3">
         <div
           v-if="creature !== undefined"
-          :class="
-            creature.state === 'alive' ? 'text-green-600' : 'text-red-600'
-          "
+          :class="creature.alive ? 'text-green-600' : 'text-red-600'"
         >
-          {{ $t(`detailSection.${creature.state}`) }}
+          {{ $t(`detailSection.alive.${creature.alive}`) }}
         </div>
       </div>
 

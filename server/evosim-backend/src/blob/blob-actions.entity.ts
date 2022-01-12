@@ -3,6 +3,10 @@ export class BlobActions {
   private _moveAmount: number;
   private _eatAmount: number;
 
+  public static count(): number {
+    return 3;
+  }
+
   get rotateAmount(): number {
     return this._rotateAmount;
   }

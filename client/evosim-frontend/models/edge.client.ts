@@ -10,6 +10,7 @@ export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
     this._title = '';
     this._width = 0;
     this._label = '';
+    this._enabled = true;
   }
 
   private _id: string;
@@ -72,6 +73,16 @@ export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
     this._label = value;
   }
 
+  private _enabled: boolean;
+
+  get enabled(): boolean {
+    return this._enabled;
+  }
+
+  set enabled(value: boolean) {
+    this._enabled = value;
+  }
+
   parseFromDto(obj: EdgeClientDto): void {
     this.id = obj._id;
     this.from = obj._from;
@@ -79,6 +90,7 @@ export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
     this.title = obj._title;
     this.width = obj._width;
     this.label = obj._label;
+    this.enabled = obj._enabled;
   }
 
   toRenderDto(): EdgeRenderDto {
@@ -89,6 +101,7 @@ export class EdgeClient implements ServerParsableInterface<EdgeClientDto> {
       this.title,
       this.width,
       this.label,
+      this.enabled,
     );
   }
 }
