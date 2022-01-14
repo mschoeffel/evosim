@@ -148,7 +148,56 @@
         </div>
         <div>
           <div v-if="currentTab === 'Info'" class="container mx-auto px-4 py-4">
-            {{ $t('statsSection.infoText') }}
+            <div class="sm:grid sm:grid-cols-2 sm:gap-4 sm:items-start sm:pt-5">
+              <div class="mt-1 sm:mt-0">
+                {{ $t('statsSection.infoText') }}
+              </div>
+              <div class="mt-1 sm:mt-0">
+                <div
+                  class="
+                    flex
+                    h-full
+                    justify-center
+                    px-6
+                    pt-5
+                    pb-6
+                    border-2 border-gray-300 border-dashed
+                    rounded-md
+                  "
+                >
+                  <div class="space-y-1 text-center">
+                    <div class="flex text-sm text-gray-600">
+                      <label
+                        for="file-upload"
+                        class="
+                          relative
+                          cursor-pointer
+                          bg-white
+                          rounded-md
+                          font-medium
+                          text-indigo-600
+                          hover:text-indigo-500
+                          focus-within:outline-none
+                          focus-within:ring-2
+                          focus-within:ring-offset-2
+                          focus-within:ring-indigo-500
+                        "
+                      >
+                        <span>{{ $t('statsSection.infoSnapshotUpload') }}</span>
+                        <input
+                          id="file-upload"
+                          name="file-upload"
+                          type="file"
+                          class="sr-only"
+                          @change="onFileChange"
+                        />
+                      </label>
+                    </div>
+                    <p class="text-xs text-gray-500">Snapshot JSON</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <GlobalStatsAvgLife
             v-if="currentTab === 'GlobalStatsAvgLife'"
@@ -196,7 +245,8 @@
 </template>
 
 <script lang="ts">
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import Vue from 'vue';
 import { MapClientDto } from '~/models/dto/map.client.dto';
 import { BlobClient } from '~/models/blob.client';
@@ -238,6 +288,7 @@ export default Vue.extend({
     currentTab: string;
     populations: number;
     gamestate: GamestateClientDto;
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   } {
     return {
       selectedX: 0,
@@ -251,18 +302,16 @@ export default Vue.extend({
       currentTab: 'Info',
       populations: 5,
       gamestate: {} as GamestateClientDto,
+      socket: {} as Socket<DefaultEventsMap, DefaultEventsMap>,
     };
   },
   mounted() {
     const P5 = require('p5');
-    // DEBUG: console.log("Starting connection to WebSocket Server");
-    // DEBUG: console.log("Base URL: " + process.env.baseUrl);
-    // DEBUG: console.log("Port: " + process.env.PORT);
 
     pixel.setUpdateCurrentSelected(this.setSelected);
 
     const socket = io(`localhost:5000`, { transports: ['websocket'] }); // http://evosim-server.herokuapp.com
-
+    this.socket = socket;
     socket.on('connect', () => {
       // DEBUG: console.log("Connected to WebSocket Server!");
       this.p5 = new P5(pixel.main);
@@ -275,22 +324,7 @@ export default Vue.extend({
           blobs: Array<BlobClientDto>;
           gamestate: GamestateClientDto;
         }) => {
-          this.map = payload.map;
-          this.blobs = payload.blobs.map<BlobClient>((b) =>
-            BlobClient.parseFromDto(b),
-          );
-          this.gamestate = payload.gamestate as GamestateClientDto;
-
-          pixel.updateState(
-            this.map,
-            this.blobs.filter((b) => b.alive),
-          );
-
-          if (this.blobs.length > 0) {
-            if (this.selectedId !== '') {
-              this.updateSelectedCreature();
-            }
-          }
+          this.update(payload);
         },
       );
     });
@@ -301,6 +335,28 @@ export default Vue.extend({
     });
   },
   methods: {
+    update(payload: {
+      map: MapClientDto;
+      blobs: Array<BlobClientDto>;
+      gamestate: GamestateClientDto;
+    }): void {
+      this.map = payload.map;
+      this.blobs = payload.blobs.map<BlobClient>((b) =>
+        BlobClient.parseFromDto(b),
+      );
+      this.gamestate = payload.gamestate as GamestateClientDto;
+
+      pixel.updateState(
+        this.map,
+        this.blobs.filter((b) => b.alive),
+      );
+
+      if (this.blobs.length > 0) {
+        if (this.selectedId !== '') {
+          this.updateSelectedCreature();
+        }
+      }
+    },
     setSelectedById(id: string) {
       this.selectedId = id;
       this.updateSelectedCreature();
@@ -326,6 +382,23 @@ export default Vue.extend({
     },
     roundToTwoDigits(x: number): number {
       return Math.round((x + Number.EPSILON) * 1000) / 1000;
+    },
+    onFileChange(e: any) {
+      // TODO: Optimize to disconnect as well
+      this.socket.removeAllListeners();
+      const files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+
+      const fr = new FileReader();
+
+      fr.onload = (e) => {
+        if (e.target !== null && typeof e.target.result === 'string') {
+          const result = JSON.parse(e.target.result);
+          this.update(result);
+        }
+      };
+
+      fr.readAsText(files[0]);
     },
   },
 });

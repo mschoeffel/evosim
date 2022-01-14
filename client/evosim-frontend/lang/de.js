@@ -16,6 +16,7 @@ export default {
     headingAvgLife: 'Avg Lebenszeit',
     population: 'Population',
     infoText: 'Test DE',
+    infoSnapshotUpload: 'Hochladen einer Snapshot JSON',
   },
   netSection: {
     inputNodeLabels: {

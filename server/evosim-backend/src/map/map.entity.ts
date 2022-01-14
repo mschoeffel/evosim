@@ -1,6 +1,7 @@
 import { MapRegrowStrategy } from './regrow/map-regrow.strategy';
 import { Tile } from './tile/Tile';
 import { MapDto } from './map.dto';
+import { Utils } from '../utils/utils';
 
 export abstract class MapEntity {
   private readonly _width: number;
@@ -50,7 +51,7 @@ export abstract class MapEntity {
     for (const mapColumn of this.map) {
       let dtoWidth = [];
       for (const mapRowTile of mapColumn) {
-        dtoWidth.push(mapRowTile.energy);
+        dtoWidth.push(Utils.roundToTwoDigits(mapRowTile.energy));
       }
       dto.map.push(dtoWidth);
       dtoWidth = [];

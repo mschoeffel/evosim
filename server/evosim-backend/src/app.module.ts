@@ -9,6 +9,7 @@ import { ProtocolEntity } from './protocol/protocol.entity';
 import { ProtocolModule } from './protocol/protocol.module';
 import { DumpModule } from './dump/dump.module';
 import { DumpEntity } from './dump/dump.entity';
+import { SnapshotModule } from './snapshot/snapshot.module';
 
 @Module({
   imports: [
@@ -17,10 +18,10 @@ import { DumpEntity } from './dump/dump.entity';
     TypeOrmModule.forRoot({
       // Local:
       type: 'mysql',
-      host: 'localhost',
+      host: '127.0.0.1',
       port: 3306,
       username: 'admin',
-      password: 'admin',
+      password: process.env.DATABASE_PSSW,
       // Heroku:
       //url: process.env.DATABASE_URL,
       //type: 'postgres',
@@ -33,6 +34,7 @@ import { DumpEntity } from './dump/dump.entity';
     }),
     ProtocolModule,
     DumpModule,
+    SnapshotModule,
     BoardModule,
   ],
   controllers: [AppController],

@@ -6,12 +6,15 @@ import { PopulationTypeEnum } from '../population/population-type.enum';
 export class BoardConfig {
   public static readonly PROTOCOL = false;
   public static readonly DUMP = false;
-  public static readonly DUMP_INTERVAL = 1000;
+  public static readonly DUMP_INTERVAL = 200;
   public static readonly TICKS_PER_SECOND = 20;
   public static readonly LOG_INTERVAL = 1000;
   public static readonly RENDER_WEBSOCKET = true;
   public static readonly SNAPSHOT = false;
-  public static readonly SNAPSHOT_INTERVAL = 500;
+  public static readonly SNAPSHOT_INTERVAL = 1000;
+  public static readonly RUNS = false;
+  public static readonly RUN_TICKS = 100000;
+  public static readonly RUN_AMOUNT = 2;
   public static readonly TICK_ENERGY_COST = 0.5;
   public static readonly CREATURES_PER_POPULATION = 30;
   public static readonly POPULATIONS_DATA = [

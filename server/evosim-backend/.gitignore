@@ -5,6 +5,7 @@
 /test/coverage
 /test/unit/coverage
 /test/e2e/coverage
+/snapshots
 
 # Logs
 logs

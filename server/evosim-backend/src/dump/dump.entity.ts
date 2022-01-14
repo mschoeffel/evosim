@@ -6,6 +6,9 @@ export class DumpEntity {
   id: number;
 
   @Column()
+  run: number;
+
+  @Column()
   tick: number;
 
   @Column()
