@@ -3,11 +3,6 @@ export class NodeDto {
   private _x: number;
   private _y: number;
   private _label: string;
-  private _shape: string;
-
-  constructor() {
-    this._shape = 'circle';
-  }
 
   get id(): string {
     return this._id;
@@ -39,13 +34,5 @@ export class NodeDto {
 
   set label(value: string) {
     this._label = value;
-  }
-
-  get shape(): string {
-    return this._shape;
-  }
-
-  set shape(value: string) {
-    this._shape = value;
   }
 }

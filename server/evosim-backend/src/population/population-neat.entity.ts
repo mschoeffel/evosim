@@ -58,14 +58,14 @@ export class PopulationNeatEntity extends PopulationEntity {
     for (let i = 0; i < this._inputSize; i++) {
       const n = this.getNewNode(NodeGenomeType.INPUT);
       n.x = 0.1;
-      n.y = (i + 1) / (this._inputSize + 1);
+      n.y = i * 100;
     }
 
     //Generate output nodes
     for (let i = 0; i < this._outputSize; i++) {
       const n = this.getNewNode(NodeGenomeType.OUTPUT);
       n.x = 0.9;
-      n.y = (i + 1) / (this._inputSize + 1);
+      n.y = i * 100;
     }
 
     //Generate clients

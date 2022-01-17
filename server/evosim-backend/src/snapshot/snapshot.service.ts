@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BoardEntity } from '../board/board.entity';
-import { writeFile } from 'fs/promises';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, promises } from 'fs';
 import { join } from 'path';
 import { BlobDto } from '../blob/blob.dto';
 
@@ -24,14 +23,15 @@ export class SnapshotService {
       this.SNAPSHOT_DIR,
       `${run}-${board.gamestate.currentTick}.json`,
     );
-    writeFile(
-      file,
-      JSON.stringify({
-        map: board.map.toDto(),
-        blobs: board.blobs().map<BlobDto>((b) => b.toDto()),
-        gamestate: board.gamestate.toDto(),
-      }),
-    )
+    promises
+      .writeFile(
+        file,
+        JSON.stringify({
+          map: board.map.toDto(),
+          blobs: board.blobs().map<BlobDto>((b) => b.toDto()),
+          gamestate: board.gamestate.toDto(),
+        }),
+      )
       .then(() =>
         this.logger.log(
           `Snapshot '${file}' created at Tick: ${board.gamestate.currentTick}`,

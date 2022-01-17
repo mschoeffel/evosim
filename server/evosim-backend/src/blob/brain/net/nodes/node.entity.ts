@@ -7,8 +7,9 @@ export abstract class NodeEntity {
   protected _value: number;
   protected readonly _id: string;
   private readonly _activationFunction: ActivationStrategy;
-  private _layer: number;
   private readonly _index: number;
+  private _layer: number;
+  private _y: number;
 
   protected constructor(
     layer: number,
@@ -28,7 +29,11 @@ export abstract class NodeEntity {
     //TODO: Rework Label -> Value
     dto.label = String(Utils.roundToTwoDigits(this.value));
     dto.x = this.layer * 100;
-    dto.y = this.index * 100;
+    if (this.y !== undefined && this.y !== null) {
+      dto.y = this.y;
+    } else {
+      dto.y = this.index * 100;
+    }
     return dto;
   }
 
@@ -60,5 +65,13 @@ export abstract class NodeEntity {
 
   get index(): number {
     return this._index;
+  }
+
+  get y(): number {
+    return this._y;
+  }
+
+  set y(value: number) {
+    this._y = value;
   }
 }

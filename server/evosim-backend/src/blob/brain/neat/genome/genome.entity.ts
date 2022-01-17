@@ -451,6 +451,7 @@ export class GenomeEntity {
           net.addNewHiddenLayer();
         }
         const n = net.addNewHiddenNodeToLayer(layer);
+        n.y = node.y;
         nodeMap.set(node.innovationNumber, n);
       }
     }

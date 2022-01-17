@@ -310,7 +310,7 @@ export default Vue.extend({
 
     pixel.setUpdateCurrentSelected(this.setSelected);
 
-    const socket = io(`localhost:5000`, { transports: ['websocket'] }); // http://evosim-server.herokuapp.com
+    const socket = io(`localhost:5000`, { transports: ['websocket'] });
     this.socket = socket;
     socket.on('connect', () => {
       // DEBUG: console.log("Connected to WebSocket Server!");
