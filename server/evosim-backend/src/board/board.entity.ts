@@ -5,16 +5,15 @@ import { BoardConfig } from './board.config';
 import { PopulationEntity } from '../population/population.entity';
 import { MapConfig } from '../map/map.config';
 import { PopulationNeatEntity } from '../population/population-neat.entity';
-import { NeatOptimizationStrategy } from '../blob/brain/net/optimization/neat-optimization.strategy';
-import { SigmoidActivationStrategy } from '../blob/brain/net/nodes/activation/sigmoid-activation.strategy';
 import { PopulationTypeEnum } from '../population/population-type.enum';
+import { GenerationDumpService } from '../dump/generation-dump.service';
 
 export class BoardEntity {
   private readonly _map: MapEntity;
   private readonly _gamestate: GamestateEntity;
   private readonly _populations: Array<PopulationEntity>;
 
-  constructor() {
+  constructor(generationDumpService: GenerationDumpService) {
     this._map = MapConfig.MAP;
     this._gamestate = new GamestateEntity(
       BoardConfig.POPULATIONS_DATA.length,
@@ -39,17 +38,19 @@ export class BoardEntity {
             BoardConfig.CREATURES_PER_POPULATION,
             this._map,
             this._gamestate,
+            generationDumpService,
           );
           break;
         case PopulationTypeEnum.NEAT:
           population = new PopulationNeatEntity(
             populationIndex,
-            new NeatOptimizationStrategy(),
-            new SigmoidActivationStrategy(),
-            [],
+            populationData.optimization,
+            populationData.activationFunction,
+            populationData.netSchema,
             BoardConfig.CREATURES_PER_POPULATION,
             this._map,
             this._gamestate,
+            generationDumpService,
           );
           break;
       }

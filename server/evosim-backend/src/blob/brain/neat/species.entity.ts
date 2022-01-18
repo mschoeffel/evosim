@@ -18,7 +18,7 @@ export class SpeciesEntity {
    * @param client client to add
    */
   public put(client: ClientEntity): boolean {
-    if (client.distance(this._representative) < NeatConfig.CP) {
+    if (client.distance(this.representative) < NeatConfig.CP) {
       this.forcePut(client);
       return true;
     }
@@ -55,7 +55,7 @@ export class SpeciesEntity {
     }
 
     //Calculate average score of all the clients of this species and set the result to the species score
-    this._score = v / this.clients.length;
+    this.score = v / this.clients.length;
   }
 
   /**
@@ -63,7 +63,7 @@ export class SpeciesEntity {
    */
   public reset(): void {
     //Set a new representative of this species randomly from all the clients of this species
-    this._representative = this.clients.at(
+    this.representative = this.clients.at(
       Math.random() * (this.clients.length - 1),
     );
 
@@ -74,9 +74,9 @@ export class SpeciesEntity {
     this.clients = [];
 
     //Add representative to the clients of this species and add species to representative. Reset score.
-    this.clients.push(this._representative);
-    this._representative.species = this;
-    this._score = 0;
+    this.clients.push(this.representative);
+    this.representative.species = this;
+    this.score = 0;
   }
 
   /**

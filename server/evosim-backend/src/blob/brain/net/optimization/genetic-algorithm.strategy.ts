@@ -13,24 +13,10 @@ export class GeneticAlgorithmStrategy extends OptimizationStrategy {
   }
 
   evolve(
-    BlobDied: BlobEntity,
+    blobDied: BlobEntity,
+    blobFittest: BlobEntity,
     populationBlobDied: PopulationEntity,
   ): MultiLayerNetEntity {
-    const blobs = [populationBlobDied.blobs[0], populationBlobDied.blobs[1]];
-    blobs.sort((a, b) => {
-      return a.score() - b.score();
-    });
-    for (const blob of populationBlobDied.blobs) {
-      if (blob.score() > blobs[0].score()) {
-        blobs[0] = blob;
-        blobs.sort((a, b) => {
-          return a.score() - b.score();
-        });
-      }
-    }
-    const fittestBlob = blobs[1];
-    const secondFittestBlob = blobs[0];
-
     const newNet = MultiLayerNetFactory.newMultiLayerNet(
       populationBlobDied.netSchema,
       populationBlobDied.activationStrategy,
@@ -40,9 +26,9 @@ export class GeneticAlgorithmStrategy extends OptimizationStrategy {
       const r = Math.random();
       if (r >= this.MAXIMUM_MUTATION_RATE) {
         if (r >= this.SEPARATION) {
-          edge.weight = fittestBlob.brain.net.edges()[index].weight;
+          edge.weight = blobFittest.brain.net.edges()[index].weight;
         } else {
-          edge.weight = secondFittestBlob.brain.net.edges()[index].weight;
+          edge.weight = blobDied.brain.net.edges()[index].weight;
         }
       }
     }

@@ -66,7 +66,6 @@ export class BlobEntity {
 
   public act(): void {
     const senses = new BlobSenses();
-    senses.currentDirection = this.direction;
     senses.currentEnergy = this.energy;
     senses.energyOfCurrentTile = this.map.getTileAt(
       this.positionX,

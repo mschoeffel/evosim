@@ -29,7 +29,7 @@ export class EdgeRenderDto {
     this.label = '';
     this.labelHidden = label;
     this.smooth = {
-      enabled: true,
+      enabled: false,
       type: 'horizontal',
       roundness: 0.5,
     };

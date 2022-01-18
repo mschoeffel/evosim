@@ -10,6 +10,8 @@ import { ProtocolModule } from './protocol/protocol.module';
 import { DumpModule } from './dump/dump.module';
 import { DumpEntity } from './dump/dump.entity';
 import { SnapshotModule } from './snapshot/snapshot.module';
+import { GenerationDumpEntity } from './dump/generation-dump.entity';
+import { GenerationDumpModule } from './dump/generation-dump.module';
 
 @Module({
   imports: [
@@ -29,11 +31,12 @@ import { SnapshotModule } from './snapshot/snapshot.module';
       //  rejectUnauthorized: false,
       //},
       database: 'EVOSIM',
-      entities: [ProtocolEntity, DumpEntity],
+      entities: [ProtocolEntity, DumpEntity, GenerationDumpEntity],
       synchronize: true,
     }),
     ProtocolModule,
     DumpModule,
+    GenerationDumpModule,
     SnapshotModule,
     BoardModule,
   ],

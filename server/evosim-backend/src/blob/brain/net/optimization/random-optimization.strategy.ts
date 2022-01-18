@@ -16,9 +16,10 @@ export class RandomOptimizationStrategy extends OptimizationStrategy {
 
   evolve(
     blobDied: BlobEntity,
+    blobFittest: BlobEntity,
     populationBlobDied: PopulationEntity,
   ): MultiLayerNetEntity {
-    const net = populationBlobDied.getFittestBlobOfPopulation().brain.net;
+    const net = blobFittest.brain.net;
     const newNet = MultiLayerNetFactory.newMultiLayerNet(
       populationBlobDied.netSchema,
       populationBlobDied.activationStrategy,

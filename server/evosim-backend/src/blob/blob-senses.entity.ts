@@ -1,19 +1,10 @@
 export class BlobSenses {
-  private _currentDirection: number;
   private _currentEnergy: number;
   private _energyOfCurrentTile: number;
   private _energyOfTileAhead: number;
 
   public static count(): number {
-    return 4;
-  }
-
-  get currentDirection(): number {
-    return this._currentDirection;
-  }
-
-  set currentDirection(value: number) {
-    this._currentDirection = value;
+    return 3;
   }
 
   get currentEnergy(): number {

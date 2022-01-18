@@ -1,5 +1,5 @@
-import { BoardService } from './board.service';
 import { GamestateDto } from './gamestate.dto';
+import { BoardConfig } from './board.config';
 
 export class GamestateEntity {
   private _ticksPerSecond: number;
@@ -8,7 +8,7 @@ export class GamestateEntity {
   private _currentTick: number;
 
   constructor(populations: number, creaturesPerPopulation: number) {
-    this._ticksPerSecond = BoardService.TICKS_PER_SECOND;
+    this._ticksPerSecond = BoardConfig.TICKS_PER_SECOND;
     this._populations = populations;
     this._creaturesPerPopulation = creaturesPerPopulation;
     this._currentTick = 0;

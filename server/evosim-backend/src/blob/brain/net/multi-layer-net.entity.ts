@@ -52,10 +52,9 @@ export class MultiLayerNetEntity extends NetInterface {
   }
 
   public input(inputs: BlobSenses): void {
-    this.inputNodes[0].value = inputs.currentDirection;
-    this.inputNodes[1].value = inputs.currentEnergy;
-    this.inputNodes[2].value = inputs.energyOfCurrentTile;
-    this.inputNodes[3].value = inputs.energyOfTileAhead;
+    this.inputNodes[0].value = inputs.currentEnergy;
+    this.inputNodes[1].value = inputs.energyOfCurrentTile;
+    this.inputNodes[2].value = inputs.energyOfTileAhead;
   }
 
   public calculate(): void {

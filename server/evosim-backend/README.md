@@ -74,8 +74,8 @@ Nest is [MIT licensed](LICENSE).
 
 Docker
 ```shell
-docker build -t evosim-server-image .
-docker run -d -p 5000:5000 -e DATABASE_PSSW="PASSWORD" -v LOKAL_ABSOLUTE:/usr/src/app/server/snapshots --name evosim-server-container --network="host" evosim-server-image
+docker build -t evosim-server-image --network="host" .
+docker run -d --network="host" -e DATABASE_PSSW="PASSWORD" -v LOKAL_ABSOLUTE:/usr/src/app/server/snapshots --name evosim-server-container evosim-server-image
 ```
 
 Heroku

@@ -30,26 +30,22 @@ export class GenomeEntity {
     let g1: GenomeEntity = this;
     let g2: GenomeEntity = genomeToCompareTo;
 
+    let highestInnovationNumberGenome1 = 0;
+    for (const connection of g1.connections) {
+      if (connection.innovationNumber > highestInnovationNumberGenome1) {
+        highestInnovationNumberGenome1 = connection.innovationNumber;
+      }
+    }
+
+    let highestInnovationNumberGenome2 = 0;
+    for (const connection of g2.connections) {
+      if (connection.innovationNumber > highestInnovationNumberGenome2) {
+        highestInnovationNumberGenome2 = connection.innovationNumber;
+      }
+    }
+
     //Swap if this doesn't have the highest innovation number
-    let highestInnovationNumberGenomeThis = 0;
-    if (g1.connections.length !== 0) {
-      highestInnovationNumberGenomeThis = this.connections.at(
-        this.connections.length - 1,
-      ).innovationNumber;
-    }
-
-    let highestInnovationNumberGenomeToCompareTo = 0;
-    if (g2.connections.length !== 0) {
-      highestInnovationNumberGenomeToCompareTo =
-        genomeToCompareTo.connections.at(
-          genomeToCompareTo.connections.length - 1,
-        ).innovationNumber;
-    }
-
-    if (
-      highestInnovationNumberGenomeThis <
-      highestInnovationNumberGenomeToCompareTo
-    ) {
+    if (highestInnovationNumberGenome1 < highestInnovationNumberGenome2) {
       g1 = genomeToCompareTo;
       g2 = this;
     }
@@ -60,9 +56,17 @@ export class GenomeEntity {
     let weightDifference = 0;
     let similarGenes = 0;
 
+    //Sort so connections align to their innovation number
+    g1.connections.sort((a, b) => {
+      return a.innovationNumber - b.innovationNumber;
+    });
+    g2.connections.sort((a, b) => {
+      return a.innovationNumber - b.innovationNumber;
+    });
+
     while (indexG1 < g1.connections.length && indexG2 < g2.connections.length) {
-      const connectionGeneG1 = g1.connections.at(indexG1);
-      const connectionGeneG2 = g2.connections.at(indexG2);
+      const connectionGeneG1 = g1.connections[indexG1];
+      const connectionGeneG2 = g2.connections[indexG2];
       const innovationNumberConnectionGeneG1 =
         connectionGeneG1.innovationNumber;
       const innovationNumberConnectionGeneG2 =
@@ -81,18 +85,17 @@ export class GenomeEntity {
       } else if (
         innovationNumberConnectionGeneG1 > innovationNumberConnectionGeneG2
       ) {
-        //Disjoint gene of GenomeToCompareTo
+        //Disjoint gene of Gene2
         countDisjoint++;
         indexG2++;
       } else {
-        //Disjoint gene of This
+        //Disjoint gene of Gene1
         countDisjoint++;
         indexG1++;
       }
     }
-    if (similarGenes !== 0) {
-      weightDifference /= similarGenes;
-    }
+
+    weightDifference /= Math.max(1, similarGenes);
     const countExcess = g1.connections.length - indexG1;
 
     let N = Math.max(g1.connections.length, g2.connections.length);
@@ -239,10 +242,18 @@ export class GenomeEntity {
     let indexG1 = 0;
     let indexG2 = 0;
 
+    //Sort so connections align to their innovation number
+    g1.connections.sort((a, b) => {
+      return a.innovationNumber - b.innovationNumber;
+    });
+    g2.connections.sort((a, b) => {
+      return a.innovationNumber - b.innovationNumber;
+    });
+
     //Add Similar and Disjoint Genes
     while (indexG1 < g1.connections.length && indexG2 < g2.connections.length) {
-      const connectionGeneG1 = g1.connections.at(indexG1);
-      const connectionGeneG2 = g2.connections.at(indexG2);
+      const connectionGeneG1 = g1.connections[indexG1];
+      const connectionGeneG2 = g2.connections[indexG2];
       const innovationNumberConnectionGeneG1 =
         connectionGeneG1.innovationNumber;
       const innovationNumberConnectionGeneG2 =

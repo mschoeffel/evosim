@@ -38,12 +38,12 @@ export default Vue.extend({
       edges: [],
       options: {
         physics: false,
-        interaction: {
-          dragNodes: false,
-        },
+        // interaction: {
+        //   dragNodes: false,
+        // },
         nodes: {
           borderWidth: 1,
-          fixed: true,
+          // fixed: true,
         },
         edges: {
           color: 'lightgray',
@@ -60,7 +60,6 @@ export default Vue.extend({
         const nodesRender = this.nodes;
 
         const start = [
-          this.$t('netSection.inputNodeLabels.direction'),
           this.$t('netSection.inputNodeLabels.energy'),
           this.$t('netSection.inputNodeLabels.energyCurrentTile'),
           this.$t('netSection.inputNodeLabels.energyTileAhead'),

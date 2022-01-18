@@ -10,7 +10,8 @@ export abstract class OptimizationStrategy {
   }
 
   public abstract evolve(
-    BlobDied: BlobEntity,
+    blobDied: BlobEntity,
+    blobFittest: BlobEntity,
     populationBlobDied: PopulationEntity,
   ): MultiLayerNetEntity;
 

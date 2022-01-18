@@ -7,6 +7,7 @@ import { ProtocolService } from '../protocol/protocol.service';
 import { BoardConfig } from './board.config';
 import { DumpService } from '../dump/dump.service';
 import { SnapshotService } from '../snapshot/snapshot.service';
+import { GenerationDumpService } from '../dump/generation-dump.service';
 
 @Injectable()
 export class BoardService {
@@ -14,16 +15,15 @@ export class BoardService {
   private _board: BoardEntity;
   private _run: number;
 
-  public static readonly TICKS_PER_SECOND = 20;
-
   constructor(
     private readonly socketService: SocketService,
     private readonly protocolService: ProtocolService,
     private readonly dumpService: DumpService,
+    private readonly generationDumpService: GenerationDumpService,
     private readonly snapshotService: SnapshotService,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {
-    this._board = new BoardEntity();
+    this._board = new BoardEntity(generationDumpService);
     this._run = 1;
   }
 
@@ -76,7 +76,7 @@ export class BoardService {
         } else {
           const intervals = this.schedulerRegistry.getIntervals();
           intervals.forEach((key) => this.logger.log(`Interval: ${key}`));
-          this._board = new BoardEntity();
+          this._board = new BoardEntity(this.generationDumpService);
           this.run++;
           this.logger.log(`Creating new Run ${this.run}.`);
         }

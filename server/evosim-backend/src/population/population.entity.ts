@@ -7,6 +7,8 @@ import { MultiLayerNetFactory } from '../blob/brain/net/multi-layer-net.factory'
 import { BoardConfig } from '../board/board.config';
 import { GamestateEntity } from '../board/gamestate.entity';
 import { PopulationStatsEntity } from './population-stats.entity';
+import { GenerationDumpService } from '../dump/generation-dump.service';
+import { PopulationGenerationStatsEntity } from './population-generation-stats.entity';
 
 export class PopulationEntity {
   protected readonly _index: number;
@@ -17,6 +19,8 @@ export class PopulationEntity {
   protected readonly _size: number;
   protected readonly _map: MapEntity;
   protected readonly _gamestate: GamestateEntity;
+  private readonly _generationDumpService: GenerationDumpService;
+  private _generation: number;
 
   constructor(
     index: number,
@@ -26,6 +30,7 @@ export class PopulationEntity {
     size: number,
     map: MapEntity,
     gamestate: GamestateEntity,
+    generationDumpService: GenerationDumpService,
   ) {
     this._index = index;
     this._optimizationStrategy = optimizationStrategy;
@@ -35,6 +40,8 @@ export class PopulationEntity {
     this._blobs = [];
     this._map = map;
     this._gamestate = gamestate;
+    this._generation = 0;
+    this._generationDumpService = generationDumpService;
     for (let i = 0; i < this.size; i++) {
       const brain = new BrainEntity(
         MultiLayerNetFactory.newMultiLayerNet(
@@ -54,6 +61,34 @@ export class PopulationEntity {
         ),
       );
     }
+  }
+
+  protected getGenerationStats(): PopulationGenerationStatsEntity {
+    let energySum = 0;
+    let energyMax = 0;
+    let tickSum = 0;
+    let tickMax = 0;
+    let blobCount = 0;
+    for (const blob of this.blobs) {
+      energySum += blob.energy;
+      tickSum += blob.ticksAlive;
+      if (blob.ticksAlive > tickMax) {
+        tickMax = blob.ticksAlive;
+      }
+      if (blob.energy > energyMax) {
+        energyMax = blob.energy;
+      }
+      blobCount++;
+    }
+    const stats = new PopulationGenerationStatsEntity();
+    stats.generation = this.generation;
+    stats.avgEnergy = Math.round(energySum / blobCount);
+    stats.maxEnergy = energyMax;
+    stats.avgLifetime = Math.round(tickSum / blobCount);
+    stats.maxLifetime = tickMax;
+    stats.population = this.index;
+    stats.gamestate = this.gamestate;
+    return stats;
   }
 
   public getStats(): PopulationStatsEntity {
@@ -84,8 +119,11 @@ export class PopulationEntity {
     return stats;
   }
 
-  public addEvolvedNewBlobToPopulation(blobDied: BlobEntity): BlobEntity {
-    const net = this.optimizationStrategy.evolve(blobDied, this);
+  public addEvolvedNewBlobToPopulation(
+    blobDied: BlobEntity,
+    blobFittest: BlobEntity,
+  ): BlobEntity {
+    const net = this.optimizationStrategy.evolve(blobDied, blobFittest, this);
     const brain = new BrainEntity(net);
 
     const blob = new BlobEntity(
@@ -93,7 +131,7 @@ export class PopulationEntity {
       this.index,
       brain,
       this.gamestate.currentTick,
-      blobDied.generation + 1,
+      this.generation,
       this.optimizationStrategy.name,
       this.activationStrategy.name,
     );
@@ -119,24 +157,47 @@ export class PopulationEntity {
 
   public tick(): void {
     for (const blob of this.blobs) {
-      blob.addTickAlive();
-      blob.act();
-      blob.energy -= BoardConfig.TICK_ENERGY_COST;
-      this.checkBlob(blob);
+      if (blob.alive) {
+        blob.addTickAlive();
+        blob.act();
+        blob.energy -= BoardConfig.TICK_ENERGY_COST;
+        this.checkBlob(blob);
+      }
     }
+
+    if (!this.stillOneAlive()) {
+      if (BoardConfig.GENERATION_DUMP) {
+        this.generationDumpService.createDump(this.getGenerationStats());
+      }
+      this.generation++;
+      const fittestBlob = this.getFittestBlobOfPopulation();
+      for (let i = 0; i < this.size; i++) {
+        this.addEvolvedNewBlobToPopulation(this.blobs[i], fittestBlob);
+        this.removeBlobFromPopulation(this.blobs[i]);
+      }
+    }
+  }
+
+  protected stillOneAlive(): boolean {
+    for (const blob of this.blobs) {
+      if (blob.alive) {
+        return true;
+      }
+    }
+    return false;
   }
 
   protected checkBlob(blob: BlobEntity): void {
     if (Number.isNaN(blob.energy) || blob.energy <= 0) {
       blob.alive = false;
-      this.removeBlobFromPopulation(blob);
-      this.addEvolvedNewBlobToPopulation(blob);
+      //this.removeBlobFromPopulation(blob);
+      //this.addEvolvedNewBlobToPopulation(blob);
     } else {
       const tile = this.map.getTileAt(blob.positionX, blob.positionY);
       if (tile === undefined || tile.short === 'W') {
         blob.alive = false;
-        this.removeBlobFromPopulation(blob);
-        this.addEvolvedNewBlobToPopulation(blob);
+        //this.removeBlobFromPopulation(blob);
+        //this.addEvolvedNewBlobToPopulation(blob);
       }
     }
   }
@@ -180,5 +241,17 @@ export class PopulationEntity {
 
   get gamestate(): GamestateEntity {
     return this._gamestate;
+  }
+
+  get generation(): number {
+    return this._generation;
+  }
+
+  set generation(value: number) {
+    this._generation = value;
+  }
+
+  get generationDumpService(): GenerationDumpService {
+    return this._generationDumpService;
   }
 }

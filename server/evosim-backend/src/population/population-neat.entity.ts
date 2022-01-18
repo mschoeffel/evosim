@@ -16,6 +16,7 @@ import { NodeGenomeType } from '../blob/brain/neat/genome/node-genome-type.enum'
 import { GenomeEntity } from '../blob/brain/neat/genome/genome.entity';
 import { RandomSelector } from '../utils/random-selector';
 import { NeatConfig } from '../blob/brain/neat/neat.config';
+import { GenerationDumpService } from '../dump/generation-dump.service';
 
 export class PopulationNeatEntity extends PopulationEntity {
   private readonly _allConnectionGenes: Array<ConnectionGeneEntity>;
@@ -35,6 +36,7 @@ export class PopulationNeatEntity extends PopulationEntity {
     size: number,
     map: MapEntity,
     gamestate: GamestateEntity,
+    generationDumpService: GenerationDumpService,
   ) {
     super(
       index,
@@ -44,6 +46,7 @@ export class PopulationNeatEntity extends PopulationEntity {
       size,
       map,
       gamestate,
+      generationDumpService,
     );
 
     this._inputSize = BlobSenses.count();
@@ -304,19 +307,16 @@ export class PopulationNeatEntity extends PopulationEntity {
       if (client.species === null) {
         //Select a random species for the client
         const s = selector.random();
-        if (s === null || s === undefined) {
-          client.genome = this.emptyGenome();
-        }
         //Breed a new Genome for the client from the selected species
         client.genome = s.breed(); // TODO: s === null
         client.creature = new BlobEntity(
-          this._map,
-          this._index,
+          this.map,
+          this.index,
           new BrainEntity(client.genome.toMultilayerNet()),
           this.gamestate.currentTick,
-          0,
-          this._optimizationStrategy.name,
-          this._activationStrategy.name,
+          this.generation,
+          this.optimizationStrategy.name,
+          this.activationStrategy.name,
         );
         //Force client add to species
         s.forcePut(client);
@@ -331,15 +331,14 @@ export class PopulationNeatEntity extends PopulationEntity {
   private mutate(): void {
     for (const c of this.clients) {
       c.mutate();
-      c.generation++;
       c.creature = new BlobEntity(
         this.map,
         this.index,
         new BrainEntity(c.genome.toMultilayerNet()),
         this.gamestate.currentTick,
-        c.generation,
-        this._optimizationStrategy.name,
-        this._activationStrategy.name,
+        this.generation,
+        this.optimizationStrategy.name,
+        this.activationStrategy.name,
       );
     }
   }
@@ -354,17 +353,12 @@ export class PopulationNeatEntity extends PopulationEntity {
       }
     }
     if (!this.stillOneAlive()) {
+      if (BoardConfig.GENERATION_DUMP) {
+        this.generationDumpService.createDump(this.getGenerationStats());
+      }
+      this.generation++;
       this.evolve();
     }
-  }
-
-  private stillOneAlive(): boolean {
-    for (const blob of this.blobs) {
-      if (blob.alive) {
-        return true;
-      }
-    }
-    return false;
   }
 
   override checkBlob(blob: BlobEntity): void {
