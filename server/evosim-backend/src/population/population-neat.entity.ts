@@ -309,15 +309,6 @@ export class PopulationNeatEntity extends PopulationEntity {
         const s = selector.random();
         //Breed a new Genome for the client from the selected species
         client.genome = s.breed(); // TODO: s === null
-        client.creature = new BlobEntity(
-          this.map,
-          this.index,
-          new BrainEntity(client.genome.toMultilayerNet()),
-          this.gamestate.currentTick,
-          this.generation,
-          this.optimizationStrategy.name,
-          this.activationStrategy.name,
-        );
         //Force client add to species
         s.forcePut(client);
       }

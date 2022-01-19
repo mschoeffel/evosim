@@ -10,5 +10,5 @@ export class NeatConfig {
   public static readonly PROBABILITY_MUTATE_WEIGHT_RANDOM = 0.02;
   public static readonly PROBABILITY_MUTATE_TOGGLE_LINK = 0.001;
   public static readonly CP = 4;
-  public static readonly SURVIVOR_RATE = 0.8;
+  public static readonly SURVIVOR_RATE = 0.65;
 }

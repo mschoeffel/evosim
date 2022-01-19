@@ -92,7 +92,7 @@ export class SpeciesEntity {
     const amount = Math.floor(percentage * this.clients.length);
     //Kill worst 'amount' clients
     for (let i = 0; i < amount; i++) {
-      this.clients[i].species = null;
+      this.clients[0].species = null;
       this.clients.splice(0, 1);
     }
   }
