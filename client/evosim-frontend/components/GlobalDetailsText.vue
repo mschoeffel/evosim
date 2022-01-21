@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h1>{{ $t('globalSection.heading') }}</h1>
+  <div class="px-4 py-4">
     <div class="flex">
       <div class="w-1/3">{{ $t('globalSection.selectedLanguage') }}</div>
       <div class="w-2/3">

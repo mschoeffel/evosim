@@ -11,9 +11,12 @@ export default {
   statsSection: {
     headingMaxEnergy: 'Max Energy',
     headingInfo: 'Info',
-    headingAvgEnergy: 'Avg Energy',
-    headingAvgGeneration: 'Avg Generation',
-    headingAvgLife: 'Avg Lifetime',
+    headingAvgEnergyNow: 'Avg Energy Now',
+    headingAvgGenerationNow: 'Avg Generation Now',
+    headingAvgLifeNow: 'Avg Lifetime Now',
+    headingAvgEnergyGen: 'Avg Energy Generations',
+    headingAvgLifetimeGen: 'Avg Lifetime Generations',
+    headingMaxLifetimeGen: 'Max Lifetime Generations',
     population: 'Population',
     infoText: 'Test EN',
     infoSnapshotUpload: 'Upload a Snapshot JSON',
@@ -56,5 +59,7 @@ export default {
     id: 'ID',
     topTicks: 'Top Lifetime',
     population: 'Population',
+    headingTopPopulation: 'Top Lifetime per Population',
+    headingTopGeneral: 'Top Lifetime',
   },
 };

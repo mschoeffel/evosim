@@ -1,17 +1,21 @@
 import { GamestateDto } from './gamestate.dto';
 import { BoardConfig } from './board.config';
+import { PopulationGenerationStatsDto } from '../population/population-generation-stats.dto';
+import { PopulationGenerationStatsEntity } from '../population/population-generation-stats.entity';
 
 export class GamestateEntity {
   private _ticksPerSecond: number;
   private _populations: number;
   private _creaturesPerPopulation: number;
   private _currentTick: number;
+  private _stats: Array<PopulationGenerationStatsEntity>;
 
   constructor(populations: number, creaturesPerPopulation: number) {
     this._ticksPerSecond = BoardConfig.TICKS_PER_SECOND;
     this._populations = populations;
     this._creaturesPerPopulation = creaturesPerPopulation;
     this._currentTick = 0;
+    this._stats = [];
   }
 
   public toDto(): GamestateDto {
@@ -20,6 +24,7 @@ export class GamestateEntity {
     dto.populations = this.populations;
     dto.creaturesPerPopulation = this.creaturesPerPopulation;
     dto.currentTick = this.currentTick;
+    dto.stats = this.stats.map<PopulationGenerationStatsDto>((i) => i.toDto());
     return dto;
   }
 
@@ -57,5 +62,13 @@ export class GamestateEntity {
 
   set currentTick(value: number) {
     this._currentTick = value;
+  }
+
+  get stats(): Array<PopulationGenerationStatsEntity> {
+    return this._stats;
+  }
+
+  set stats(value: Array<PopulationGenerationStatsEntity>) {
+    this._stats = value;
   }
 }

@@ -1,127 +1,124 @@
 <template>
-  <div>
-    <h1>{{ $t('detailSection.heading') }}</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-4">
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.state') }}</div>
+  <div class="px-4 py-4 grid grid-cols-1 sm:grid-cols-4">
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.state') }}</div>
+    </div>
+    <div class="sm:col-span-3">
+      <div
+        v-if="creature !== undefined"
+        :class="creature.alive ? 'text-green-600' : 'text-red-600'"
+      >
+        {{ $t(`detailSection.alive.${creature.alive}`) }}
       </div>
-      <div class="sm:col-span-3">
-        <div
-          v-if="creature !== undefined"
-          :class="creature.alive ? 'text-green-600' : 'text-red-600'"
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.id') }}</div>
+    </div>
+    <div class="sm:col-span-3">
+      <div v-if="creature !== undefined">{{ creature.id }}</div>
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.x') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.x !== undefined">
+        {{ roundToTwoDigits(creature.x) }}
+      </div>
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.y') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ roundToTwoDigits(creature.y) }}
+      </div>
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.direction') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ roundToTwoDigits(creature.direction) }}
+      </div>
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.energy') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ roundToTwoDigits(creature.energy) }}
+      </div>
+    </div>
+
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.population') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.population !== undefined">
+        <span
+          :style="'background-color: ' + colors[creature.population]"
+          class="
+            inline-flex
+            items-center
+            px-2.5
+            py-0.5
+            rounded-full
+            text-xs
+            font-medium
+            bg-blue-100
+          "
+          >{{ creature.population }}</span
         >
-          {{ $t(`detailSection.alive.${creature.alive}`) }}
-        </div>
       </div>
+    </div>
 
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.id') }}</div>
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.generation') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ creature.generation }}
       </div>
-      <div class="sm:col-span-3">
-        <div v-if="creature !== undefined">{{ creature.id }}</div>
-      </div>
+    </div>
 
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.x') }}</div>
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.initTick') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ creature.initTick }}
       </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.x !== undefined">
-          {{ roundToTwoDigits(creature.x) }}
-        </div>
-      </div>
+    </div>
 
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.y') }}</div>
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.ticksAlive') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ creature.ticksAlive }}
       </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ roundToTwoDigits(creature.y) }}
-        </div>
-      </div>
+    </div>
 
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.direction') }}</div>
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.algorithm') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ creature.algorithm }}
       </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ roundToTwoDigits(creature.direction) }}
-        </div>
-      </div>
+    </div>
 
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.energy') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ roundToTwoDigits(creature.energy) }}
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.population') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.population !== undefined">
-          <span
-            :style="'background-color: ' + colors[creature.population]"
-            class="
-              inline-flex
-              items-center
-              px-2.5
-              py-0.5
-              rounded-full
-              text-xs
-              font-medium
-              bg-blue-100
-            "
-            >{{ creature.population }}</span
-          >
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.generation') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ creature.generation }}
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.initTick') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ creature.initTick }}
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.ticksAlive') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ creature.ticksAlive }}
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.algorithm') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ creature.algorithm }}
-        </div>
-      </div>
-
-      <div class="sm:col-span-1">
-        <div>{{ $t('detailSection.activation') }}</div>
-      </div>
-      <div class="sm:col-span-1">
-        <div v-if="creature !== undefined && creature.y !== undefined">
-          {{ creature.activation }}
-        </div>
+    <div class="sm:col-span-1">
+      <div>{{ $t('detailSection.activation') }}</div>
+    </div>
+    <div class="sm:col-span-1">
+      <div v-if="creature !== undefined && creature.y !== undefined">
+        {{ creature.activation }}
       </div>
     </div>
   </div>

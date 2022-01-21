@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-1">
+  <div class="pt-4">
     <line-chart
       :height="150"
       :chart-data="chartData"

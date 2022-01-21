@@ -6,10 +6,10 @@ import { NeatOptimizationStrategy } from '../blob/brain/net/optimization/neat-op
 
 export class BoardConfig {
   public static readonly PROTOCOL = false;
-  public static readonly GENERATION_DUMP = true;
+  public static readonly GENERATION_DUMP = false;
   public static readonly DUMP = false;
   public static readonly DUMP_INTERVAL = 200;
-  public static readonly TICKS_PER_SECOND = 20;
+  public static readonly TICKS_PER_SECOND = 10;
   public static readonly LOG_INTERVAL = 1000;
   public static readonly RENDER_WEBSOCKET = true;
   public static readonly SNAPSHOT = false;

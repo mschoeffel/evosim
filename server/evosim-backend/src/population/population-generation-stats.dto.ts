@@ -1,6 +1,4 @@
-import { PopulationGenerationStatsDto } from './population-generation-stats.dto';
-
-export class PopulationGenerationStatsEntity {
+export class PopulationGenerationStatsDto {
   private _avgLifetime: number;
   private _generation: number;
   private _avgEnergy: number;
@@ -8,18 +6,6 @@ export class PopulationGenerationStatsEntity {
   private _maxLifetime: number;
   private _population: number;
   private _tick: number;
-
-  public toDto(): PopulationGenerationStatsDto {
-    const dto = new PopulationGenerationStatsDto();
-    dto.avgLifetime = this.avgLifetime;
-    dto.generation = this.generation;
-    dto.avgEnergy = this.avgEnergy;
-    dto.maxEnergy = this.maxEnergy;
-    dto.maxLifetime = this.maxLifetime;
-    dto.population = this.population;
-    dto.tick = this.tick;
-    return dto;
-  }
 
   get avgLifetime(): number {
     return this._avgLifetime;

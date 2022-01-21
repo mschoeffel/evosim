@@ -1,8 +1,11 @@
+import { PopulationGenerationStatsDto } from '../population/population-generation-stats.dto';
+
 export class GamestateDto {
   private _ticksPerSecond: number;
   private _populations: number;
   private _creaturesPerPopulation: number;
   private _currentTick: number;
+  private _stats: Array<PopulationGenerationStatsDto>;
 
   get ticksPerSecond(): number {
     return this._ticksPerSecond;
@@ -34,5 +37,13 @@ export class GamestateDto {
 
   set currentTick(value: number) {
     this._currentTick = value;
+  }
+
+  get stats(): Array<PopulationGenerationStatsDto> {
+    return this._stats;
+  }
+
+  set stats(value: Array<PopulationGenerationStatsDto>) {
+    this._stats = value;
   }
 }

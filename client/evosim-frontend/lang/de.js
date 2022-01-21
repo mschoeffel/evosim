@@ -11,9 +11,12 @@ export default {
   statsSection: {
     headingMaxEnergy: 'Max Energie',
     headingInfo: 'Info',
-    headingAvgEnergy: 'Avg Energie',
-    headingAvgGeneration: 'Avg Generation',
-    headingAvgLife: 'Avg Lebenszeit',
+    headingAvgEnergyNow: 'Avg Energie Aktuell',
+    headingAvgGenerationNow: 'Avg Generation Aktuell',
+    headingAvgLifeNow: 'Avg Lebenszeit Aktuell',
+    headingAvgEnergyGen: 'Avg Energie Gen.',
+    headingAvgLifetimeGen: 'Avg Lebenszeit Gen.',
+    headingMaxLifetimeGen: 'Max Lebenszeit Gen.',
     population: 'Population',
     infoText: 'Test DE',
     infoSnapshotUpload: 'Hochladen einer Snapshot JSON',
@@ -56,5 +59,7 @@ export default {
     id: 'ID',
     topTicks: 'Top Lebenszeit',
     population: 'Population',
+    headingTopPopulation: 'Top Lebenszeit je Population',
+    headingTopGeneral: 'Top Lebenszeit',
   },
 };

@@ -87,7 +87,7 @@ export class PopulationEntity {
     stats.avgLifetime = Math.round(tickSum / blobCount);
     stats.maxLifetime = tickMax;
     stats.population = this.index;
-    stats.gamestate = this.gamestate;
+    stats.tick = this.gamestate.currentTick;
     return stats;
   }
 
@@ -166,8 +166,10 @@ export class PopulationEntity {
     }
 
     if (!this.stillOneAlive()) {
+      const stats = this.getGenerationStats();
+      this.gamestate.stats.push(stats);
       if (BoardConfig.GENERATION_DUMP) {
-        this.generationDumpService.createDump(this.getGenerationStats());
+        this.generationDumpService.createDump(stats);
       }
       this.generation++;
       const fittestBlob = this.getFittestBlobOfPopulation();

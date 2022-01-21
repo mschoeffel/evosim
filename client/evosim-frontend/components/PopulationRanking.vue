@@ -1,5 +1,5 @@
 <template>
-  <table class="min-w-full divide-y divide-gray-200">
+  <table class="min-w-full divide-y divide-gray-200 ">
     <thead>
       <tr>
         <th
@@ -85,7 +85,7 @@ import Vue from 'vue';
 import { BlobClient } from '~/models/blob.client';
 
 export default Vue.extend({
-  name: 'CreatureRanking',
+  name: 'PopulationRanking',
   props: {
     creatures: {
       type: Array,
@@ -124,32 +124,21 @@ export default Vue.extend({
     },
     update(newVal: Array<BlobClient> | undefined): void {
       if (newVal !== undefined) {
-        let top5LongestAlive = [0];
-        let top5Creature = [] as Array<BlobClient>;
-        const top = 4;
+        const topMap = new Map<number, BlobClient>();
         for (const blob of newVal) {
           if (!blob.alive) {
             continue;
           }
-          if (blob.ticksAlive > top5LongestAlive[0]) {
-            top5LongestAlive.push(blob.ticksAlive);
-            top5Creature.push(blob);
+          if (!topMap.has(blob.population)) {
+            topMap.set(blob.population, blob);
+            continue;
           }
-          top5LongestAlive = top5LongestAlive.sort((a, b) => {
-            return a - b;
-          });
-          top5Creature = top5Creature.sort((a, b) => {
-            return a.ticksAlive - b.ticksAlive;
-          });
-
-          if (top5LongestAlive.length > top) {
-            top5LongestAlive.shift();
-          }
-          if (top5Creature.length > top) {
-            top5Creature.shift();
+          const blobMap = topMap.get(blob.population);
+          if (blobMap !== undefined && blob.ticksAlive > blobMap.ticksAlive) {
+            topMap.set(blob.population, blob);
           }
         }
-        this.topCreatures = top5Creature.reverse();
+        this.topCreatures = Array.from(topMap.values());
       }
     },
   },

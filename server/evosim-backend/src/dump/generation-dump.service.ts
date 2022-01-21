@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PopulationGenerationStatsEntity } from '../population/population-generation-stats.entity';
 import { GenerationDumpEntity } from './generation-dump.entity';
+import { PopulationGenerationStatsEntity } from '../population/population-generation-stats.entity';
 
 @Injectable()
 export class GenerationDumpService {
@@ -20,7 +20,7 @@ export class GenerationDumpService {
   createDump(stats: PopulationGenerationStatsEntity): void {
     const dump = new GenerationDumpEntity();
     dump.population = stats.population;
-    dump.tick = stats.gamestate.currentTick;
+    dump.tick = stats.tick;
     dump.generation = stats.generation;
     dump.avgLifetime = stats.avgLifetime;
     dump.avgEnergy = stats.avgEnergy;
@@ -29,7 +29,7 @@ export class GenerationDumpService {
     this.create(dump)
       .then(() =>
         this.logger.log(
-          `Generation Dump for Population ${stats.population} Generation ${stats.generation} written at Tick: ${stats.gamestate.currentTick}`,
+          `Generation Dump for Population ${stats.population} Generation ${stats.generation} written at Tick: ${stats.tick}`,
         ),
       )
       .catch((e) => this.logger.error(`Error creating generation dump ${e}`));

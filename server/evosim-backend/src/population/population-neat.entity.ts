@@ -344,8 +344,10 @@ export class PopulationNeatEntity extends PopulationEntity {
       }
     }
     if (!this.stillOneAlive()) {
+      const stats = this.getGenerationStats();
+      this.gamestate.stats.push(stats);
       if (BoardConfig.GENERATION_DUMP) {
-        this.generationDumpService.createDump(this.getGenerationStats());
+        this.generationDumpService.createDump(stats);
       }
       this.generation++;
       this.evolve();

@@ -11,18 +11,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import LineChart from './../js/linechart.js';
-import { BlobClient } from '~/models/blob.client';
+import { GamestateClientDto } from '~/models/dto/gamestate.client.dto';
 
 export default Vue.extend({
-  name: 'GlobalStatsAvgGeneration',
+  name: 'GenerationStatsAvgLifetime',
   components: {
     LineChart,
   },
   props: {
-    creatures: {
-      type: Array,
+    gamestate: {
+      type: Object,
       default: () => {
-        return [];
+        return {};
       },
     },
     colors: {
@@ -30,10 +30,6 @@ export default Vue.extend({
       default: () => {
         return [];
       },
-    },
-    populations: {
-      type: Number,
-      default: 0,
     },
   },
   data(): {
@@ -45,6 +41,7 @@ export default Vue.extend({
       }>;
     };
     chartOptions: {};
+    renderedSave: number;
   } {
     return {
       chartData: {
@@ -80,64 +77,81 @@ export default Vue.extend({
           position: 'bottom',
           labels: {
             usePointStyle: true,
-            boxWidth: 10,
           },
         },
       },
+      renderedSave: 0,
     };
   },
   watch: {
-    creatures: {
+    gamestate: {
       immediate: true,
       handler: 'update',
     },
   },
   methods: {
-    update(newVal: Array<BlobClient> | undefined): void {
-      if (newVal !== undefined) {
+    update(newVal: GamestateClientDto | undefined): void {
+      if (
+        newVal !== undefined &&
+        newVal._stats !== undefined &&
+        newVal._stats.length > this.renderedSave
+      ) {
         const newChartData = [];
-        const sumOfEachPopulation = [];
-        const countOfEachPopulation = [];
+        const data = new Map<number, Array<number>>();
 
-        for (let p = 0; p < this.populations; p++) {
-          sumOfEachPopulation[p] = 0;
-          countOfEachPopulation[p] = 0;
+        let maxGeneration = 0;
+        for (const stat of newVal._stats) {
+          if (stat._generation > maxGeneration) {
+            maxGeneration = stat._generation;
+          }
         }
 
-        for (const blob of newVal) {
-          sumOfEachPopulation[blob.population] += blob.generation;
-          countOfEachPopulation[blob.population]++;
+        for (const stat of newVal._stats) {
+          if (!data.has(stat._population)) {
+            data.set(stat._population, [maxGeneration]);
+          }
+          const arr = data.get(stat._population);
+          if (arr !== undefined) {
+            arr[stat._generation] = stat._avgLifetime;
+          }
         }
 
-        for (let population = 0; population < this.populations; population++) {
+        for (
+          let population = 0;
+          population < newVal._populations;
+          population++
+        ) {
           const newChartDataPopulation = {
             id: population,
             label: `${this.$t('statsSection.population')} ${population}`,
             borderColor: this.colors[population],
             fill: false,
-            data: [] as Array<number>,
+            data: [] as Array<any>,
           };
-          const chartDataPopulationSet = this.chartData.datasets[population];
-          if (chartDataPopulationSet !== undefined) {
-            for (const element of chartDataPopulationSet.data) {
-              newChartDataPopulation.data.push(element);
+          const arr = data.get(population);
+          if (arr !== undefined) {
+            let index = arr.length - 1;
+            while (index >= 0 && index >= arr.length - 26) {
+              newChartDataPopulation.data.push(
+                this.roundToTwoDigits(arr[index]),
+              );
+              index--;
             }
-            if (newChartDataPopulation.data.length > 9) {
-              newChartDataPopulation.data.shift();
+            while (newChartDataPopulation.data.length < 26) {
+              newChartDataPopulation.data.push(null);
             }
           }
-          newChartDataPopulation.data.push(
-            this.roundToTwoDigits(
-              sumOfEachPopulation[population] /
-                countOfEachPopulation[population],
-            ),
-          );
+          newChartDataPopulation.data.reverse();
           newChartData.push(newChartDataPopulation);
         }
         this.chartData = {
-          labels: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0],
+          labels: [
+            -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13,
+            -12, -11, -10, -9, -8, -7, -6, -5, -5, -4, -3, -2, -1,
+          ],
           datasets: newChartData,
         };
+        this.renderedSave = newVal._stats.length;
       }
     },
     getRandomInt() {
