@@ -1,45 +1,109 @@
 <template>
-  <div class="h-full w- full grid grid-cols-1 lg:grid-cols-2 gap-1">
-    <div id="canvasParent" class="h-full w-full border-solid border-2 border-black">
+  <div
+    class="
+      h-screen
+      w-full
+      flex flex-row flex-wrap
+      xl:flex-nowrap
+      justify-items-stretch
+    "
+  >
+    <div
+      id="canvasParent"
+      class="
+        h-96
+        sm:h-full
+        w-full
+        xl:basis-1/2
+        border-solid border-2 border-black
+      "
+    >
       <div
         id="p5Canvas"
-        class="w-full h-full justify-center items-center flex"
+        class="w-full h-full justify-center items-center"
       ></div>
     </div>
-    <div class="w-full h-full grid grid-rows-4 grid-cols-2 gap-1">
-      <div class="border-solid border-2 border-black">
-        <GenerationStatsSections
-          :colors="colors"
-          :gamestate="gamestate"
-        ></GenerationStatsSections>
+    <div class="w-full h-full xl:basis-1/2 flex flex-col grow shrink">
+      <div
+        class="w-full h-80 flex flex-row md:flex-nowrap flex-wrap shrink grow"
+      >
+        <div
+          class="w-full h-full grow shrink border-solid border-2 border-black"
+        >
+          <GenerationStatsSections
+            :colors="colors"
+            :gamestate="gamestate"
+          ></GenerationStatsSections>
+        </div>
+        <div
+          class="w-full h-full grow shrink border-solid border-2 border-black"
+        >
+          <LiveStatsSections
+            :colors="colors"
+            :creatures="blobs"
+            :populations="gamestate._populations"
+          ></LiveStatsSections>
+        </div>
       </div>
-      <div class="border-solid border-2 border-black">
-        <LiveStatsSections
-          :colors="colors"
-          :creatures="blobs"
-          :populations="gamestate._populations"
-        ></LiveStatsSections>
+      <div
+        class="
+          w-full
+          min-h-[20rem]
+          xl:min-h-0
+          md:h-full
+          mt-80
+          md:mt-0
+          flex flex-row
+          shrink-0
+          grow
+        "
+      >
+        <div
+          class="basis-full h-full w-full border-solid border-2 border-black"
+        >
+          <CreatureNetDetail
+            v-if="selectedCreature !== undefined"
+            :selected-creature="selectedCreature"
+          ></CreatureNetDetail>
+        </div>
       </div>
-      <div class="col-span-2 row-span-2 border-solid border-2 border-black">
-        <CreatureNetDetail
-          v-if="selectedCreature !== undefined"
-          :selected-creature="selectedCreature"
-        ></CreatureNetDetail>
-      </div>
-      <div class="border-solid border-2 border-black">
-        <DetailsSections
-          :colors="colors"
-          :creature="selectedCreature"
-          :gamestate="gamestate"
-          @updateSnapshot="updateSnapshot"
-        ></DetailsSections>
-      </div>
-      <div class="border-solid border-2 border-black">
-        <RankingSections
-          :colors="colors"
-          :creatures="blobs"
-          @selectCreature="setSelectedById"
-        ></RankingSections>
+      <div
+        class="
+          w-full
+          min-h-[20rem]
+          h-96
+          flex flex-row
+          md:flex-nowrap
+          flex-wrap
+          grow
+        "
+      >
+        <div
+          class="
+            w-full
+            h-96
+            sm:h-full
+            grow
+            shrink
+            border-solid border-2 border-black
+          "
+        >
+          <DetailsSections
+            :colors="colors"
+            :creature="selectedCreature"
+            :gamestate="gamestate"
+            @updateSnapshot="updateSnapshot"
+          ></DetailsSections>
+        </div>
+        <div
+          class="w-full h-full grow shrink border-solid border-2 border-black"
+        >
+          <RankingSections
+            :colors="colors"
+            :creatures="blobs"
+            @selectCreature="setSelectedById"
+          ></RankingSections>
+        </div>
       </div>
     </div>
   </div>

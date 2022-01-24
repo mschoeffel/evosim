@@ -343,13 +343,24 @@ export class PopulationNeatEntity extends PopulationEntity {
         this.checkBlob(blob);
       }
     }
-    if (!this.stillOneAlive()) {
+    let blobsAlive = this.getBlobsAlive();
+    if (blobsAlive.length <= BoardConfig.COUNT_BLOBS_OVERTIME) {
+      if (this.overtime >= BoardConfig.MAX_OVERTIME) {
+        for (const blobAlive of blobsAlive) {
+          blobAlive.alive = false;
+        }
+        blobsAlive = [];
+      }
+      this.overtime++;
+    }
+    if (blobsAlive.length <= 0) {
       const stats = this.getGenerationStats();
       this.gamestate.stats.push(stats);
       if (BoardConfig.GENERATION_DUMP) {
         this.generationDumpService.createDump(stats);
       }
       this.generation++;
+      this.overtime = 0;
       this.evolve();
     }
   }

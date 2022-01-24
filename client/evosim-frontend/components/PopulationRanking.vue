@@ -1,5 +1,5 @@
 <template>
-  <table class="min-w-full divide-y divide-gray-200 ">
+  <table class="min-w-full divide-y divide-gray-200">
     <thead>
       <tr>
         <th
@@ -72,7 +72,7 @@
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600"
         >
           <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{
-            topCreature.id
+            $t('topSection.select')
           }}</a>
         </td>
       </tr>

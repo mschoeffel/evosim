@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 py-4 grid grid-cols-1 sm:grid-cols-4">
+  <div class="px-4 py-4 grid grid-cols-2 sm:grid-cols-4">
     <div class="sm:col-span-1">
       <div>{{ $t('detailSection.state') }}</div>
     </div>

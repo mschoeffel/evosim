@@ -14,8 +14,8 @@
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
-          href="#"
-          @click="currentTab = 'global'"
+          href=""
+          @click.prevent="currentTab = 'global'"
         >
           <span>{{ $t('topSection.headingTopGeneral') }}</span>
           <span
@@ -35,8 +35,8 @@
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
-          href="#"
-          @click="currentTab = 'population'"
+          href=""
+          @click.prevent="currentTab = 'population'"
         >
           <span>{{ $t('topSection.headingTopPopulation') }}</span>
           <span

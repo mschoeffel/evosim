@@ -61,5 +61,6 @@ export default {
     population: 'Population',
     headingTopPopulation: 'Top Lebenszeit je Population',
     headingTopGeneral: 'Top Lebenszeit',
+    select: 'Auswählen',
   },
 };

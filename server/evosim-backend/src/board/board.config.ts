@@ -39,4 +39,6 @@ export class BoardConfig {
       netSchema: [],
     },
   ];
+  public static readonly MAX_OVERTIME = 2000;
+  public static readonly COUNT_BLOBS_OVERTIME = 10;
 }

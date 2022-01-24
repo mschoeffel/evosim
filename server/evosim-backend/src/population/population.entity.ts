@@ -21,6 +21,7 @@ export class PopulationEntity {
   protected readonly _gamestate: GamestateEntity;
   private readonly _generationDumpService: GenerationDumpService;
   private _generation: number;
+  private _overtime: number;
 
   constructor(
     index: number,
@@ -42,6 +43,7 @@ export class PopulationEntity {
     this._gamestate = gamestate;
     this._generation = 0;
     this._generationDumpService = generationDumpService;
+    this._overtime = 0;
     for (let i = 0; i < this.size; i++) {
       const brain = new BrainEntity(
         MultiLayerNetFactory.newMultiLayerNet(
@@ -164,8 +166,17 @@ export class PopulationEntity {
         this.checkBlob(blob);
       }
     }
-
-    if (!this.stillOneAlive()) {
+    let blobsAlive = this.getBlobsAlive();
+    if (blobsAlive.length <= BoardConfig.COUNT_BLOBS_OVERTIME) {
+      if (this.overtime >= BoardConfig.MAX_OVERTIME) {
+        for (const blobAlive of blobsAlive) {
+          blobAlive.alive = false;
+        }
+        blobsAlive = [];
+      }
+      this.overtime++;
+    }
+    if (blobsAlive.length <= 0) {
       const stats = this.getGenerationStats();
       this.gamestate.stats.push(stats);
       if (BoardConfig.GENERATION_DUMP) {
@@ -177,16 +188,18 @@ export class PopulationEntity {
         this.addEvolvedNewBlobToPopulation(this.blobs[i], fittestBlob);
         this.removeBlobFromPopulation(this.blobs[i]);
       }
+      this.overtime = 0;
     }
   }
 
-  protected stillOneAlive(): boolean {
+  protected getBlobsAlive(): Array<BlobEntity> {
+    const i = [];
     for (const blob of this.blobs) {
       if (blob.alive) {
-        return true;
+        i.push(blob);
       }
     }
-    return false;
+    return i;
   }
 
   protected checkBlob(blob: BlobEntity): void {
@@ -255,5 +268,13 @@ export class PopulationEntity {
 
   get generationDumpService(): GenerationDumpService {
     return this._generationDumpService;
+  }
+
+  get overtime(): number {
+    return this._overtime;
+  }
+
+  set overtime(value: number) {
+    this._overtime = value;
   }
 }

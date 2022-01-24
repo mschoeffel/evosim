@@ -16,8 +16,8 @@
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
-          href="#"
-          @click="currentTab = 'GlobalStatsAvgLife'"
+          href=""
+          @click.prevent="currentTab = 'GlobalStatsAvgLife'"
         >
           <span>{{ $t('statsSection.headingAvgLifetimeGen') }}</span>
           <span
@@ -41,8 +41,8 @@
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
-          href="#"
-          @click="currentTab = 'GlobalStatsAvgEnergy'"
+          href=""
+          @click.prevent="currentTab = 'GlobalStatsAvgEnergy'"
         >
           <span>{{ $t('statsSection.headingMaxLifetimeGen') }}</span>
           <span
@@ -66,8 +66,8 @@
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
-          href="#"
-          @click="currentTab = 'GlobalStatsAvgGeneration'"
+          href=""
+          @click.prevent="currentTab = 'GlobalStatsAvgGeneration'"
         >
           <span>{{ $t('statsSection.headingAvgEnergyGen') }}</span>
           <span
