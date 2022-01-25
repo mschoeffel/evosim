@@ -33,10 +33,6 @@
       <div class="w-1/3">{{ $t('globalSection.gameTicksPerSecond') }}</div>
       <div class="w-2/3">{{ gamestate._ticksPerSecond }}</div>
     </div>
-    <div class="flex">
-      <div class="w-1/3">{{ $t('globalSection.renderTicksPerSecond') }}</div>
-      <div class="w-2/3">{{ gamestate._ticksPerSecond }}</div>
-    </div>
   </div>
 </template>
 
