@@ -12,14 +12,19 @@ export default {
     headingMaxEnergy: 'Max Energy',
     headingInfo: 'Info',
     headingAvgEnergyNow: 'Avg Energy Now',
-    headingAvgGenerationNow: 'Avg Generation Now',
+    headingCreaturesAlive: 'Creatures Alive',
+    headingAvgGenerationNow: 'Avg Gen. Now',
     headingAvgLifeNow: 'Avg Lifetime Now',
     headingAvgEnergyGen: 'Avg Energy Generations',
     headingAvgLifetimeGen: 'Avg Lifetime Generations',
     headingMaxLifetimeGen: 'Max Lifetime Generations',
     population: 'Population',
-    infoText: 'Test EN',
+    infoText:
+      'This is a web based visualization of artificial neural networks and their learning process, based on a simplified evolution simulation. On the map creatures are acting according to their neural net. The diagrams show the development over time. By clicking on a creature you can see their net and details.',
+    credits: 'Bachelor Thesis Michael Schöffel',
     infoSnapshotUpload: 'Upload a Snapshot JSON',
+    infoSnapshotUploadDescription:
+      'If you have a Snapshot JSON you can upload to display it here',
   },
   netSection: {
     inputNodeLabels: {

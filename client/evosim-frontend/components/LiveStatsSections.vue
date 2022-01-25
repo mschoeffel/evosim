@@ -80,6 +80,27 @@
             aria-hidden="true"
           />
         </a>
+        <a
+          key="GlobalStatsAlive"
+          :aria-current="currentTab === 'GlobalStatsAlive' ? 'page' : undefined"
+          :class="[
+            currentTab === 'GlobalStatsAlive'
+              ? 'text-gray-900'
+              : 'text-gray-500 hover:text-gray-700',
+            'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
+          ]"
+          href=""
+          @click.prevent="currentTab = 'GlobalStatsAlive'"
+        >
+          <span>{{ $t('statsSection.headingCreaturesAlive') }}</span>
+          <span
+            :class="[
+              currentTab === 'GlobalStatsAlive' ? 'bg-black' : 'bg-transparent',
+              'absolute inset-x-0 bottom-0 h-0.5',
+            ]"
+            aria-hidden="true"
+          />
+        </a>
       </nav>
     </div>
     <div>
@@ -101,6 +122,12 @@
         :creatures="creatures"
         :populations="populations"
       ></GlobalStatsAvgGeneration>
+      <GlobalStatsAlive
+        v-if="currentTab === 'GlobalStatsAlive'"
+        :colors="colors"
+        :creatures="creatures"
+        :populations="populations"
+      ></GlobalStatsAlive>
     </div>
   </div>
 </template>
@@ -110,10 +137,12 @@ import Vue from 'vue';
 import GlobalStatsAvgEnergy from '~/components/GlobalStatsAvgEnergy.vue';
 import GlobalStatsAvgLife from '~/components/GlobalStatsAvgLife.vue';
 import GlobalStatsAvgGeneration from '~/components/GlobalStatsAvgGeneration.vue';
+import GlobalStatsAlive from '~/components/GlobalStatsAlive.vue';
 
 export default Vue.extend({
   name: 'LiveStatsSections',
   components: {
+    GlobalStatsAlive,
     GlobalStatsAvgEnergy,
     GlobalStatsAvgLife,
     GlobalStatsAvgGeneration,

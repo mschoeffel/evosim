@@ -66,16 +66,23 @@ export class BoardService {
         this.logger.log(
           `Run ${this.run} Tick ${currentTick} of max ${BoardConfig.RUN_TICKS} reached.`,
         );
+
+        this._board.stop();
+        this.logger.log(`Board stopped of run ${this.run}.`);
+        if (BoardConfig.DUMP) {
+          this.dumpService.createDump(this.board, this.run);
+        }
+        if (BoardConfig.SNAPSHOT) {
+          this.snapshotService.writeSnapshot(this.board, this.run);
+        }
+
         if (this.run >= BoardConfig.RUN_AMOUNT) {
           this.logger.log(
             `Run ${this.run} of max ${BoardConfig.RUN_AMOUNT} reached.`,
           );
-          const interval = this.schedulerRegistry.getInterval('gametick');
-          clearInterval(interval);
+          clearInterval(this.schedulerRegistry.getInterval('gametick'));
           this.logger.warn(`Gametick stopped!`);
         } else {
-          const intervals = this.schedulerRegistry.getIntervals();
-          intervals.forEach((key) => this.logger.log(`Interval: ${key}`));
           this._board = new BoardEntity(this.generationDumpService);
           this.run++;
           this.logger.log(`Creating new Run ${this.run}.`);

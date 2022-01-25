@@ -40,5 +40,7 @@ export class BoardConfig {
     },
   ];
   public static readonly MAX_OVERTIME = 2000;
-  public static readonly COUNT_BLOBS_OVERTIME = 10;
+  public static readonly COUNT_BLOBS_OVERTIME =
+    this.CREATURES_PER_POPULATION / 10;
+  public static readonly MAX_LIFETIME = 50000;
 }

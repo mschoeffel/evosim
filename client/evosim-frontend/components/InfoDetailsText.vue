@@ -1,17 +1,18 @@
 <template>
-  <div class="px-4 py-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:items-start">
-    <div class="mt-1 sm:mt-0">
+  <div class="px-4 py-4 flex w-full h-full flex-wrap 2xl:flex-nowrap">
+    <div class="h-full w-full pr-4">
       {{ $t('statsSection.infoText') }}
     </div>
-    <div class="mt-1 sm:mt-0">
+    <div
+      class="h-full w-full pt-4 2xl:pt-0 flex flex-col justify-items-stretch"
+    >
       <div
         class="
           flex
           h-full
           justify-center
-          px-6
-          pt-5
-          pb-6
+          px-4
+          py-4
           border-2 border-gray-300 border-dashed
           rounded-md
         "
@@ -26,12 +27,12 @@
                 bg-white
                 rounded-md
                 font-medium
-                text-indigo-600
-                hover:text-indigo-500
+                text-blue-600
+                hover:text-blue-500
                 focus-within:outline-none
                 focus-within:ring-2
                 focus-within:ring-offset-2
-                focus-within:ring-indigo-500
+                focus-within:ring-blue-500
               "
             >
               <span>{{ $t('statsSection.infoSnapshotUpload') }}</span>
@@ -44,8 +45,23 @@
               />
             </label>
           </div>
-          <p class="text-xs text-gray-500">Snapshot JSON</p>
+          <p class="text-xs m-auto w-32 text-gray-500">
+            {{ $t('statsSection.infoSnapshotUploadDescription') }}
+          </p>
         </div>
+      </div>
+      <div class="py-4">
+        <p class="font-medium">{{ $t('statsSection.credits') }}</p>
+        Links:
+        <ul class="px-4 list-inside list-disc">
+          <li>
+            <a
+              href="https://github.com/mschoeffel"
+              class="text-blue-600 cursor-pointer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
       </div>
     </div>
   </div>

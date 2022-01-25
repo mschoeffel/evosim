@@ -167,14 +167,26 @@ export class PopulationEntity {
       }
     }
     let blobsAlive = this.getBlobsAlive();
-    if (blobsAlive.length <= BoardConfig.COUNT_BLOBS_OVERTIME) {
-      if (this.overtime >= BoardConfig.MAX_OVERTIME) {
+    if (blobsAlive.length > 0) {
+      if (
+        BoardConfig.MAX_LIFETIME > 0 &&
+        blobsAlive[0].ticksAlive > BoardConfig.MAX_LIFETIME
+      ) {
         for (const blobAlive of blobsAlive) {
           blobAlive.alive = false;
         }
         blobsAlive = [];
+      } else {
+        if (blobsAlive.length <= BoardConfig.COUNT_BLOBS_OVERTIME) {
+          if (this.overtime >= BoardConfig.MAX_OVERTIME) {
+            for (const blobAlive of blobsAlive) {
+              blobAlive.alive = false;
+            }
+            blobsAlive = [];
+          }
+          this.overtime++;
+        }
       }
-      this.overtime++;
     }
     if (blobsAlive.length <= 0) {
       const stats = this.getGenerationStats();
@@ -183,12 +195,24 @@ export class PopulationEntity {
         this.generationDumpService.createDump(stats);
       }
       this.generation++;
-      const fittestBlob = this.getFittestBlobOfPopulation();
-      for (let i = 0; i < this.size; i++) {
-        this.addEvolvedNewBlobToPopulation(this.blobs[i], fittestBlob);
-        this.removeBlobFromPopulation(this.blobs[i]);
-      }
+      this.evolve();
       this.overtime = 0;
+    }
+  }
+
+  protected evolve(): void {
+    const fittestBlob = this.getFittestBlobOfPopulation();
+    for (let i = 0; i < this.size; i++) {
+      this.addEvolvedNewBlobToPopulation(this.blobs[i], fittestBlob);
+      this.removeBlobFromPopulation(this.blobs[i]);
+    }
+  }
+
+  public stop(): void {
+    const stats = this.getGenerationStats();
+    this.gamestate.stats.push(stats);
+    if (BoardConfig.GENERATION_DUMP) {
+      this.generationDumpService.createDump(stats);
     }
   }
 
@@ -205,14 +229,10 @@ export class PopulationEntity {
   protected checkBlob(blob: BlobEntity): void {
     if (Number.isNaN(blob.energy) || blob.energy <= 0) {
       blob.alive = false;
-      //this.removeBlobFromPopulation(blob);
-      //this.addEvolvedNewBlobToPopulation(blob);
     } else {
       const tile = this.map.getTileAt(blob.positionX, blob.positionY);
       if (tile === undefined || tile.short === 'W') {
         blob.alive = false;
-        //this.removeBlobFromPopulation(blob);
-        //this.addEvolvedNewBlobToPopulation(blob);
       }
     }
   }

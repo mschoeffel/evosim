@@ -11,15 +11,20 @@ export default {
   statsSection: {
     headingMaxEnergy: 'Max Energie',
     headingInfo: 'Info',
-    headingAvgEnergyNow: 'Avg Energie Aktuell',
-    headingAvgGenerationNow: 'Avg Generation Aktuell',
-    headingAvgLifeNow: 'Avg Lebenszeit Aktuell',
+    headingAvgEnergyNow: 'Avg Energie Akt.',
+    headingAvgGenerationNow: 'Avg Gen. Akt.',
+    headingCreaturesAlive: 'Figuren am Leben',
+    headingAvgLifeNow: 'Avg Lebenszeit Akt.',
     headingAvgEnergyGen: 'Avg Energie Gen.',
     headingAvgLifetimeGen: 'Avg Lebenszeit Gen.',
     headingMaxLifetimeGen: 'Max Lebenszeit Gen.',
     population: 'Population',
-    infoText: 'Test DE',
+    infoText:
+      'Dies ist eine webbasierte Visualisierung von künstlichen neuronalen Netzen und deren Entwicklung, anhand einer vereinfachten Evolutionssimulation. Auf der Karte agieren Figuren anhand deren neuronalen Netze. Die Diagramme visualisieren die Entwicklung. Durch anklicken einer Figur kann dessen Netz und Details betrachtet werden.',
+    credits: 'Bachelorarbeit Michael Schöffel',
     infoSnapshotUpload: 'Hochladen einer Snapshot JSON',
+    infoSnapshotUploadDescription:
+      'Wenn Sie eine Snapshot JSON haben können Sie diese hier hochladen und anzeigen lassen',
   },
   netSection: {
     inputNodeLabels: {

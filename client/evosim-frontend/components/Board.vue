@@ -25,7 +25,7 @@
     </div>
     <div class="w-full h-full xl:basis-1/2 flex flex-col grow shrink">
       <div
-        class="w-full h-80 flex flex-row md:flex-nowrap flex-wrap shrink grow"
+        class="w-full h-96 flex flex-row md:flex-nowrap flex-wrap shrink grow"
       >
         <div
           class="w-full h-full grow shrink border-solid border-2 border-black"
@@ -86,6 +86,7 @@
             grow
             shrink
             border-solid border-2 border-black
+            overflow-y-auto
           "
         >
           <DetailsSections
@@ -96,7 +97,14 @@
           ></DetailsSections>
         </div>
         <div
-          class="w-full h-full grow shrink border-solid border-2 border-black"
+          class="
+            w-full
+            h-full
+            grow
+            shrink
+            border-solid border-2 border-black
+            overflow-y-auto
+          "
         >
           <RankingSections
             :colors="colors"

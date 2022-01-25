@@ -55,7 +55,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      lang: 'en',
+      lang: this.$i18n.locale,
     };
   },
   beforeMount() {

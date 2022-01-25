@@ -4,7 +4,6 @@ import { ActivationStrategy } from '../blob/brain/net/nodes/activation/activatio
 import { MapEntity } from '../map/map.entity';
 import { GamestateEntity } from '../board/gamestate.entity';
 import { BlobEntity } from '../blob/blob.entity';
-import { BoardConfig } from '../board/board.config';
 import { BrainEntity } from '../blob/brain/brain.entity';
 import { ConnectionGeneEntity } from '../blob/brain/neat/genome/connection-gene.entity';
 import { NodeGeneEntity } from '../blob/brain/neat/genome/node-gene.entity';
@@ -220,7 +219,7 @@ export class PopulationNeatEntity extends PopulationEntity {
   /**
    * Main cycle function
    */
-  public evolve(): void {
+  override evolve(): void {
     this.generateSpecies();
     this.kill();
     this.removeExtinctSpecies();
@@ -308,7 +307,7 @@ export class PopulationNeatEntity extends PopulationEntity {
         //Select a random species for the client
         const s = selector.random();
         //Breed a new Genome for the client from the selected species
-        client.genome = s.breed(); // TODO: s === null
+        client.genome = s.breed();
         //Force client add to species
         s.forcePut(client);
       }
@@ -334,62 +333,12 @@ export class PopulationNeatEntity extends PopulationEntity {
     }
   }
 
-  override tick() {
-    for (const blob of this.blobs) {
-      if (blob.alive) {
-        blob.addTickAlive();
-        blob.act();
-        blob.energy -= BoardConfig.TICK_ENERGY_COST;
-        this.checkBlob(blob);
-      }
-    }
-    let blobsAlive = this.getBlobsAlive();
-    if (blobsAlive.length <= BoardConfig.COUNT_BLOBS_OVERTIME) {
-      if (this.overtime >= BoardConfig.MAX_OVERTIME) {
-        for (const blobAlive of blobsAlive) {
-          blobAlive.alive = false;
-        }
-        blobsAlive = [];
-      }
-      this.overtime++;
-    }
-    if (blobsAlive.length <= 0) {
-      const stats = this.getGenerationStats();
-      this.gamestate.stats.push(stats);
-      if (BoardConfig.GENERATION_DUMP) {
-        this.generationDumpService.createDump(stats);
-      }
-      this.generation++;
-      this.overtime = 0;
-      this.evolve();
-    }
-  }
-
-  override checkBlob(blob: BlobEntity): void {
-    if (Number.isNaN(blob.energy) || blob.energy <= 0) {
-      blob.alive = false;
-    } else {
-      const tile = this.map.getTileAt(blob.positionX, blob.positionY);
-      if (tile === undefined || tile.short === 'W') {
-        blob.alive = false;
-      }
-    }
-  }
-
   override removeBlobFromPopulation(blob: BlobEntity) {
     for (let i = 0; i < this.clients.length; i++) {
       if (this.clients[i].creature.id === blob.id) {
         this.clients.splice(i, 1);
       }
     }
-  }
-
-  public getBlobs(): Array<BlobEntity> {
-    const b = [];
-    for (const client of this.clients) {
-      b.push(client.creature);
-    }
-    return b;
   }
 
   override addNewBlobToPopulation(): void {

@@ -66,6 +66,12 @@ export class BoardEntity {
     }
   }
 
+  public stop(): void {
+    for (const population of this.populations) {
+      population.stop();
+    }
+  }
+
   public blobs(): Array<BlobEntity> {
     const blobs = [];
     for (const population of this.populations) {
