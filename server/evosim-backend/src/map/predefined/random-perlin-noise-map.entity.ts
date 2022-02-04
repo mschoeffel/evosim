@@ -1,8 +1,8 @@
 import { MapEntity } from '../map.entity';
 import { MapConfig } from '../map.config';
-import { TileMapper } from '../mapper/TileMapper';
+import { TileMapper } from '../mapper/tile.mapper';
 import { PerlinNoiseGenerator } from '../generaror/perlin-noise.generator';
-import { Tile } from '../tile/Tile';
+import { TileEntity } from '../tile/tile.entity';
 
 export class RandomPerlinNoiseMapEntity extends MapEntity {
   constructor() {
@@ -14,7 +14,7 @@ export class RandomPerlinNoiseMapEntity extends MapEntity {
     );
   }
 
-  protected generateMap(): Array<Array<Tile>> {
+  protected generateMap(): Array<Array<TileEntity>> {
     return TileMapper.map(
       new PerlinNoiseGenerator().generate(this.width, this.height),
     );

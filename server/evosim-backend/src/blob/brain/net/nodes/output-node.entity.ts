@@ -10,14 +10,6 @@ export class OutputNodeEntity extends NodeEntity {
     this._incomingConnections = [];
   }
 
-  public get incomingConnections(): Array<ConnectionEntity> {
-    return this._incomingConnections;
-  }
-
-  public set incomingConnections(value: Array<ConnectionEntity>) {
-    this._incomingConnections = value;
-  }
-
   calculateValue(): number {
     let value = 0;
     for (const incomingConnection of this.incomingConnections) {
@@ -27,5 +19,13 @@ export class OutputNodeEntity extends NodeEntity {
     }
     this.value = value;
     return value;
+  }
+
+  get incomingConnections(): Array<ConnectionEntity> {
+    return this._incomingConnections;
+  }
+
+  set incomingConnections(value: Array<ConnectionEntity>) {
+    this._incomingConnections = value;
   }
 }

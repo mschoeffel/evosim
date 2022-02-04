@@ -84,7 +84,7 @@ Docker
 
 ```shell
 docker build -t evosim-client-image .
-docker run -d -p 8000:8000 --name evosim-client-container evosim-client-image
+docker run -d -p 8000:8000 --env-file=docker.env --name evosim-client-container evosim-client-image
 ```
 
 Heroku

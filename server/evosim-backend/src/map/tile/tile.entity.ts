@@ -1,19 +1,18 @@
 import { v4 as uuid } from 'uuid';
+import { TileType } from './tile-type.enum';
 
-export abstract class Tile {
+export abstract class TileEntity {
   private readonly _id: string;
   private readonly _x: number;
   private readonly _y: number;
-  protected readonly _name: string;
-  protected readonly _short: string;
+  private readonly _type: TileType;
   protected _energy: number;
 
-  protected constructor(x: number, y: number, name: string, short: string) {
+  protected constructor(x: number, y: number, type: TileType) {
     this._id = uuid();
     this._x = x;
     this._y = y;
-    this._name = name;
-    this._short = short;
+    this._type = type;
   }
 
   get energy(): number {
@@ -22,14 +21,6 @@ export abstract class Tile {
 
   set energy(value: number) {
     this._energy = value;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get short(): string {
-    return this._short;
   }
 
   get id(): string {
@@ -42,5 +33,9 @@ export abstract class Tile {
 
   get y(): number {
     return this._y;
+  }
+
+  get type(): TileType {
+    return this._type;
   }
 }

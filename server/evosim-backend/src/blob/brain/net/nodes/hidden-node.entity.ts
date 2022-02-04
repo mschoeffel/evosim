@@ -12,22 +12,6 @@ export class HiddenNodeEntity extends NodeEntity {
     this._outgoingConnections = [];
   }
 
-  public get incomingConnections(): Array<ConnectionEntity> {
-    return this._incomingConnections;
-  }
-
-  public set incomingConnections(value: Array<ConnectionEntity>) {
-    this._incomingConnections = value;
-  }
-
-  public get outgoingConnections(): Array<ConnectionEntity> {
-    return this._outgoingConnections;
-  }
-
-  public set outgoingConnections(value: Array<ConnectionEntity>) {
-    this._outgoingConnections = value;
-  }
-
   calculateValue(): number {
     let value = 0;
     for (const incomingConnection of this.incomingConnections) {
@@ -37,5 +21,21 @@ export class HiddenNodeEntity extends NodeEntity {
     }
     this.value = this.activationFunction.evaluate(value);
     return value;
+  }
+
+  get incomingConnections(): Array<ConnectionEntity> {
+    return this._incomingConnections;
+  }
+
+  set incomingConnections(value: Array<ConnectionEntity>) {
+    this._incomingConnections = value;
+  }
+
+  get outgoingConnections(): Array<ConnectionEntity> {
+    return this._outgoingConnections;
+  }
+
+  set outgoingConnections(value: Array<ConnectionEntity>) {
+    this._outgoingConnections = value;
   }
 }

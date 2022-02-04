@@ -24,9 +24,7 @@
       ></div>
     </div>
     <div class="w-full h-full xl:basis-1/2 flex flex-col grow shrink">
-      <div
-        class="w-full h-96 flex flex-row md:flex-nowrap flex-wrap shrink grow"
-      >
+      <div class="w-full h-80 flex flex-row md:flex-nowrap flex-wrap shrink">
         <div
           class="w-full h-full grow shrink border-solid border-2 border-black"
         >
@@ -49,8 +47,7 @@
         class="
           w-full
           min-h-[20rem]
-          xl:min-h-0
-          md:h-full
+          md:h-96
           mt-80
           md:mt-0
           flex flex-row
@@ -68,15 +65,7 @@
         </div>
       </div>
       <div
-        class="
-          w-full
-          min-h-[20rem]
-          h-96
-          flex flex-row
-          md:flex-nowrap
-          flex-wrap
-          grow
-        "
+        class="w-full min-h-[20rem] h-80 flex flex-row md:flex-nowrap flex-wrap"
       >
         <div
           class="
@@ -179,7 +168,9 @@ export default Vue.extend({
 
     pixel.setUpdateCurrentSelected(this.setSelected);
 
-    const socket = io(`localhost:5000`, { transports: ['websocket'] });
+    const socket = io(`${this.$config.serverHost}:${this.$config.serverPort}`, {
+      transports: ['websocket'],
+    });
     this.socket = socket;
     socket.on('connect', () => {
       // DEBUG: console.log("Connected to WebSocket Server!");

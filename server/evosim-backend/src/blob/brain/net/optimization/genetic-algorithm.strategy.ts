@@ -21,14 +21,14 @@ export class GeneticAlgorithmStrategy extends OptimizationStrategy {
       populationBlobDied.netSchema,
       populationBlobDied.activationStrategy,
     );
-    const index = 0;
-    for (const edge of newNet.edges()) {
+    for (let i = 0; i < newNet.edges().length; i++) {
       const r = Math.random();
       if (r >= this.MAXIMUM_MUTATION_RATE) {
+        const edge = newNet.edges()[i];
         if (r >= this.SEPARATION) {
-          edge.weight = blobFittest.brain.net.edges()[index].weight;
+          edge.weight = blobFittest.brain.net.edges()[i].weight;
         } else {
-          edge.weight = blobDied.brain.net.edges()[index].weight;
+          edge.weight = blobDied.brain.net.edges()[i].weight;
         }
       }
     }

@@ -10,15 +10,15 @@ export class InputNodeEntity extends NodeEntity {
     this._outgoingConnections = [];
   }
 
-  public get outgoingConnections(): Array<ConnectionEntity> {
+  calculateValue(): number {
+    return this.value;
+  }
+
+  get outgoingConnections(): Array<ConnectionEntity> {
     return this._outgoingConnections;
   }
 
-  public set outgoingConnections(value: Array<ConnectionEntity>) {
+  set outgoingConnections(value: Array<ConnectionEntity>) {
     this._outgoingConnections = value;
-  }
-
-  calculateValue(): number {
-    return this.value;
   }
 }

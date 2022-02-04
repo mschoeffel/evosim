@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'evosim-frontend',
+    title: 'EvoSim',
     htmlAttrs: {
       lang: 'en'
     },
@@ -12,13 +12,18 @@ export default {
       {name: 'format-detection', content: 'telephone=no'}
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
+      {rel: 'icon', type: 'image/png', href: '/ai-favicon.png'}
     ]
   },
 
-  server: { // Commented out for Heroku
+  server: {
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 8000 // default: 3000
+  },
+
+  publicRuntimeConfig: {
+    serverHost: process.env.SERVER_HOST || 'localhost',
+    serverPort: process.env.SERVER_PORT || 5000,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

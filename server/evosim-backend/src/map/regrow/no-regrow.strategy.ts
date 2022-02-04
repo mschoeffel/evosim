@@ -5,7 +5,7 @@ export class NoRegrowStrategy extends MapRegrowStrategy {
     super();
   }
 
-  regrowTile(): void {
-    /* No regrow */
+  getRegrowAmountForTile(): number {
+    return 0;
   }
 }

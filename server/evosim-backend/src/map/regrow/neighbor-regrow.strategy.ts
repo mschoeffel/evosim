@@ -1,7 +1,7 @@
 import { MapRegrowStrategy } from './map-regrow.strategy';
-import { Tile } from '../tile/Tile';
+import { TileEntity } from '../tile/tile.entity';
 import { MapEntity } from '../map.entity';
-import { MapConfig } from '../map.config';
+import { TileType } from '../tile/tile-type.enum';
 
 export class NeighborRegrowStrategy extends MapRegrowStrategy {
   private readonly regrowRate;
@@ -11,35 +11,10 @@ export class NeighborRegrowStrategy extends MapRegrowStrategy {
     this.regrowRate = regrowRate;
   }
 
-  regrowTile(tile: Tile, map?: MapEntity): void {
-    if (tile.energy >= 0) {
-      const neighborTiles = NeighborRegrowStrategy.findNeighborsOfTile(
-        tile,
-        map.map,
-      );
-      let countGrassNeighbors = 0;
-      let sumGrassNeighborsEnergy = 0;
-      for (const neighborTile of neighborTiles) {
-        if (neighborTile.energy > 0) {
-          countGrassNeighbors++;
-          sumGrassNeighborsEnergy += neighborTile.energy;
-        }
-      }
-      const maxSumGrassNeighborsEnergy = countGrassNeighbors * 100;
-      const p = sumGrassNeighborsEnergy / maxSumGrassNeighborsEnergy;
-
-      let amount = this.regrowRate * p;
-      if (tile.energy + amount > MapConfig.MAX_ENERGY_OF_TILE) {
-        amount = MapConfig.MAX_ENERGY_OF_TILE - tile.energy;
-      }
-      tile.energy += amount;
-    }
-  }
-
   private static findNeighborsOfTile(
-    tile: Tile,
-    map: Array<Array<Tile>>,
-  ): Array<Tile> {
+    tile: TileEntity,
+    map: Array<Array<TileEntity>>,
+  ): Array<TileEntity> {
     const neighborTiles = [];
     const neighborSet = [
       { x: -1, y: -1 },
@@ -66,8 +41,27 @@ export class NeighborRegrowStrategy extends MapRegrowStrategy {
   private static isOnMap(
     x: number,
     y: number,
-    map: Array<Array<Tile>>,
+    map: Array<Array<TileEntity>>,
   ): boolean {
     return x >= 0 && y >= 0 && x < map[0].length && y < map.length;
+  }
+
+  getRegrowAmountForTile(tile: TileEntity, map?: MapEntity): number {
+    const neighborTiles = NeighborRegrowStrategy.findNeighborsOfTile(
+      tile,
+      map.map,
+    );
+    let countGrassNeighbors = 0;
+    let sumGrassNeighborsEnergy = 0;
+    for (const neighborTile of neighborTiles) {
+      if (neighborTile.type === TileType.GRASS) {
+        countGrassNeighbors++;
+        sumGrassNeighborsEnergy += neighborTile.energy;
+      }
+    }
+    const maxSumGrassNeighborsEnergy = countGrassNeighbors * 100;
+    const p = sumGrassNeighborsEnergy / maxSumGrassNeighborsEnergy;
+
+    return this.regrowRate * p;
   }
 }

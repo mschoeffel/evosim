@@ -52,7 +52,6 @@
       </div>
       <div class="py-4">
         <p class="font-medium">{{ $t('statsSection.credits') }}</p>
-        Links:
         <ul class="px-4 list-inside list-disc">
           <li>
             <a
@@ -60,6 +59,11 @@
               class="text-blue-600 cursor-pointer"
               >GitHub</a
             >
+          </li>
+          <li>
+            <NuxtLink class="text-blue-600" to="/manual">{{
+              $t('manual.help')
+            }}</NuxtLink>
           </li>
         </ul>
       </div>

@@ -1,7 +1,7 @@
 import { MapEntity } from '../map.entity';
 import { MapConfig } from '../map.config';
-import { Tile } from '../tile/Tile';
-import { TileMapper } from '../mapper/TileMapper';
+import { TileEntity } from '../tile/tile.entity';
+import { TileMapper } from '../mapper/tile.mapper';
 
 const w = 10;
 const g = 100;
@@ -90,7 +90,7 @@ export class GridMapEntity extends MapEntity {
     super(75, 75, MapConfig.MAP_TILESIZE, MapConfig.MAP_REGROW_STRATEGY);
   }
 
-  protected generateMap(): Array<Array<Tile>> {
+  protected generateMap(): Array<Array<TileEntity>> {
     return TileMapper.map(mapSchema);
   }
 }

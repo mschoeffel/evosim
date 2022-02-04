@@ -1,5 +1,19 @@
-version: '2'
+version: '3.3'
 services:
+  evosim-database:
+    image: mysql:latest
+    container_name: evosim-database
+    hostname: evosim-database.docker
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: 'EVOSIM'
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PSSW}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT}
+    ports:
+      - ${DATABASE_PORT}:3306
+    networks:
+      - evosim-net
   evosim-server:
     container_name: evosim-server
     hostname: evosim-server.docker
@@ -7,11 +21,21 @@ services:
       context: ./server/evosim-backend/
       dockerfile: ./Dockerfile
     command: npm run start:prod
+    environment:
+      DATABASE_HOST: evosim-database
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PSSW: ${DATABASE_PSSW}
+      PORT: ${SERVER_PORT}
     ports:
-      - "5000:5000"
+      - ${SERVER_PORT}:${SERVER_PORT}
       - "9229:9229"
     networks:
       - evosim-net
+    volumes:
+      - ${SERVER_SNAPSHOT_DIRECTORY}:/usr/src/app/server/snapshots
+    depends_on:
+      - evosim-database
     restart: unless-stopped
   evosim-client:
     container_name: evosim-client
@@ -22,8 +46,12 @@ services:
     command: npm run start
     environment:
       SERVERHOST: evosim-server
+      HOST: ${CLIENT_HOST}
+      PORT: ${CLIENT_PORT}
+      SERVER_HOST: ${SERVER_HOST}
+      SERVER_PORT: ${SERVER_PORT}
     ports:
-      - "8000:8000"
+      - ${CLIENT_PORT}:${CLIENT_PORT}
     networks:
       - evosim-net
     depends_on:

@@ -1,7 +1,7 @@
 import { MapEntity } from '../map.entity';
 import { MapConfig } from '../map.config';
-import { Tile } from '../tile/Tile';
-import { TileMapper } from '../mapper/TileMapper';
+import { TileEntity } from '../tile/tile.entity';
+import { TileMapper } from '../mapper/tile.mapper';
 import { SimplexNoiseGenerator } from '../generaror/simplex-noise.generator';
 
 export class RandomSimplexNoiseMapEntity extends MapEntity {
@@ -14,7 +14,7 @@ export class RandomSimplexNoiseMapEntity extends MapEntity {
     );
   }
 
-  protected generateMap(): Array<Array<Tile>> {
+  protected generateMap(): Array<Array<TileEntity>> {
     return TileMapper.map(
       new SimplexNoiseGenerator().generate(this.width, this.height),
     );

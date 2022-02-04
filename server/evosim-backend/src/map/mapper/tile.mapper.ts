@@ -1,11 +1,11 @@
-import { GrassTile } from '../tile/GrassTile';
-import { WaterTile } from '../tile/WaterTile';
-import { Tile } from '../tile/Tile';
+import { GrassTileEntity } from '../tile/grass-tile.entity';
+import { WaterTileEntity } from '../tile/water-tile.entity';
+import { TileEntity } from '../tile/tile.entity';
 
 export class TileMapper {
   public static readonly BORDER = 30;
 
-  public static map(mapData: Array<Array<number>>): Array<Array<Tile>> {
+  public static map(mapData: Array<Array<number>>): Array<Array<TileEntity>> {
     const mappedMapColumns = [];
     let indexY = 0;
     for (const mapColumns of mapData) {
@@ -16,9 +16,9 @@ export class TileMapper {
           const energy = Math.round(
             ((mapRowTiles - this.BORDER) / (100 - this.BORDER)) * 100,
           );
-          mappedMapRowTiles.push(new GrassTile(indexX, indexY, energy));
+          mappedMapRowTiles.push(new GrassTileEntity(indexX, indexY, energy));
         } else {
-          mappedMapRowTiles.push(new WaterTile(indexX, indexY));
+          mappedMapRowTiles.push(new WaterTileEntity(indexX, indexY));
         }
         indexX++;
       }

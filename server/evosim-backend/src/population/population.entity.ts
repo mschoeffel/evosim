@@ -9,6 +9,7 @@ import { GamestateEntity } from '../board/gamestate.entity';
 import { PopulationStatsEntity } from './population-stats.entity';
 import { GenerationDumpService } from '../dump/generation-dump.service';
 import { PopulationGenerationStatsEntity } from './population-generation-stats.entity';
+import { TileType } from '../map/tile/tile-type.enum';
 
 export class PopulationEntity {
   protected readonly _index: number;
@@ -231,7 +232,7 @@ export class PopulationEntity {
       blob.alive = false;
     } else {
       const tile = this.map.getTileAt(blob.positionX, blob.positionY);
-      if (tile === undefined || tile.short === 'W') {
+      if (tile === undefined || tile.type === TileType.WATER) {
         blob.alive = false;
       }
     }

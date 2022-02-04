@@ -1,5 +1,5 @@
 import { MapRegrowStrategy } from './regrow/map-regrow.strategy';
-import { Tile } from './tile/Tile';
+import { TileEntity } from './tile/tile.entity';
 import { MapDto } from './map.dto';
 import { Utils } from '../utils/utils';
 
@@ -8,7 +8,7 @@ export abstract class MapEntity {
   private readonly _height: number;
   private readonly _tileSize: number;
   private readonly _regrowStrategy: MapRegrowStrategy;
-  private _map: Array<Array<Tile>>;
+  private _map: Array<Array<TileEntity>>;
 
   protected constructor(
     width: number,
@@ -23,9 +23,9 @@ export abstract class MapEntity {
     this._map = this.generateMap();
   }
 
-  protected abstract generateMap(): Array<Array<Tile>>;
+  protected abstract generateMap(): Array<Array<TileEntity>>;
 
-  public getTileAt(x: number, y: number): Tile {
+  public getTileAt(x: number, y: number): TileEntity {
     x = Math.floor(x);
     y = Math.floor(y);
     const mapColumn = this.map[y];
@@ -75,11 +75,11 @@ export abstract class MapEntity {
     return this._regrowStrategy;
   }
 
-  get map(): Array<Array<Tile>> {
+  get map(): Array<Array<TileEntity>> {
     return this._map;
   }
 
-  set map(value: Array<Array<Tile>>) {
+  set map(value: Array<Array<TileEntity>>) {
     this._map = value;
   }
 }

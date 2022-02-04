@@ -12,24 +12,19 @@ import { DumpEntity } from './dump/dump.entity';
 import { SnapshotModule } from './snapshot/snapshot.module';
 import { GenerationDumpEntity } from './dump/generation-dump.entity';
 import { GenerationDumpModule } from './dump/generation-dump.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     SocketModule,
     ScheduleModule.forRoot(),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      // Local:
       type: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      username: 'admin',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PSSW,
-      // Heroku:
-      //url: process.env.DATABASE_URL,
-      //type: 'postgres',
-      //ssl: {
-      //  rejectUnauthorized: false,
-      //},
       database: 'EVOSIM',
       entities: [ProtocolEntity, DumpEntity, GenerationDumpEntity],
       synchronize: true,

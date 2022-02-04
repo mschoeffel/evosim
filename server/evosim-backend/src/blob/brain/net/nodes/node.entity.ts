@@ -4,12 +4,12 @@ import { NodeDto } from '../../node.dto';
 import { Utils } from '../../../../utils/utils';
 
 export abstract class NodeEntity {
-  protected _value: number;
-  protected readonly _id: string;
-  private readonly _activationFunction: ActivationStrategy;
   private readonly _index: number;
+  private readonly _activationFunction: ActivationStrategy;
   private _layer: number;
   private _y: number;
+  protected readonly _id: string;
+  protected _value: number;
 
   protected constructor(
     layer: number,
@@ -22,6 +22,8 @@ export abstract class NodeEntity {
     this._index = index;
     this._activationFunction = activation;
   }
+
+  public abstract calculateValue(): number;
 
   public toDto(): NodeDto {
     const dto = new NodeDto();
@@ -37,21 +39,19 @@ export abstract class NodeEntity {
     return dto;
   }
 
-  public abstract calculateValue(): number;
-
-  public get value(): number {
+  get value(): number {
     return this._value;
   }
 
-  public set value(value: number) {
+  set value(value: number) {
     this._value = value;
   }
 
-  public get id(): string {
+  get id(): string {
     return this._id;
   }
 
-  public get activationFunction(): ActivationStrategy {
+  get activationFunction(): ActivationStrategy {
     return this._activationFunction;
   }
 

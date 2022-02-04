@@ -4,6 +4,4 @@ Repository for my bachelor thesis: Visualization of artificial neural networks u
 
 ## Startup
 ### Docker Compose
-To start everything using docker compose simply use the command `docker-compose --env-file ./dev.env  up`.
-
-`docker-compose up --build --force-recreate --remove-orphans --no-deps`
+To start everything using docker compose simply use the command `docker-compose --env-file ./compose.env up --build --force-recreate --no-deps --remove-orphans`.
