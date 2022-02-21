@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { BoardEntity } from '../board/board.entity';
 import { existsSync, mkdirSync, promises } from 'fs';
 import { join } from 'path';
-import { BlobDto } from '../blob/blob.dto';
+import { FigureDto } from '../board/population/figure/figure.dto';
 
 @Injectable()
 export class SnapshotService {
@@ -28,7 +28,7 @@ export class SnapshotService {
         file,
         JSON.stringify({
           map: board.map.toDto(),
-          blobs: board.blobs().map<BlobDto>((b) => b.toDto()),
+          figures: board.figures().map<FigureDto>((b) => b.toDto()),
           gamestate: board.gamestate.toDto(),
         }),
       )

@@ -16,5 +16,5 @@
     ".eslintrc.js",
     "src/main.ts"
   ],
-  "coverageDirectory": "./test/unit/coverage"
+  "coverageDirectory": "./test/e2e/coverage"
 }

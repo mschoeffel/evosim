@@ -44,17 +44,17 @@
       </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-      <tr v-for="topCreature in topCreatures" :key="topCreature.id">
+      <tr v-for="topFigure in topFigures" :key="topFigure.id">
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
         >
-          {{ roundToTwoDigits(topCreature.ticksAlive) }}
+          {{ roundToTwoDigits(topFigure.ticksAlive) }}
         </td>
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
         >
           <span
-            :style="'background-color: ' + colors[topCreature.population]"
+            :style="'background-color: ' + colors[topFigure.population]"
             class="
               inline-flex
               items-center
@@ -65,13 +65,13 @@
               font-medium
               bg-blue-100
             "
-            >{{ topCreature.population }}</span
+            >{{ topFigure.population }}</span
           >
         </td>
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600"
         >
-          <a class="cursor-pointer" @click="emitSelect(topCreature.id)">{{
+          <a class="cursor-pointer" @click="emitSelect(topFigure.id)">{{
             $t('topSection.select')
           }}</a>
         </td>
@@ -82,12 +82,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { BlobClient } from '~/models/blob.client';
+import { FigureClient } from '~/models/figure.client';
 
 export default Vue.extend({
   name: 'PopulationRanking',
   props: {
-    creatures: {
+    figures: {
       type: Array,
       default: () => {
         return [];
@@ -101,16 +101,16 @@ export default Vue.extend({
     },
   },
   data(): {
-    topCreatures: Array<BlobClient>;
+    topFigures: Array<FigureClient>;
     updateschedule: number;
   } {
     return {
-      topCreatures: [],
+      topFigures: [],
       updateschedule: 10,
     };
   },
   watch: {
-    creatures: {
+    figures: {
       immediate: true,
       handler: 'update',
     },
@@ -120,25 +120,28 @@ export default Vue.extend({
       return Math.round((x + Number.EPSILON) * 100) / 100;
     },
     emitSelect(id: string): void {
-      this.$emit('selectCreature', id);
+      this.$emit('selectFigure', id);
     },
-    update(newVal: Array<BlobClient> | undefined): void {
+    update(newVal: Array<FigureClient> | undefined): void {
       if (newVal !== undefined) {
-        const topMap = new Map<number, BlobClient>();
-        for (const blob of newVal) {
-          if (!blob.alive) {
+        const topMap = new Map<number, FigureClient>();
+        for (const figure of newVal) {
+          if (!figure.alive) {
             continue;
           }
-          if (!topMap.has(blob.population)) {
-            topMap.set(blob.population, blob);
+          if (!topMap.has(figure.population)) {
+            topMap.set(figure.population, figure);
             continue;
           }
-          const blobMap = topMap.get(blob.population);
-          if (blobMap !== undefined && blob.ticksAlive > blobMap.ticksAlive) {
-            topMap.set(blob.population, blob);
+          const figureMap = topMap.get(figure.population);
+          if (
+            figureMap !== undefined &&
+            figure.ticksAlive > figureMap.ticksAlive
+          ) {
+            topMap.set(figure.population, figure);
           }
         }
-        this.topCreatures = Array.from(topMap.values());
+        this.topFigures = Array.from(topMap.values());
       }
     },
   },

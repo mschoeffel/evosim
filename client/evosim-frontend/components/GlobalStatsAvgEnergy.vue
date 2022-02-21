@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import LineChart from './../js/linechart.js';
-import { BlobClient } from '~/models/blob.client';
+import { FigureClient } from '~/models/figure.client';
 
 export default Vue.extend({
   name: 'GlobalStatsAvgEnergy',
@@ -19,7 +19,7 @@ export default Vue.extend({
     LineChart,
   },
   props: {
-    creatures: {
+    figures: {
       type: Array,
       default: () => {
         return [];
@@ -100,13 +100,13 @@ export default Vue.extend({
     };
   },
   watch: {
-    creatures: {
+    figures: {
       immediate: true,
       handler: 'update',
     },
   },
   methods: {
-    update(newVal: Array<BlobClient> | undefined): void {
+    update(newVal: Array<FigureClient> | undefined): void {
       if (newVal !== undefined) {
         const newChartData = [];
         const sumOfEachPopulation = [];
@@ -117,9 +117,9 @@ export default Vue.extend({
           countOfEachPopulation[p] = 0;
         }
 
-        for (const blob of newVal) {
-          sumOfEachPopulation[blob.population] += blob.energy;
-          countOfEachPopulation[blob.population]++;
+        for (const figure of newVal) {
+          sumOfEachPopulation[figure.population] += figure.energy;
+          countOfEachPopulation[figure.population]++;
         }
 
         for (let population = 0; population < this.populations; population++) {

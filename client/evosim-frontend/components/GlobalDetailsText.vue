@@ -26,8 +26,8 @@
       <div class="w-2/3">{{ gamestate._populations }}</div>
     </div>
     <div class="flex">
-      <div class="w-1/3">{{ $t('globalSection.creaturesPerPopulation') }}</div>
-      <div class="w-2/3">{{ gamestate._creaturesPerPopulation }}</div>
+      <div class="w-1/3">{{ $t('globalSection.figuresPerPopulation') }}</div>
+      <div class="w-2/3">{{ gamestate._figuresPerPopulation }}</div>
     </div>
     <div class="flex">
       <div class="w-1/3">{{ $t('globalSection.gameTicksPerSecond') }}</div>

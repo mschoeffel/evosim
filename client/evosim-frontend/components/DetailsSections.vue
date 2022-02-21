@@ -48,21 +48,21 @@
           />
         </a>
         <a
-          key="creature"
-          :aria-current="currentTab === 'creature' ? 'page' : undefined"
+          key="figure"
+          :aria-current="currentTab === 'figure' ? 'page' : undefined"
           :class="[
-            currentTab === 'creature'
+            currentTab === 'figure'
               ? 'text-gray-900'
               : 'text-gray-500 hover:text-gray-700',
             'group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-4 text-sm font-medium text-center hover:bg-gray-50 focus:z-10',
           ]"
           href=""
-          @click.prevent="currentTab = 'creature'"
+          @click.prevent="currentTab = 'figure'"
         >
           <span>{{ $t('detailSection.heading') }}</span>
           <span
             :class="[
-              currentTab === 'creature' ? 'bg-black' : 'bg-transparent',
+              currentTab === 'figure' ? 'bg-black' : 'bg-transparent',
               'absolute inset-x-0 bottom-0 h-0.5',
             ]"
             aria-hidden="true"
@@ -77,11 +77,11 @@
       <div v-if="currentTab === 'global'">
         <GlobalDetailsText :gamestate="gamestate"></GlobalDetailsText>
       </div>
-      <div v-if="currentTab === 'creature'">
-        <CreatureDetailsText
+      <div v-if="currentTab === 'figure'">
+        <FigureDetailsText
           :colors="colors"
-          :creature="creature"
-        ></CreatureDetailsText>
+          :figure="figure"
+        ></FigureDetailsText>
       </div>
     </div>
   </div>
@@ -89,16 +89,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import CreatureDetailsText from '~/components/CreatureDetailsText.vue';
 import GlobalDetailsText from '~/components/GlobalDetailsText.vue';
-import { BlobClient } from '~/models/blob.client';
+import { FigureClient } from '~/models/figure.client';
 import InfoDetailsText from '~/components/InfoDetailsText.vue';
+import FigureDetailsText from '~/components/FigureDetailsText.vue';
 
 export default Vue.extend({
   name: 'DetailsSections',
   components: {
+    FigureDetailsText,
     InfoDetailsText,
-    CreatureDetailsText,
     GlobalDetailsText,
   },
   props: {
@@ -108,8 +108,8 @@ export default Vue.extend({
         return {};
       },
     },
-    creature: {
-      type: BlobClient,
+    figure: {
+      type: FigureClient,
       default: () => {
         return undefined;
       },

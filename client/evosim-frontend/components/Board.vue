@@ -38,7 +38,7 @@
         >
           <LiveStatsSections
             :colors="colors"
-            :creatures="blobs"
+            :figures="figures"
             :populations="gamestate._populations"
           ></LiveStatsSections>
         </div>
@@ -58,14 +58,22 @@
         <div
           class="basis-full h-full w-full border-solid border-2 border-black"
         >
-          <CreatureNetDetail
-            v-if="selectedCreature !== undefined"
-            :selected-creature="selectedCreature"
-          ></CreatureNetDetail>
+          <FigureNetDetail
+            v-if="selectedFigure !== undefined"
+            :selectedFigure="selectedFigure"
+          ></FigureNetDetail>
         </div>
       </div>
       <div
-        class="w-full min-h-[20rem] h-80 flex flex-row md:flex-nowrap flex-wrap"
+        class="
+          w-full
+          min-h-[20rem]
+          md:min-h-0
+          h-80
+          flex flex-row
+          md:flex-nowrap
+          flex-wrap
+        "
       >
         <div
           class="
@@ -80,7 +88,7 @@
         >
           <DetailsSections
             :colors="colors"
-            :creature="selectedCreature"
+            :figure="selectedFigure"
             :gamestate="gamestate"
             @updateSnapshot="updateSnapshot"
           ></DetailsSections>
@@ -97,8 +105,8 @@
         >
           <RankingSections
             :colors="colors"
-            :creatures="blobs"
-            @selectCreature="setSelectedById"
+            :figures="figures"
+            @selectFigure="setSelectedById"
           ></RankingSections>
         </div>
       </div>
@@ -111,14 +119,14 @@ import { io, Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import Vue from 'vue';
 import { MapClientDto } from '~/models/dto/map.client.dto';
-import { BlobClient } from '~/models/blob.client';
-import { BlobClientDto } from '~/models/dto/blob.client.dto';
-import CreatureNetDetail from '~/components/CreatureNetDetail.vue';
+import { FigureClient } from '~/models/figure.client';
+import { FigureClientDto } from '~/models/dto/figure.client.dto';
 import { GamestateClientDto } from '~/models/dto/gamestate.client.dto';
 import DetailsSections from '~/components/DetailsSections.vue';
 import LiveStatsSections from '~/components/LiveStatsSections.vue';
 import RankingSections from '~/components/RankingSections.vue';
 import GenerationStatsSections from '~/components/GenerationStatsSections.vue';
+import FigureNetDetail from '~/components/FigureNetDetail.vue';
 
 let pixel: any;
 if (process.browser) {
@@ -128,19 +136,19 @@ if (process.browser) {
 export default Vue.extend({
   name: 'Board',
   components: {
+    FigureNetDetail,
     GenerationStatsSections,
     RankingSections,
     LiveStatsSections,
     DetailsSections,
-    CreatureNetDetail,
   },
   data(): {
     selectedX: number;
     selectedY: number;
     selectedId: string;
-    selectedCreature: BlobClient | undefined;
+    selectedFigure: FigureClient | undefined;
     map: MapClientDto | undefined;
-    blobs: Array<BlobClient>;
+    figures: Array<FigureClient>;
     p5: {} | undefined;
     colors: Array<string>;
     currentTab: string;
@@ -152,9 +160,9 @@ export default Vue.extend({
       selectedX: 0,
       selectedY: 0,
       selectedId: '',
-      selectedCreature: undefined,
+      selectedFigure: undefined,
       map: undefined,
-      blobs: [],
+      figures: [],
       p5: undefined,
       colors: ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF'],
       currentTab: 'Info',
@@ -163,9 +171,11 @@ export default Vue.extend({
       socket: {} as Socket<DefaultEventsMap, DefaultEventsMap>,
     };
   },
+  beforeDestroy() {
+    this.reset();
+  },
   mounted() {
     const P5 = require('p5');
-
     pixel.setUpdateCurrentSelected(this.setSelected);
 
     const socket = io(`${this.$config.serverHost}:${this.$config.serverPort}`, {
@@ -181,7 +191,7 @@ export default Vue.extend({
         'state',
         (payload: {
           map: MapClientDto;
-          blobs: Array<BlobClientDto>;
+          figures: Array<FigureClientDto>;
           gamestate: GamestateClientDto;
         }) => {
           this.update(payload);
@@ -195,49 +205,52 @@ export default Vue.extend({
     });
   },
   methods: {
+    reset() {
+      pixel.clear();
+    },
     update(payload: {
       map: MapClientDto;
-      blobs: Array<BlobClientDto>;
+      figures: Array<FigureClientDto>;
       gamestate: GamestateClientDto;
     }): void {
       this.map = payload.map;
-      this.blobs = payload.blobs.map<BlobClient>((b) =>
-        BlobClient.parseFromDto(b),
+      this.figures = payload.figures.map<FigureClient>((f) =>
+        FigureClient.parseFromDto(f),
       );
       this.gamestate = payload.gamestate as GamestateClientDto;
 
       pixel.updateState(
         this.map,
-        this.blobs.filter((b) => b.alive),
+        this.figures.filter((b) => b.alive),
       );
 
-      if (this.blobs.length > 0) {
+      if (this.figures.length > 0) {
         if (this.selectedId !== '') {
-          this.updateSelectedCreature();
+          this.updateSelectedFigure();
         }
       }
     },
     setSelectedById(id: string) {
       this.selectedId = id;
-      this.updateSelectedCreature();
-      pixel.setSelectedCreature(id);
+      this.updateSelectedFigure();
+      pixel.setSelectedFigure(id);
     },
     setSelected(x: number, y: number, id: string): void {
       this.selectedX = x;
       this.selectedY = y;
       this.selectedId = id;
       if (id === '') {
-        this.selectedCreature = undefined;
+        this.selectedFigure = undefined;
       } else {
-        this.updateSelectedCreature();
+        this.updateSelectedFigure();
       }
     },
-    updateSelectedCreature(): void {
-      const t = this.blobs.find((b) => b.id === this.selectedId);
+    updateSelectedFigure(): void {
+      const t = this.figures.find((f) => f.id === this.selectedId);
       if (t !== undefined) {
-        this.selectedCreature = t;
-      } else if (this.selectedCreature !== undefined) {
-        this.selectedCreature.alive = false;
+        this.selectedFigure = t;
+      } else if (this.selectedFigure !== undefined) {
+        this.selectedFigure.alive = false;
       }
     },
     roundToTwoDigits(x: number): number {

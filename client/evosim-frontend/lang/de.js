@@ -3,7 +3,7 @@ export default {
     heading: 'Globale Details',
     selectedLanguage: 'Ausgewählte Sprache',
     populations: 'Populationen',
-    creaturesPerPopulation: 'Kreaturen pro Population',
+    figuresPerPopulation: 'Figuren pro Population',
     renderTicksPerSecond: 'Darstellungsupdates pro Sekunde',
     gameTicksPerSecond: 'Spielschritte pro Sekunde',
     currentTick: 'Aktueller Tick',
@@ -13,7 +13,7 @@ export default {
     headingInfo: 'Info',
     headingAvgEnergyNow: 'Avg Energie Akt.',
     headingAvgGenerationNow: 'Avg Gen. Akt.',
-    headingCreaturesAlive: 'Figuren am Leben',
+    headingFiguresAlive: 'Figuren am Leben',
     headingAvgLifeNow: 'Avg Lebenszeit Akt.',
     headingAvgEnergyGen: 'Avg Energie Gen.',
     headingAvgLifetimeGen: 'Avg Lebenszeit Gen.',
@@ -42,7 +42,7 @@ export default {
     },
   },
   detailSection: {
-    heading: 'Kreatur Details',
+    heading: 'Figur Details',
     state: 'Status',
     alive: {
       true: 'Lebend',
@@ -137,7 +137,7 @@ export default {
       subheading5: 'Mitte',
       image6: 'Darstellung des künstlichen neuronalen Netzes',
       text7:
-        'Hat man eine Figur ausgewählt wird in der Mitte live das künstliche neuronale Netz dieser angezeigt. Hierbei sind links die Sinne der Figur als Knoten dargestellt (Aktuelle Energie, Energie des aktuellen Feldes und die Energie des Feldes vor der Figur) und ganz rechts dir möglichen Aktionen der Figur (Drehen, Bewegen, Essen). Zwischen diesen fest vorgegebenen Knoten befinden sich dann je nach Architektur des Netzes verscheidene Zwischenknoten und Verbindungen, die die Eingabeinformationen dann nach rechts zu den Aktionen weitertragen bzw. manipulieren. Es kann hierbei auf jeden Knoten geklickt werden um die Gewichte der eingehenden und ausgehenden Verbindungen anzuzeigen. Je dicker die Verbindungslinie zwischen zwei Knoten, desto höher ist auch das aktuelle Gewicht dieser Verbindung. Innerhalb der Knoten wird deren aktueller Wert angezeigt. Hier kann live nachverfolgt werden, wie eine Änderung der Sinne/Eingaben, z.B. ein Wasserfeld is nun vor der Figur, direkt im künstlichen neuronalen Netz zu ggf. einer neuen Aktionen führt.',
+        'Hat man eine Figur ausgewählt wird in der Mitte live das künstliche neuronale Netz dieser angezeigt. Hierbei sind links die Sinne der Figur als Knoten dargestellt (Aktuelle Energie, Energie des aktuellen Feldes und die Energie des Feldes vor der Figur) und ganz rechts die möglichen Aktionen der Figur (Drehen, Bewegen, Essen). Zwischen diesen fest vorgegebenen Knoten befinden sich dann je nach Architektur des Netzes verscheidene Zwischenknoten und Verbindungen, die die Eingabeinformationen dann nach rechts zu den Aktionen weitertragen bzw. manipulieren. Es kann hierbei auf jeden Knoten geklickt werden um die Gewichte der eingehenden und ausgehenden Verbindungen anzuzeigen. Je dicker die Verbindungslinie zwischen zwei Knoten, desto höher ist auch das aktuelle Gewicht dieser Verbindung. Innerhalb der Knoten wird deren aktueller Wert angezeigt. Hier kann live nachverfolgt werden, wie eine Änderung der Sinne/Eingaben, z.B. ein Wasserfeld is nun vor der Figur, direkt im künstlichen neuronalen Netz zu ggf. einer neuen Aktionen führt.',
       subheading6: 'Links Unten',
       image7: 'Darstellung von Details',
       text8:

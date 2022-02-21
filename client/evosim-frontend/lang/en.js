@@ -3,7 +3,7 @@ export default {
     heading: 'Global Details',
     selectedLanguage: 'Selected Language',
     populations: 'Populations',
-    creaturesPerPopulation: 'Creatures per population',
+    figuresPerPopulation: 'Figures per population',
     renderTicksPerSecond: 'Renderings per second',
     gameTicksPerSecond: 'Gamesteps per second',
     currentTick: 'Current Tick',
@@ -12,7 +12,7 @@ export default {
     headingMaxEnergy: 'Max Energy',
     headingInfo: 'Info',
     headingAvgEnergyNow: 'Avg Energy Now',
-    headingCreaturesAlive: 'Creatures Alive',
+    headingFiguresAlive: 'Figures Alive',
     headingAvgGenerationNow: 'Avg Gen. Now',
     headingAvgLifeNow: 'Avg Lifetime Now',
     headingAvgEnergyGen: 'Avg Energy Generations',
@@ -20,7 +20,7 @@ export default {
     headingMaxLifetimeGen: 'Max Lifetime Generations',
     population: 'Population',
     infoText:
-      'This is a web based visualization of artificial neural networks and their learning process, based on a simplified evolution simulation. On the map creatures are acting according to their neural net. The diagrams show the development over time. By clicking on a creature you can see their net and details.',
+      'This is a web based visualization of artificial neural networks and their learning process, based on a simplified evolution simulation. On the map figures are acting according to their neural net. The diagrams show the development over time. By clicking on a figure you can see their net and details.',
     credits: 'Bachelor Thesis Michael Schöffel',
     infoSnapshotUpload: 'Upload a Snapshot JSON',
     infoSnapshotUploadDescription:
@@ -42,7 +42,7 @@ export default {
     },
   },
   detailSection: {
-    heading: 'Creature Details',
+    heading: 'Figure Details',
     state: 'State',
     alive: {
       true: 'Alive',

@@ -9,7 +9,10 @@ export class ProtocolEntity {
   tick: number;
 
   @Column()
-  creatureId: string;
+  run: number;
+
+  @Column()
+  figureId: string;
 
   @Column()
   population: number;

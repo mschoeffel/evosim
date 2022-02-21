@@ -1,11 +1,11 @@
-import { BlobEntity } from '../blob/blob.entity';
+import { FigureEntity } from './population/figure/figure.entity';
 import { GamestateEntity } from './gamestate.entity';
-import { MapEntity } from '../map/map.entity';
+import { MapEntity } from './map/map.entity';
 import { BoardConfig } from './board.config';
-import { PopulationEntity } from '../population/population.entity';
-import { MapConfig } from '../map/map.config';
-import { PopulationNeatEntity } from '../population/population-neat.entity';
-import { PopulationTypeEnum } from '../population/population-type.enum';
+import { PopulationEntity } from './population/population.entity';
+import { MapConfig } from './map/map.config';
+import { PopulationNeatEntity } from './population/population-neat.entity';
+import { PopulationTypeEnum } from './population/population-type.enum';
 import { GenerationDumpService } from '../dump/generation-dump.service';
 
 export class BoardEntity {
@@ -17,7 +17,7 @@ export class BoardEntity {
     this._map = MapConfig.MAP;
     this._gamestate = new GamestateEntity(
       BoardConfig.POPULATIONS_DATA.length,
-      BoardConfig.CREATURES_PER_POPULATION,
+      BoardConfig.FIGURES_PER_POPULATION,
     );
 
     this._populations = [];
@@ -35,7 +35,7 @@ export class BoardEntity {
             populationData.optimization,
             populationData.activationFunction,
             populationData.netSchema,
-            BoardConfig.CREATURES_PER_POPULATION,
+            BoardConfig.FIGURES_PER_POPULATION,
             this._map,
             this._gamestate,
             generationDumpService,
@@ -47,7 +47,7 @@ export class BoardEntity {
             populationData.optimization,
             populationData.activationFunction,
             populationData.netSchema,
-            BoardConfig.CREATURES_PER_POPULATION,
+            BoardConfig.FIGURES_PER_POPULATION,
             this._map,
             this._gamestate,
             generationDumpService,
@@ -72,14 +72,14 @@ export class BoardEntity {
     }
   }
 
-  public blobs(): Array<BlobEntity> {
-    const blobs = [];
+  public figures(): Array<FigureEntity> {
+    const figures = [];
     for (const population of this.populations) {
-      for (const blob of population.blobs) {
-        blobs.push(blob);
+      for (const figure of population.figures) {
+        figures.push(figure);
       }
     }
-    return blobs;
+    return figures;
   }
 
   get populations(): Array<PopulationEntity> {

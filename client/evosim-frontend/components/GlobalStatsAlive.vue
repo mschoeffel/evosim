@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import LineChart from './../js/linechart.js';
-import { BlobClient } from '~/models/blob.client';
+import { FigureClient } from '~/models/figure.client';
 
 export default Vue.extend({
   name: 'GlobalStatsAlive',
@@ -19,7 +19,7 @@ export default Vue.extend({
     LineChart,
   },
   props: {
-    creatures: {
+    figures: {
       type: Array,
       default: () => {
         return [];
@@ -100,13 +100,13 @@ export default Vue.extend({
     };
   },
   watch: {
-    creatures: {
+    figures: {
       immediate: true,
       handler: 'update',
     },
   },
   methods: {
-    update(newVal: Array<BlobClient> | undefined): void {
+    update(newVal: Array<FigureClient> | undefined): void {
       if (newVal !== undefined) {
         const newChartData = [];
         const sumOfEachPopulation = [];
@@ -115,9 +115,9 @@ export default Vue.extend({
           sumOfEachPopulation[p] = 0;
         }
 
-        for (const blob of newVal) {
-          if (blob.alive) {
-            sumOfEachPopulation[blob.population]++;
+        for (const figure of newVal) {
+          if (figure.alive) {
+            sumOfEachPopulation[figure.population]++;
           }
         }
 

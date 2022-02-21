@@ -1,8 +1,8 @@
-import { SigmoidActivationStrategy } from '../blob/brain/net/nodes/activation/sigmoid-activation.strategy';
-import { RandomOptimizationStrategy } from '../blob/brain/net/optimization/random-optimization.strategy';
-import { GeneticAlgorithmStrategy } from '../blob/brain/net/optimization/genetic-algorithm.strategy';
-import { PopulationTypeEnum } from '../population/population-type.enum';
-import { NeatOptimizationStrategy } from '../blob/brain/net/optimization/neat-optimization.strategy';
+import { SigmoidActivationStrategy } from './population/figure/brain/net/nodes/activation/sigmoid-activation.strategy';
+import { RandomOptimizationStrategy } from './population/figure/brain/net/optimization/random-optimization.strategy';
+import { GeneticAlgorithmStrategy } from './population/figure/brain/net/optimization/genetic-algorithm.strategy';
+import { PopulationTypeEnum } from './population/population-type.enum';
+import { NeatOptimizationStrategy } from './population/figure/brain/net/optimization/neat-optimization.strategy';
 
 export class BoardConfig {
   public static readonly PROTOCOL = false;
@@ -18,7 +18,7 @@ export class BoardConfig {
   public static readonly RUN_TICKS = 100000;
   public static readonly RUN_AMOUNT = 2;
   public static readonly TICK_ENERGY_COST = 0.5;
-  public static readonly CREATURES_PER_POPULATION = 50;
+  public static readonly FIGURES_PER_POPULATION = 40;
   public static readonly POPULATIONS_DATA = [
     {
       type: PopulationTypeEnum.SIMPLE,
@@ -40,7 +40,7 @@ export class BoardConfig {
     },
   ];
   public static readonly MAX_OVERTIME = 2000;
-  public static readonly COUNT_BLOBS_OVERTIME =
-    this.CREATURES_PER_POPULATION / 10;
+  public static readonly COUNT_FIGURES_OVERTIME =
+    this.FIGURES_PER_POPULATION / 10;
   public static readonly MAX_LIFETIME = 50000;
 }

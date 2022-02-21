@@ -16,20 +16,21 @@ export class ProtocolService {
   }
 
   createProtocol(board: BoardEntity): void {
-    for (const blob of board.blobs()) {
+    for (const figure of board.figures()) {
       const protocol = new ProtocolEntity();
       protocol.tick = board.gamestate.currentTick;
-      protocol.creatureId = blob.id;
-      protocol.population = blob.population;
-      protocol.positionX = blob.positionX;
-      protocol.positionY = blob.positionY;
-      protocol.energy = blob.energy;
-      protocol.direction = blob.direction;
-      protocol.ticksAlive = blob.ticksAlive;
-      protocol.tickBorn = blob.initTick;
-      protocol.algortithm = blob.algorithm;
-      protocol.activation = blob.activation;
-      protocol.generation = blob.generation;
+      protocol.run = board.gamestate.run;
+      protocol.figureId = figure.id;
+      protocol.population = figure.population;
+      protocol.positionX = figure.positionX;
+      protocol.positionY = figure.positionY;
+      protocol.energy = figure.energy;
+      protocol.direction = figure.direction;
+      protocol.ticksAlive = figure.ticksAlive;
+      protocol.tickBorn = figure.initTick;
+      protocol.algortithm = figure.algorithm;
+      protocol.activation = figure.activation;
+      protocol.generation = figure.generation;
       this.create(protocol);
     }
   }

@@ -1,4 +1,4 @@
-import { PerlinNoiseGenerator } from '../../../src/map/generaror/perlin-noise.generator';
+import { PerlinNoiseGenerator } from '../../../src/board/map/generaror/perlin-noise.generator';
 
 describe('PerlinNoiseGenerator', () => {
   let perlinNoiseGenerator: PerlinNoiseGenerator;

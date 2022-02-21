@@ -51,17 +51,17 @@
     </div>
     <div>
       <div v-if="currentTab === 'global'">
-        <CreatureRanking
+        <FigureRanking
           :colors="colors"
-          :creatures="creatures"
-          @selectCreature="emitSelect"
-        ></CreatureRanking>
+          :figures="figures"
+          @selectFigure="emitSelect"
+        ></FigureRanking>
       </div>
       <div v-if="currentTab === 'population'">
         <PopulationRanking
           :colors="colors"
-          :creatures="creatures"
-          @selectCreature="emitSelect"
+          :figures="figures"
+          @selectFigure="emitSelect"
         ></PopulationRanking>
       </div>
     </div>
@@ -70,17 +70,17 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import CreatureRanking from '~/components/CreatureRanking.vue';
 import PopulationRanking from '~/components/PopulationRanking.vue';
+import FigureRanking from '~/components/FigureRanking.vue';
 
 export default Vue.extend({
   name: 'RankingSections',
   components: {
+    FigureRanking,
     PopulationRanking,
-    CreatureRanking,
   },
   props: {
-    creatures: {
+    figures: {
       type: Array,
       default: () => {
         return [];
@@ -100,7 +100,7 @@ export default Vue.extend({
   },
   methods: {
     emitSelect(id: string): void {
-      this.$emit('selectCreature', id);
+      this.$emit('selectFigure', id);
     },
   },
 });

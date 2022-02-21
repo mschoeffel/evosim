@@ -1,6 +1,6 @@
 <template>
   <div class="h-full">
-    <Board />
+    <Board ref="board" />
   </div>
 </template>
 

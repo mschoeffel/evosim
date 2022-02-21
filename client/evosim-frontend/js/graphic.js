@@ -7,13 +7,13 @@ let mapData = {
 let mapImage;
 let mapChanged = false;
 
-let creatureData = [];
+let figureData = [];
 
 const selectedCoordinates = {
   x: null,
   y: null,
 };
-let selectedCreatureId = '';
+let selectedFigureId = '';
 
 let locked = false;
 let sf = 1;
@@ -68,7 +68,7 @@ export function main(_p5) {
     p5.translate(tx, ty);
     p5.image(mapImage, 0, 0);
 
-    drawCreatures();
+    drawFigures();
     // DEBUG: drawFPSIndicator();
   };
   p5.mouseClicked = () => {
@@ -80,7 +80,7 @@ export function main(_p5) {
       const tempXMax = tempX / mapData._tilesize + size / 2;
       const tempYMin = tempY / mapData._tilesize - size / 2;
       const tempYMax = tempY / mapData._tilesize + size / 2;
-      const select = creatureData
+      const select = figureData
         .filter(
           (c) =>
             c.x >= tempXMin &&
@@ -90,14 +90,14 @@ export function main(_p5) {
         )
         .pop();
       if (select !== undefined) {
-        if (select.id === selectedCreatureId) {
+        if (select.id === selectedFigureId) {
           selectedCoordinates.x = 0;
           selectedCoordinates.y = 0;
-          selectedCreatureId = '';
+          selectedFigureId = '';
         } else {
           selectedCoordinates.x = tempX;
           selectedCoordinates.y = tempY;
-          selectedCreatureId = select.id;
+          selectedFigureId = select.id;
         }
         notifyCurrentSelect();
       }
@@ -204,28 +204,28 @@ function drawMap() {
   mapImage.updatePixels();
 }
 
-function drawCreatures() {
-  for (const creature of creatureData) {
-    drawCreature(creature);
+function drawFigures() {
+  for (const figure of figureData) {
+    drawFigure(figure);
   }
 }
 
-function drawCreature(creature) {
+function drawFigure(figure) {
   const tilesize = mapData._tilesize;
-  const cx = creature.x * tilesize;
-  const cy = creature.y * tilesize;
-  const c = populationColors[creature.population];
-  c.setAlpha(creature.energy * 2.55);
+  const cx = figure.x * tilesize;
+  const cy = figure.y * tilesize;
+  const c = populationColors[figure.population];
+  c.setAlpha(figure.energy * 2.55);
   p5.stroke(c);
   p5.strokeWeight(1);
-  p5.line(cx, cy, creature.eyeX * tilesize, creature.eyeY * tilesize);
-  if (creature.id === selectedCreatureId) {
+  p5.line(cx, cy, figure.eyeX * tilesize, figure.eyeY * tilesize);
+  if (figure.id === selectedFigureId) {
     p5.fill('#FFFFFF');
   } else {
     p5.fill(c);
     p5.noStroke();
   }
-  p5.circle(cx, cy, creature.size);
+  p5.circle(cx, cy, figure.size);
 }
 
 /* DEBUG:
@@ -241,7 +241,7 @@ function notifyCurrentSelect() {
     updateCurrentSelected(
       selectedCoordinates.x,
       selectedCoordinates.y,
-      selectedCreatureId,
+      selectedFigureId,
     );
   }
 }
@@ -251,9 +251,9 @@ export function clear() {
   p5.clear();
 }
 
-export function updateState(map, blobs) {
+export function updateState(map, figures) {
   mapData = map;
-  creatureData = blobs;
+  figureData = figures;
   mapChanged = true;
 }
 
@@ -273,10 +273,10 @@ export function setPopulationColors(colors) {
   }
 }
 
-export function setSelectedCreature(id) {
-  selectedCreatureId = id;
+export function setSelectedFigure(id) {
+  selectedFigureId = id;
 }
 
-export function updateCreatures(creatures) {
-  creatureData = creatures;
+export function updateFigures(figures) {
+  figureData = figures;
 }

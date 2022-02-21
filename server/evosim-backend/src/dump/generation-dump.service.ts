@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GenerationDumpEntity } from './generation-dump.entity';
-import { PopulationGenerationStatsEntity } from '../population/population-generation-stats.entity';
+import { PopulationGenerationStatsEntity } from '../board/population/population-generation-stats.entity';
 
 @Injectable()
 export class GenerationDumpService {
@@ -21,6 +21,7 @@ export class GenerationDumpService {
     const dump = new GenerationDumpEntity();
     dump.population = stats.population;
     dump.tick = stats.tick;
+    dump.run = stats.run;
     dump.generation = stats.generation;
     dump.avgLifetime = stats.avgLifetime;
     dump.avgEnergy = stats.avgEnergy;

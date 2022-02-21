@@ -1,30 +1,33 @@
 import { GamestateDto } from './gamestate.dto';
 import { BoardConfig } from './board.config';
-import { PopulationGenerationStatsDto } from '../population/population-generation-stats.dto';
-import { PopulationGenerationStatsEntity } from '../population/population-generation-stats.entity';
+import { PopulationGenerationStatsDto } from './population/population-generation-stats.dto';
+import { PopulationGenerationStatsEntity } from './population/population-generation-stats.entity';
 
 export class GamestateEntity {
   private _ticksPerSecond: number;
   private _populations: number;
-  private _creaturesPerPopulation: number;
+  private _figuresPerPopulation: number;
   private _currentTick: number;
   private _stats: Array<PopulationGenerationStatsEntity>;
+  private _run: number;
 
-  constructor(populations: number, creaturesPerPopulation: number) {
+  constructor(populations: number, figuresPerPopulation: number) {
     this._ticksPerSecond = BoardConfig.TICKS_PER_SECOND;
     this._populations = populations;
-    this._creaturesPerPopulation = creaturesPerPopulation;
+    this._figuresPerPopulation = figuresPerPopulation;
     this._currentTick = 0;
     this._stats = [];
+    this._run = 1;
   }
 
   public toDto(): GamestateDto {
     const dto = new GamestateDto();
     dto.ticksPerSecond = this.ticksPerSecond;
     dto.populations = this.populations;
-    dto.creaturesPerPopulation = this.creaturesPerPopulation;
+    dto.figuresPerPopulation = this.figuresPerPopulation;
     dto.currentTick = this.currentTick;
     dto.stats = this.stats.map<PopulationGenerationStatsDto>((i) => i.toDto());
+    dto.run = this.run;
     return dto;
   }
 
@@ -48,12 +51,12 @@ export class GamestateEntity {
     this._populations = value;
   }
 
-  get creaturesPerPopulation(): number {
-    return this._creaturesPerPopulation;
+  get figuresPerPopulation(): number {
+    return this._figuresPerPopulation;
   }
 
-  set creaturesPerPopulation(value: number) {
-    this._creaturesPerPopulation = value;
+  set figuresPerPopulation(value: number) {
+    this._figuresPerPopulation = value;
   }
 
   get currentTick(): number {
@@ -70,5 +73,13 @@ export class GamestateEntity {
 
   set stats(value: Array<PopulationGenerationStatsEntity>) {
     this._stats = value;
+  }
+
+  get run(): number {
+    return this._run;
+  }
+
+  set run(value: number) {
+    this._run = value;
   }
 }

@@ -9,6 +9,9 @@ export class GenerationDumpEntity {
   tick: number;
 
   @Column()
+  run: number;
+
+  @Column()
   population: number;
 
   @Column()

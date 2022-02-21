@@ -92,7 +92,7 @@
           href=""
           @click.prevent="currentTab = 'GlobalStatsAlive'"
         >
-          <span>{{ $t('statsSection.headingCreaturesAlive') }}</span>
+          <span>{{ $t('statsSection.headingFiguresAlive') }}</span>
           <span
             :class="[
               currentTab === 'GlobalStatsAlive' ? 'bg-black' : 'bg-transparent',
@@ -107,25 +107,25 @@
       <GlobalStatsAvgLife
         v-if="currentTab === 'GlobalStatsAvgLife'"
         :colors="colors"
-        :creatures="creatures"
+        :figures="figures"
         :populations="populations"
       ></GlobalStatsAvgLife>
       <GlobalStatsAvgEnergy
         v-if="currentTab === 'GlobalStatsAvgEnergy'"
         :colors="colors"
-        :creatures="creatures"
+        :figures="figures"
         :populations="populations"
       ></GlobalStatsAvgEnergy>
       <GlobalStatsAvgGeneration
         v-if="currentTab === 'GlobalStatsAvgGeneration'"
         :colors="colors"
-        :creatures="creatures"
+        :figures="figures"
         :populations="populations"
       ></GlobalStatsAvgGeneration>
       <GlobalStatsAlive
         v-if="currentTab === 'GlobalStatsAlive'"
         :colors="colors"
-        :creatures="creatures"
+        :figures="figures"
         :populations="populations"
       ></GlobalStatsAlive>
     </div>
@@ -148,7 +148,7 @@ export default Vue.extend({
     GlobalStatsAvgGeneration,
   },
   props: {
-    creatures: {
+    figures: {
       type: Array,
       default: () => {
         return [];
