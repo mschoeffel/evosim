@@ -69,12 +69,14 @@
         <p>{{ $t('manual.section2.text4') }}</p>
         <p>{{ $t('manual.section2.text5') }}</p>
         <p>{{ $t('manual.section2.text6') }}</p>
-        <h3>{{ $t('manual.section2.subheading3') }}</h3>
         <p>{{ $t('manual.section2.text7') }}</p>
-        <h3>{{ $t('manual.section2.subheading4') }}</h3>
+        <h3>{{ $t('manual.section2.subheading3') }}</h3>
         <p>{{ $t('manual.section2.text8') }}</p>
+        <h3>{{ $t('manual.section2.subheading4') }}</h3>
+        <p>{{ $t('manual.section2.text9') }}</p>
         <h2>{{ $t('manual.section3.heading') }}</h2>
         <p>{{ $t('manual.section3.introduction') }}</p>
+        <p>{{ $t('manual.section3.introduction2') }}</p>
         <h3>{{ $t('manual.section3.subheading1') }}</h3>
         <figure>
           <img
