@@ -34,5 +34,5 @@ $ npm run test:cov
 ```bash
 # build and run docker image
 $ docker build -t evosim-server-image --network="host" .
-$ docker run -d --network="host" --env-file=docker.env -v LOCAL_PATH:/usr/src/app/server/snapshots --name evosim-server-container evosim-server-image
+$ docker run -d --network="host" --env-file=docker.env -v [LOCAL_PATH]:/usr/src/app/server/snapshots --name evosim-server-container evosim-server-image
 ```

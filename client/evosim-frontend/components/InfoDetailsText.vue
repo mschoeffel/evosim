@@ -55,7 +55,7 @@
         <ul class="px-4 list-inside list-disc">
           <li>
             <a
-              href="https://github.com/mschoeffel"
+              href="https://github.com/mschoeffel/evosim"
               class="text-blue-600 cursor-pointer"
               >GitHub</a
             >
