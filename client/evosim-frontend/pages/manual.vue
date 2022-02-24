@@ -180,6 +180,9 @@
         <p>{{ $t('manual.section4.text4') }}</p>
         <h2>{{ $t('manual.section5.heading') }}</h2>
         <p>{{ $t('manual.section5.text') }}</p>
+        <h2>{{ $t('manual.section6.heading') }}</h2>
+        <p>{{ $t('manual.section6.text1') }}</p>
+        <p>{{ $t('manual.section6.text2') }}</p>
       </div>
     </div>
   </div>

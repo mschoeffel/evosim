@@ -69,7 +69,7 @@ export default {
     select: 'Auswählen',
   },
   manual: {
-    help: 'Hilfe',
+    help: 'Hilfe & Infos',
     heading: 'Anleitung',
     subtitle:
       'Wofür ist diese Anwendung nützlich? Was ist zu sehen? Was kann man damit machen?',
@@ -80,7 +80,7 @@ export default {
       heading: 'Wofür wurde diese Anwendung entwickelt?',
       text1: 'EvoSim wurde im Rahmen der Bachelorarbeit zum Thema',
       quote:
-        'Visualisierung künstlicher neuronaler Netze anhand einerwebbasierten, simplifizierten Evolutionssimulation',
+        'Visualisierung künstlicher neuronaler Netze anhand einer webbasierten, simplifizierten Evolutionssimulation',
       text2:
         'entwicklet. Hiermit soll versucht werden, mithilfe eines einfachen, gamifizierten Ansatzes, die Funktionsweise und das Lernverfahren von verschiedenen künstlichen neuronalen Netzen transparenter und konkret nachvollziehbar zu machen.',
     },
@@ -90,7 +90,7 @@ export default {
         'Das Szenario teilt sich in drei Komponenten und ein klares, einfaches Ziel auf.',
       subheading1: 'Die Karte',
       text1:
-        'Die Karte besteht aus vielen einzelnen Feldern. Es gibt zwei Typen von Feldern: Wasserfelder und Grasfelder. Grasfelder besitzen hierbei Nahrung bzw. Energie, welche von Figuren konsumiert werden kann über Zeit wieder nachwächst. Wasserfelder besitzen keine Energie und töten jede Figur, die sie berührt.',
+        'Die Karte besteht aus vielen einzelnen Feldern. Es gibt zwei Typen von Feldern: Wasserfelder und Grasfelder. Grasfelder besitzen hierbei Nahrung bzw. Energie, welche von Figuren konsumiert werden kann und über Zeit wieder nachwächst. Wasserfelder besitzen keine Energie und töten jede Figur, die sie berührt.',
       subheading2: 'Die Figuren',
       text2:
         'Unter den Figuren kann man sich Charaktere vorstellen, welche sich über die Karte bewegen und deren Ziel es ist, so lange wie möglich zu überleben.',
@@ -99,7 +99,7 @@ export default {
       text4:
         'Außderdem können sie drei Aktionen ausführen: sich drehen, vorwärts bzw. rückwärts bewegen und Nahrung vom aktuellen Feld konsumieren. Hierbei wird dem aktuellen Feld dann die Energie abgezogen und der Figur hinzugefügt. Über Zeit und mit jeder Bewegung verliert die Figur Energie.',
       text5:
-        'Jede Figur besitzt ein künstliches neuronales Netz, welches die Sinne der Figur interpretiert und basieren darauf die Aktionen auslöst.',
+        'Jede Figur besitzt ein künstliches neuronales Netz, welches die Sinne der Figur interpretiert und basierend darauf die Aktionen auslöst.',
       text6: 'Zudem gehören Figuren immer einer bestimmten Population und Generation an. Eine Population gibt die Architektur und das Lernverfahren des künstlichen neuronalen Netzes für jede zugehörige Figur an. Die Generation gibt an, wie oft sich diese Population schon weiterentwickelt hat.',
       text7:
         'Bewegt sich eine Figur auf ein Wasserfeld oder besitzt keine Energie mehr stirbt diese. Sind alle Figuren einer Generation verstorben wird eine neue Generation der Population erstellt und das Lernverfahren der Population auf jede Figur oder genauer ihr neuronales Netz angewandt.',
@@ -121,7 +121,7 @@ export default {
         'Auf der linken Hälfte ist live die visuelle Darstellung des Szenarios. Hier ist die Karte mit den Gras- / Wasserfeldern und den Figuren zu sehen. Die Wasserfelder sind hierbei blau dargestellt und die Grasfelder, je nach Energie, braun bis grün. Je mehr Energie ein Grasfeld besitzt desto grüner ist es.',
       image2: 'Farbverlauf von 0 Energie zu 100 Energie',
       text2:
-        'Die Figuren werden als farbige Punkte dargestellt. Jede Population besitzt hierbei eine eigene Farbe. So kann zu einer Figur die zugehörige Population direkt erkannt werden. Zudem besitzt jede Figur einen Richtungsindikator. Dieser gibt an, in welche Richtung die Figur schaut und von welchem Feld die Energie voraus wahrgenommen wird. Abhängig von der Energie der Figur wird auch die Farbe angezeigt: Je kräftiger die Farbe einer Figur, desto mehr Energie besitzt diese. Besitzt eine Figur keine Energie mehr, also stirbt, verschwindet diese komplett von der Karte.',
+        'Die Figuren werden als farbige Punkte dargestellt. Jede Population besitzt hierbei eine eigene Farbe. So kann zu einer Figur die zugehörige Population direkt erkannt werden. Zudem besitzt jede Figur einen Richtungsindikator. Dieser gibt an, in welche Richtung die Figur schaut und von welchem Feld die Energie voraus wahrgenommen wird. Abhängig von der Energie der Figur wird auch die Farbe angezeigt: Je kräftiger die Farbe einer Figur, desto mehr Energie besitzt diese. Besitzt eine Figur keine Energie mehr, ist also tot, verschwindet diese komplett von der Karte.',
       text3:
         'Die Ansicht kann mittels Klicken und Ziehen verschoben werden und per Mausrad kann hinein- bzw. herausgezoomt werden. Einzelne Figuren können hier auch per Klick an- bzw. abgewählt werden.',
       subheading2: 'Grafische Darstellung der Daten',
@@ -163,6 +163,11 @@ export default {
     section5: {
       heading: 'Schlusswort',
       text: 'Viel Spaß mit dieser Anwendung! - Michael Schöffel',
+    },
+    section6: {
+      heading: 'Kontakt & Impressum',
+      text1: 'Michael Schöffel',
+      text2: 'michael.schoeffel[at]t-online.de',
     },
   },
 };

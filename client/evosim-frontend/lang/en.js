@@ -69,7 +69,7 @@ export default {
     select: 'Select',
   },
   manual: {
-    help: 'Help',
+    help: 'Help & Info',
     heading: 'Manual',
     subtitle:
       'What is the application useful for? What does it show? What can you do with it?',
@@ -165,6 +165,11 @@ export default {
     section5: {
       heading: 'Final word',
       text: 'Have fun with this application! - Michael Schöffel',
+    },
+    section6: {
+      heading: 'Contact & Imprint',
+      text1: 'Michael Schöffel',
+      text2: 'michael.schoeffel[at]t-online.de',
     },
   },
 };

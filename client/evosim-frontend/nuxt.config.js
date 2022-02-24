@@ -65,6 +65,11 @@ export default {
     strategy: 'no_prefix',
     lazy: true,
     langDir: 'lang/',
+    detectBrowserLanguage: {
+      useCookie: false,
+      alwaysRedirect: true,
+      fallbackLocale: 'en'
+    },
     defaultLocale: 'en',
     vueI18n: {
       fallbackLocale: 'en',
