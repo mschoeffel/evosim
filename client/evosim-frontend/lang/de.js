@@ -33,7 +33,7 @@ export default {
       direction: 'Richtung',
       energy: 'Energie',
       energyCurrentTile: 'Energie aktuelles Feld',
-      energyTileAhead: 'Energie vorraus',
+      energyTileAhead: 'Energie voraus',
     },
     outputNodeLabels: {
       rotation: 'Drehung',
@@ -56,7 +56,7 @@ export default {
     population: 'Population',
     generation: 'Generation',
     initTick: 'Erstellt mit Tick',
-    ticksAlive: 'Ticks am leben',
+    ticksAlive: 'Ticks am Leben',
     algorithm: 'Algorithmus',
     activation: 'Aktivierung',
   },
@@ -118,36 +118,36 @@ export default {
       subheading1: 'Visualisierung des Szenarios',
       image1: 'Beispielbild Szenario',
       text1:
-        'Auf der linken Hälfte ist live die visuelle Darstellung des Szenarios. Hier ist die Karte mit den Gras- / Wasserfeldern und den Figuren zu sehen. Die Wasserfelder sind hierbei blau dargestellt und die Grasfelder, je nach Energie, braun bis grün. Je mehr Energie ein Grasfeld besitzt desto grüner ist es.',
+        'Auf der linken Hälfte ist live die visuelle Darstellung des Szenarios. Hier ist die Karte mit den Gras- / Wasserfeldern und den Figuren zu sehen. Die Wasserfelder sind hierbei blau dargestellt und die Grasfelder, je nach Energie, braun bis grün. Je mehr Energie ein Grasfeld besitzt, desto grüner ist es.',
       image2: 'Farbverlauf von 0 Energie zu 100 Energie',
       text2:
-        'Die Figuren werden als farbige Punkte dargestellt. Jede Population besitzt hierbei eine eigene Farbe. So kann zu einer Figur die zugehörige Population direkt erkannt werden. Zudem besitzt jede Figur einen Richtungsindikator. Dieser gibt an, in welche Richtung die Figur schaut und von welchem Feld die Energie voraus wahrgenommen wird. Abhängig von der Energie der Figur wird auch die Farbe angezeigt: Je kräftiger die Farbe einer Figur, desto mehr Energie besitzt diese. Besitzt eine Figur keine Energie mehr, ist also tot, verschwindet diese komplett von der Karte.',
+        'Die Figuren werden als farbige Punkte dargestellt. Jede Population besitzt hierbei eine eigene Farbe. So kann die Population, zu der eine Figur gehört, direkt erkannt werden. Zudem besitzt jede Figur einen Richtungsindikator, der angibt, in welche Richtung die Figur schaut und von welchem Feld voraus die Energie wahrgenommen wird. Abhängig von der Energie der Figur wird auch die Farbe angezeigt: Je kräftiger die Farbe einer Figur, desto mehr Energie besitzt diese. Hat eine Figur keine Energie mehr, ist also tot, verschwindet sie komplett von der Karte.',
       text3:
-        'Die Ansicht kann mittels Klicken und Ziehen verschoben werden und per Mausrad kann hinein- bzw. herausgezoomt werden. Einzelne Figuren können hier auch per Klick an- bzw. abgewählt werden.',
+        'Die Ansicht kann mittels Klicken und Ziehen verschoben werden und per Mausrad kann hinein- und herausgezoomt werden. Einzelne Figuren können hier per Klick an- bzw. abgewählt werden.',
       subheading2: 'Grafische Darstellung der Daten',
       image3: 'Beispielbild grafische Darstellung der Daten',
       text4:
-        'Auf der rechten Hälfte werden jegliche Daten der Simulation und deren historischen Verläufe angezeigt. Hier lässt sich die Ansicht noch weiter unterteilen in: Generationsdaten, Livedaten, Darstellung des künstlichen neuronalen Netzes, Details und die \'besten\' Figuren:',
+        'Auf der rechten Hälfte werden Daten der Simulation und deren historischen Verläufe angezeigt. Hier lässt sich die Ansicht noch weiter unterteilen in: Generationsdaten, Livedaten, Darstellung des künstlichen neuronalen Netzes, Details und die \'besten\' Figuren:',
       subheading3: 'Darstellung der Generationsdaten',
       image4: 'Beispielbild Darstellung der Generationsdaten',
       text5:
-        'Links oben sind Statistiken über die Generationen aufbereitet, um den historischen Verlauf von Generationen nachverfolgen zu können. So kann dort die durchschnittliche Lebenszeit, maximale Lebenszeit und die durchschnittliche Energie der letzten 25 Generationen einer jeden Population verglichen werden. So ist ersichtlich, wie die unterschiedlichen Populationen sich von Generation zu Generation verändern und ob beispielsweise eine Population mit jeder Generation länger lebt.',
+        'Links oben sind Statistiken über die Generationen aufbereitet, um den historischen Verlauf von Generationen nachverfolgen zu können. So kann dort die durchschnittliche Lebenszeit, die maximale Lebenszeit und die durchschnittliche Energie der letzten 25 Generationen jeder Population verglichen werden. So ist ersichtlich, wie die unterschiedlichen Populationen sich von Generation zu Generation verändern und ob beispielsweise eine Population mit jeder Generation länger lebt.',
       subheading4: 'Darstellung der Livedaten',
       image5: 'Beispielbild Darstellung der Livedaten',
       text6:
-        'Rechts oben sind die Livedaten aufbereitet und es kann direkt verfolgt werden, wie viele Figuren bei einer Population noch leben, was die aktuelle durchschnittliche Lebenszeit/Energie und Generation einer jeden Population ist. Hier ist erkennbar, wie sich die Populationen im aktuellen Augenblick verhalten und agieren.',
+        'Rechts oben sind die Livedaten aufbereitet und es kann direkt verfolgt werden, wie viele Figuren bei einer Population noch leben, was die aktuelle durchschnittliche Lebenszeit/Energie und Generation jeder Population ist. Hier ist erkennbar, wie sich die Populationen im aktuellen Augenblick verhalten und agieren.',
       subheading5: 'Darstellung des künstlichen neuronalen Netzes',
       image6: 'Beispielbild Darstellung des künstlichen neuronalen Netzes',
       text7:
-        'Hat man eine Figur ausgewählt wird in der Mitte live ihr künstliches neuronales Netz angezeigt. Hierbei sind ganz links die Sinne der Figur als Knoten dargestellt (Aktuelle Energie, Energie des aktuellen Feldes und die Energie des Feldes vor der Figur) und ganz rechts die möglichen Aktionen der Figur (Drehen, Bewegen, Essen). Zwischen diesen fest vorgegebenen Knoten befinden sich dann je nach Architektur des Netzes verschiedene Zwischenknoten und Verbindungen, welche die Eingabeinformationen dann nach rechts zu den Aktionen weitertragen bzw. manipulieren. Es kann hierbei auf jeden Knoten geklickt werden um die Gewichte der eingehenden und ausgehenden Verbindungen anzuzeigen. Je dicker die Verbindungslinie zwischen zwei Knoten, desto höher ist auch das aktuelle Gewicht dieser Verbindung. Innerhalb der Knoten wird deren aktueller Wert angezeigt. Hier kann live nachverfolgt werden, wenn eine Änderung der Sinne/Eingaben (z.B. ein Wasserfeld ist nun vor der Figur) direkt im künstlichen neuronalen Netz zu einer neuen Aktion führt.',
+        'Hat man eine Figur ausgewählt, wird in der Mitte live ihr künstliches neuronales Netz angezeigt. Hierbei sind ganz links die Sinne der Figur als Knoten dargestellt (aktuelle Energie der Figur, Energie des Feldes auf dem die Figur sich befindet und die Energie des Feldes auf das die Figur blickt) und ganz rechts die möglichen Aktionen der Figur (Drehen, Bewegen, Essen). Zwischen diesen fest vorgegebenen Knoten befinden sich je nach Architektur des Netzes verschiedene Zwischenknoten und Verbindungen, die die Eingabeinformationen nach rechts zu den Aktionen weitertragen bzw. manipulieren. Es kann hierbei auf jeden Knoten geklickt werden um die Gewichte der eingehenden und ausgehenden Verbindungen anzuzeigen. Je dicker die Verbindungslinie zwischen zwei Knoten, desto höher ist das aktuelle Gewicht dieser Verbindung. Innerhalb der Knoten wird deren aktueller Wert angezeigt. Hier kann live nachverfolgt werden, wenn eine Änderung der Sinne/Eingaben (z.B. wenn nun ein Wasserfeld vor der Figur ist) direkt im künstlichen neuronalen Netz zu einer neuen Aktion führt.',
       subheading6: 'Darstellung von Details',
       image7: 'Beispielbild Darstellung von Details',
       text8:
-        'Links unten sind Detaildaten in Textform ersichtlich. Eine kleine Beschreibung und die globalen Daten, wie Anzahl an Populationen, Anzahl an Ticks pro Sekunde, der aktuelle Tick der Simulation etc. sind hier zu finden. Falls eine Figur angewählt ist, sind auch deren Daten aufgelistet, wie zugehörige Population, Tick der Geburt oder aktuelle Lebenszeit.',
+        'Links unten sind Detaildaten in Textform ersichtlich. Eine Beschreibung und globale Daten, wie Anzahl der Populationen, Anzahl der Ticks pro Sekunde, der aktuelle Tick der Simulation etc. sind hier zu finden. Falls eine Figur angewählt ist, sind auch deren Daten aufgelistet, wie zugehörige Population, Tick der Geburt oder aktuelle Lebenszeit.',
       subheading7: 'Darstellung der \'besten\' Figuren',
       image8: "Beispielbild Darstellung der 'besten' Figuren",
       text9:
-        'Rechts unten ist ein Ranking der Figuren zu sehen. Hier kann live entnommen werden, welche die Figuren mit der längsten Lebenszeit sind, oder welche die Figur mit der längsten Lebenszeit pro Population ist. Hier können die aufgelisteten Figuren auch direkt angewählt werden.',
+        'Rechts unten ist ein Ranking der Figuren zu sehen. Hier kann live nachvollzogen werden, welche Figuren die längste Lebenszeit haben oder welche Figur die längste Lebenszeit pro Population hat. Hier können die aufgelisteten Figuren auch direkt angewählt werden.',
     },
     section4: {
       heading: 'Was ist der Nutzen?',
