@@ -363,7 +363,7 @@ export class GenomeEntity {
   private getRandomConnection(): ConnectionGeneEntity | null {
     if (this.connections.length > 0) {
       return this.connections[
-        Math.round(Math.random() * (this.connections.length - 1))
+        Math.floor(Math.random() * (this.connections.length - 1))
       ];
     }
     return null;
@@ -374,7 +374,7 @@ export class GenomeEntity {
    */
   private getRandomNode(): NodeGeneEntity | null {
     if (this.nodes.length > 0) {
-      return this.nodes[Math.round(Math.random() * (this.nodes.length - 1))];
+      return this.nodes[Math.floor(Math.random() * (this.nodes.length - 1))];
     }
     return null;
   }
