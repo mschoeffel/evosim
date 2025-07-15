@@ -182,16 +182,16 @@
         <p>{{ $t('manual.section5.text') }}</p>
         <h2>{{ $t('manual.section6.heading') }}</h2>
         <p>{{ $t('manual.section6.text1') }}</p>
-        <p>{{ $t('manual.section6.text2') }}</p>
+        <a href="https://mschoeffel.de">{{ $t('manual.section6.text2') }}</a>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'Manual',
   data() {
     return {

@@ -25,6 +25,7 @@ let p5;
 
 let canvas;
 let populationColors = [];
+let populationColorStrings = ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF'];
 
 const dirtColorRed = 117;
 const dirtColorGreen = 66;
@@ -34,15 +35,24 @@ const grassColorGreen = 255;
 const grassColorBlue = 0;
 
 export function main(_p5) {
-  p5 = _p5;
-  p5.disableFriendlyErrors = true;
-  const backgroundColor = p5.color(255, 255, 255);
+  p5 = _p5 || (typeof window !== 'undefined' ? window.p5 : undefined);
+  if (!p5) {
+    throw new Error('p5 is not defined. Make sure p5 is loaded globally.');
+  }
 
-  p5.setup = () => {
-    const canvasDiv = document.getElementById('p5Canvas');
-    canvas = p5.createCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
-    canvas.parent('p5Canvas');
+
+  p5.setup = () =>
+  {
+    p5.disableFriendlyErrors = true;
+
+    const canvasDiv = document.getElementById('canvasParent');
+    console.log(canvasDiv.offsetWidth);
+    canvas = p5.createCanvas(canvasDiv.offsetWidth - 6, canvasDiv.offsetHeight - 6);
+    canvas.parent('p5-canvas');
     canvas.style('display', 'block');
+    canvas.style('width', (canvasDiv.offsetWidth - 6) + 'px');
+    canvas.style('height', (canvasDiv.offsetHeight - 6) + 'px');
+    canvas.style('overflow', 'hidden');
 
     p5.noSmooth();
     mapImage = p5.createImage(10, 10);
@@ -55,15 +65,21 @@ export function main(_p5) {
     p5.translate(tx, ty);
     p5.noSmooth();
     p5.image(mapImage, 0, 0);
-  };
+
+    for(let i = 0; i < populationColorStrings.length; i++) {
+      populationColors.push(p5.color(populationColorStrings[i]));
+    }
+  }
 
   p5.draw = () => {
+    p5.noSmooth();
     if (mapChanged) {
       drawMap();
       mapChanged = false;
     }
 
-    p5.background(backgroundColor);
+    p5.noSmooth();
+    p5.background(p5.color(255, 255, 255));
     p5.scale(sf);
     p5.translate(tx, ty);
     p5.image(mapImage, 0, 0);
@@ -130,14 +146,14 @@ export function main(_p5) {
     p5.redraw();
   };
 
-  window.addEventListener('wheel', function (e) {
+  window.addEventListener('wheel', function(e) {
     if (
       p5.mouseX < p5.width &&
       p5.mouseX > 0 &&
       p5.mouseY < p5.height &&
       p5.mouseY > 0
     ) {
-      p5.applyScale(e.deltaY > 0 ? 1.05 : 0.95);
+      p5.applyScale(e.deltaY > 0 ? 0.95 : 1.05);
     }
   });
 
@@ -150,13 +166,16 @@ export function main(_p5) {
   };
 
   p5.windowResized = () => {
-    const canvasDiv = document.getElementById('p5Canvas');
-    p5.resizeCanvas(canvasDiv.offsetWidth, canvasDiv.offsetHeight);
+    const canvasDiv = document.getElementById('canvasParent');
+    p5.resizeCanvas(canvasDiv.offsetWidth - 4, canvasDiv.offsetHeight -4);
     sf = canvasDiv.offsetWidth / 400;
     tx = canvasDiv.offsetWidth / 100;
     ty = canvasDiv.offsetHeight / 200;
   };
+
+
 }
+
 
 function drawMap() {
   p5.noSmooth();
@@ -205,6 +224,7 @@ function drawMap() {
 }
 
 function drawFigures() {
+
   for (const figure of figureData) {
     drawFigure(figure);
   }

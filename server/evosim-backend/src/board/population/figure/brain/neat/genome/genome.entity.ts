@@ -111,19 +111,19 @@ export class GenomeEntity {
   }
 
   public mutate(): void {
-    if (NeatConfig.PROBABILITY_MUTATE_LINK > Math.random()) {
+    if (NeatConfig.PROBABILITY_MUTATE_LINK >= Math.random()) {
       this.mutateLink();
     }
-    if (NeatConfig.PROBABILITY_MUTATE_NODE > Math.random()) {
+    if (NeatConfig.PROBABILITY_MUTATE_NODE >= Math.random()) {
       this.mutateNode();
     }
-    if (NeatConfig.PROBABILITY_MUTATE_WEIGHT_SHIFT > Math.random()) {
+    if (NeatConfig.PROBABILITY_MUTATE_WEIGHT_SHIFT >= Math.random()) {
       this.mutateWeightShift();
     }
-    if (NeatConfig.PROBABILITY_MUTATE_WEIGHT_RANDOM > Math.random()) {
+    if (NeatConfig.PROBABILITY_MUTATE_WEIGHT_RANDOM >= Math.random()) {
       this.mutateWeightRandom();
     }
-    if (NeatConfig.PROBABILITY_MUTATE_TOGGLE_LINK > Math.random()) {
+    if (NeatConfig.PROBABILITY_MUTATE_TOGGLE_LINK >= Math.random()) {
       this.mutateLinkToggle();
     }
   }
@@ -405,7 +405,7 @@ export class GenomeEntity {
     return inputNodes;
   }
 
-  private ouputNodes(): Array<NodeGeneEntity> {
+  private outputNodes(): Array<NodeGeneEntity> {
     const inputNodes = [];
     for (const node of this.nodes) {
       if (node.type === NodeGenomeType.OUTPUT) {
@@ -441,7 +441,7 @@ export class GenomeEntity {
     }
 
     for (let i = 0; i < FigureActions.count(); i++) {
-      nodeMap.set(this.ouputNodes()[i].innovationNumber, net.outputNodes[i]);
+      nodeMap.set(this.outputNodes()[i].innovationNumber, net.outputNodes[i]);
     }
 
     const hiddenNodes = this.hiddenNodes();

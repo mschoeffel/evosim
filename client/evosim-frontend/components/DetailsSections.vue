@@ -88,13 +88,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { defineComponent } from 'vue';
 import GlobalDetailsText from '~/components/GlobalDetailsText.vue';
 import { FigureClient } from '~/models/figure.client';
 import InfoDetailsText from '~/components/InfoDetailsText.vue';
 import FigureDetailsText from '~/components/FigureDetailsText.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'DetailsSections',
   components: {
     FigureDetailsText,

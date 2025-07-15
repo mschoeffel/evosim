@@ -1,4 +1,4 @@
-export default {
+export default defineNuxtConfig({
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'EvoSim',
@@ -21,13 +21,15 @@ export default {
     port: process.env.PORT || 8000 // default: 3000
   },
 
-  publicRuntimeConfig: {
-    serverHost: process.env.SERVER_HOST || 'localhost',
-    serverPort: process.env.SERVER_PORT || 5000,
+  runtimeConfig: {
+    public: {
+      serverHost: process.env.SERVER_HOST || 'localhost',
+      serverPort: process.env.SERVER_PORT || 5000,
+    }
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/css/tailwind.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -48,8 +50,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/i18n'
+    '@nuxtjs/i18n',
+    '@nuxtjs/tailwindcss'
   ],
 
   i18n: {
@@ -71,14 +73,11 @@ export default {
       fallbackLocale: 'en'
     },
     defaultLocale: 'en',
-    vueI18n: {
-      fallbackLocale: 'en',
-    }
+    vueI18n: 'vue-i18n.config.ts'
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {}
-}
+})

@@ -1,19 +1,20 @@
 <template>
-  <div class="pt-4">
+  <div class="pt-4 h-full">
     <line-chart
-      :height="150"
-      :chart-data="chartData"
+      v-if="(chartData && chartData.labels && chartData.datasets) || true"
+      :data="chartData || { labels: [], datasets: [] }"
       :options="chartOptions"
+      class="h-full w-full"
     ></line-chart>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import LineChart from './../js/linechart.js';
+import { defineComponent } from 'vue';
+import LineChart from './../components/LineChart.vue';
 import { FigureClient } from '~/models/figure.client';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'GlobalStatsAlive',
   components: {
     LineChart,
@@ -73,14 +74,15 @@ export default Vue.extend({
         ],
       },
       chartOptions: {
-        tooltips: {
-          enabled: false,
-        },
-        legend: {
-          position: 'bottom',
-          labels: {
-            usePointStyle: true,
-            boxWidth: 10,
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            position: 'bottom',
+            labels: {
+              usePointStyle: true,
+            },
           },
         },
         scales: {

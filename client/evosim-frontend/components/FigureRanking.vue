@@ -81,10 +81,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { defineComponent } from 'vue';
 import { FigureClient } from '~/models/figure.client';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FigureRanking',
   props: {
     figures: {

@@ -1,5 +1,5 @@
 <template>
-  <Network
+  <NetworkWrapper
     ref="network"
     :edges="renderEdges"
     :nodes="renderNodes"
@@ -7,17 +7,19 @@
     class="w-full h-full"
     @select-node="selectNode"
     @deselect-node="deselectNode"
-  >
-  </Network>
+  />
 </template>
+
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { NodeRenderDto } from '~/models/dto/node.render.dto';
 import { EdgeRenderDto } from '~/models/dto/edge.render.dto';
 import { FigureClient } from '~/models/figure.client';
+import NetworkWrapper from './NetworkWrapper.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FigureNetDetail',
+  components: { NetworkWrapper },
   props: {
     selectedFigure: {
       type: FigureClient,
@@ -57,7 +59,8 @@ export default Vue.extend({
     renderNodes(): Array<NodeRenderDto> {
       // TODO: Cleanup & Optimize performance
       if (this.nodes.length > 0) {
-        const nodesRender = this.nodes;
+        // Kopie der Nodes erstellen, um Mutationen am Original zu vermeiden
+        const nodesRender = this.nodes.map((node) => ({ ...node }));
 
         const start = [
           this.$t('netSection.inputNodeLabels.energy'),
@@ -106,6 +109,7 @@ export default Vue.extend({
             this.selectedEdgeIds.includes(e.id),
           )) {
             edge.width = edge.widthHidden;
+            edge.label = edge.labelHidden;
           }
         } else {
           for (const edge of edgesRender) {

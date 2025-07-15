@@ -169,7 +169,7 @@ export default {
     section6: {
       heading: 'Contact & Imprint',
       text1: 'Michael Schöffel',
-      text2: 'michael.schoeffel[at]t-online.de',
+      text2: 'mschoeffel.de',
     },
   },
 };

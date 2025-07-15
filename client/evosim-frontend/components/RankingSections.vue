@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-full flex flex-col">
     <div>
       <nav
         aria-label="Tabs"
@@ -49,7 +49,7 @@
         </a>
       </nav>
     </div>
-    <div>
+    <div class="h-full">
       <div v-if="currentTab === 'global'">
         <FigureRanking
           :colors="colors"
@@ -69,11 +69,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { defineComponent } from 'vue';
 import PopulationRanking from '~/components/PopulationRanking.vue';
 import FigureRanking from '~/components/FigureRanking.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'RankingSections',
   components: {
     FigureRanking,

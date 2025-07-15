@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-full flex flex-col">
     <div>
       <nav
         aria-label="Tabs"
@@ -82,7 +82,7 @@
         </a>
       </nav>
     </div>
-    <div>
+    <div class="h-full grow shrink">
       <GenerationStatsAvgLifetime
         v-if="currentTab === 'GlobalStatsAvgLife'"
         :colors="colors"
@@ -103,12 +103,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import GenerationStatsAvgLifetime from '~/components/GenerationStatsAvgLifetime.vue';
 import GenerationStatsMaxLifetime from '~/components/GenerationStatsMaxLifetime.vue';
 import GenerationStatsAvgEnergy from '~/components/GenerationStatsAvgEnergy.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'GenerationStatsSections',
   components: {
     GenerationStatsAvgEnergy,

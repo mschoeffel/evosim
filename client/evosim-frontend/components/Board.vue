@@ -1,4 +1,5 @@
 <template>
+
   <div
     class="
       h-screen
@@ -18,10 +19,12 @@
         border-solid border-2 border-black
       "
     >
+      <main>
       <div
-        id="p5Canvas"
+        id="p5-canvas"
         class="w-full h-full justify-center items-center"
       ></div>
+      </main>
     </div>
     <div class="w-full h-full xl:basis-1/2 flex flex-col grow shrink">
       <div class="w-full h-80 flex flex-row md:flex-nowrap flex-wrap shrink">
@@ -117,7 +120,8 @@
 <script lang="ts">
 import { io, Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-import Vue from 'vue';
+import { defineComponent } from 'vue';
+import { useRuntimeConfig } from 'nuxt/app';
 import { MapClientDto } from '~/models/dto/map.client.dto';
 import { FigureClient } from '~/models/figure.client';
 import { FigureClientDto } from '~/models/dto/figure.client.dto';
@@ -127,13 +131,9 @@ import LiveStatsSections from '~/components/LiveStatsSections.vue';
 import RankingSections from '~/components/RankingSections.vue';
 import GenerationStatsSections from '~/components/GenerationStatsSections.vue';
 import FigureNetDetail from '~/components/FigureNetDetail.vue';
+import { nextTick } from 'vue';
 
-let pixel: any;
-if (process.browser) {
-  pixel = require('@/js/graphic.js');
-}
-
-export default Vue.extend({
+export default defineComponent({
   name: 'Board',
   components: {
     FigureNetDetail,
@@ -155,6 +155,7 @@ export default Vue.extend({
     populations: number;
     gamestate: GamestateClientDto;
     socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+    pixel: any;
   } {
     return {
       selectedX: 0,
@@ -169,44 +170,61 @@ export default Vue.extend({
       populations: 5,
       gamestate: {} as GamestateClientDto,
       socket: {} as Socket<DefaultEventsMap, DefaultEventsMap>,
+      pixel: undefined,
     };
   },
   beforeDestroy() {
     this.reset();
   },
   mounted() {
-    const P5 = require('p5');
-    pixel.setUpdateCurrentSelected(this.setSelected);
+    const config = useRuntimeConfig();
+    if (!config.public.serverHost || !config.public.serverPort) {
+      console.error('Server configuration missing');
+      return;
+    }
+    Promise.all([
+      import('p5'),
+      import('@/js/graphic.js')
+    ]).then(async ([P5Module, pixelModule]) => {
+      const P5 = P5Module.default;
+      this.pixel = pixelModule;
+      this.pixel.setUpdateCurrentSelected(this.setSelected);
 
-    const socket = io(`${this.$config.serverHost}:${this.$config.serverPort}`, {
-      transports: ['websocket'],
-    });
-    this.socket = socket;
-    socket.on('connect', () => {
-      // DEBUG: console.log("Connected to WebSocket Server!");
-      this.p5 = new P5(pixel.main);
-      pixel.setPopulationColors(this.colors);
-
-      socket.on(
-        'state',
-        (payload: {
-          map: MapClientDto;
-          figures: Array<FigureClientDto>;
-          gamestate: GamestateClientDto;
-        }) => {
-          this.update(payload);
-        },
-      );
-    });
-
-    socket.on('disconnect', () => {
-      pixel.clear();
-      // DEBUG: console.log("Disconnected from WebSocket Server");
+      const socket = io(`${config.public.serverHost}:${config.public.serverPort}`, {
+        transports: ['websocket'],
+      });
+      this.socket = socket;
+      socket.on('connect', async () => {
+        // Initialisiere p5 erst, wenn map und figures gesetzt wurden
+        if (!this.map || !this.figures || this.figures.length === 0) {
+          // Warte auf ersten State
+          socket.once('state', async (payload: {
+            map: MapClientDto;
+            figures: Array<FigureClientDto>;
+            gamestate: GamestateClientDto;
+          }) => {
+            this.update(payload);
+            await nextTick();
+            this.p5 = new P5(this.pixel.main);
+            //this.pixel.setPopulationColors(this.colors);
+            // Jetzt weitere State-Listener aktivieren
+            socket.on('state', (payload) => {this.update(payload)});
+          });
+        } else {
+          await nextTick();
+          this.p5 = new P5(this.pixel.main);
+          //this.pixel.setPopulationColors(this.colors);
+          socket.on('state', (payload) => this.update(payload));
+        }
+      });
+      socket.on('disconnect', () => {
+        this.pixel.clear();
+      });
     });
   },
   methods: {
     reset() {
-      pixel.clear();
+      if (this.pixel) this.pixel.clear();
     },
     update(payload: {
       map: MapClientDto;
@@ -218,12 +236,12 @@ export default Vue.extend({
         FigureClient.parseFromDto(f),
       );
       this.gamestate = payload.gamestate as GamestateClientDto;
-
-      pixel.updateState(
-        this.map,
-        this.figures.filter((b) => b.alive),
-      );
-
+      if (this.pixel) {
+        this.pixel.updateState(
+          this.map,
+          this.figures.filter((b) => b.alive),
+        );
+      }
       if (this.figures.length > 0) {
         if (this.selectedId !== '') {
           this.updateSelectedFigure();
@@ -233,7 +251,7 @@ export default Vue.extend({
     setSelectedById(id: string) {
       this.selectedId = id;
       this.updateSelectedFigure();
-      pixel.setSelectedFigure(id);
+      if (this.pixel) this.pixel.setSelectedFigure(id);
     },
     setSelected(x: number, y: number, id: string): void {
       this.selectedX = x;
@@ -246,11 +264,12 @@ export default Vue.extend({
       }
     },
     updateSelectedFigure(): void {
+      // Stelle sicher, dass selectedFigure wirklich ein FigureClient ist
       const t = this.figures.find((f) => f.id === this.selectedId);
-      if (t !== undefined) {
+      if (t !== undefined && t instanceof FigureClient) {
         this.selectedFigure = t;
-      } else if (this.selectedFigure !== undefined) {
-        this.selectedFigure.alive = false;
+      } else {
+        this.selectedFigure = undefined;
       }
     },
     roundToTwoDigits(x: number): number {

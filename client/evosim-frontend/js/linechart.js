@@ -1,13 +1,36 @@
-import { Line, mixins } from 'vue-chartjs';
-const { reactiveProp } = mixins;
+import { Line } from 'vue-chartjs';
 
 export default {
-  extends: Line,
-  mixins: [reactiveProp],
-  props: ['options'],
-  mounted() {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, this.options);
+  name: 'LineChart',
+  props: {
+    chartData: { type: Object, required: true },
+    chartOptions: { type: Object, required: false, default: () => ({}) },
+  },
+  watch: {
+    chartData: {
+      handler() {
+        if (this.$refs.chartRef && this.$refs.chartRef.chartInstance) {
+          this.$refs.chartRef.chartInstance.update();
+        }
+      },
+      deep: true,
+    },
+    chartOptions: {
+      handler() {
+        if (this.$refs.chartRef && this.$refs.chartRef.chartInstance) {
+          this.$refs.chartRef.chartInstance.update();
+        }
+      },
+      deep: true,
+    },
+  },
+  render() {
+    return this.$createElement(Line, {
+      ref: 'chartRef',
+      props: {
+        chartData: this.chartData,
+        options: this.chartOptions,
+      },
+    });
   },
 };
