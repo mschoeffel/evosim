@@ -96,8 +96,7 @@ export default defineComponent({
     update(newVal: GamestateClientDto | undefined): void {
       if (
         newVal !== undefined &&
-        newVal._stats !== undefined &&
-        newVal._stats.length > this.renderedSave
+        newVal._stats !== undefined
       ) {
         const newChartData = [];
         const data = new Map<number, Array<number>>();

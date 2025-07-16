@@ -14,7 +14,7 @@ import { FigureActions } from './figure/figure-actions.entity';
 import { NodeGenomeType } from './figure/brain/neat/genome/node-genome-type.enum';
 import { GenomeEntity } from './figure/brain/neat/genome/genome.entity';
 import { RandomSelector } from '../../utils/random-selector';
-import { NeatConfig } from './figure/brain/neat/neat.config';
+import { NeatConfig, SPECIES_THRESHOLD } from './figure/brain/neat/neat.config';
 import { GenerationDumpService } from '../../dump/generation-dump.service';
 
 export class PopulationNeatEntity extends PopulationEntity {
@@ -90,7 +90,7 @@ export class PopulationNeatEntity extends PopulationEntity {
    */
   public emptyGenome(): GenomeEntity {
     const g = new GenomeEntity(this);
-
+    // Nodes hinzufügen
     for (let i = 0; i < this.inputSize + this.outputSize; i++) {
       g.nodes.push(this.getNodeByInnovationNumber(i + 1));
     }
@@ -220,45 +220,11 @@ export class PopulationNeatEntity extends PopulationEntity {
    * Main cycle function
    */
   override evolve(): void {
-    this.generateSpecies();
+    this.speciate(); // Speziesbildung am Anfang
     this.kill();
     this.removeExtinctSpecies();
     this.reproduceClients();
     this.mutate();
-  }
-
-  /**
-   * Resets all species and assigns all the clients to the species or generates a new if no existing is fitting
-   * @private
-   */
-  private generateSpecies(): void {
-    //Reset all Species
-    for (const species of this.species) {
-      species.reset();
-    }
-
-    // Assign clients to species except representatives (they are already set)
-    for (const client of this.clients) {
-      if (client.species === null) {
-        //Search for fitting species
-        let foundFittingSpecies = false;
-        for (const s of this.species) {
-          if (s.put(client)) {
-            foundFittingSpecies = true;
-            break;
-          }
-        }
-        //If no fitting species is found creating a new one with the client as representative
-        if (!foundFittingSpecies) {
-          this.species.push(new SpeciesEntity(client));
-        }
-      }
-    }
-
-    //Evaluate score of each species
-    for (const species of this.species) {
-      species.evaluateScore();
-    }
   }
 
   /**
@@ -290,27 +256,75 @@ export class PopulationNeatEntity extends PopulationEntity {
   }
 
   /**
-   * Gets all Clients without a species and adds them to other random species and breeds a new genome from the species for the client
-   * @private
+   * Reproduziert die nächste Generation mit Elitismus und Fitness-Sharing
    */
   private reproduceClients(): void {
-    //Add all species to a random selector
-    const selector = new RandomSelector<SpeciesEntity>();
+    // Fitness-Sharing: Fitness jedes Clients durch Speziesgröße teilen
     for (const species of this.species) {
-      selector.add(species, species.score);
+      for (const client of species.clients) {
+        client.sharedFitness = client.score() / species.size();
+      }
     }
 
-    //For each client
-    for (const client of this.clients) {
-      //If the client has no species
-      if (client.species === null) {
-        //Select a random species for the client
-        const s = selector.random();
-        //Breed a new Genome for the client from the selected species
-        client.genome = s.breed();
-        //Force client add to species
-        s.forcePut(client);
+    // Elitismus: Die besten Individuen jeder Spezies direkt übernehmen
+    const newClients: ClientEntity[] = [];
+    for (const species of this.species) {
+      const elite = species.getElite();
+      const eliteClone = new ClientEntity(
+        elite.genome,
+        this._map,
+        this._index,
+        0,
+        0,
+        this._optimizationStrategy.name,
+        this._activationStrategy.name,
+      );
+      newClients.push(eliteClone);
+    }
+
+    // Nachkommen proportional zur Spezies-Fitness erzeugen
+    const totalScore = this.species.reduce((sum, s) => sum + s.score, 0);
+    let offspringCount = this.maxClients - newClients.length;
+    for (const species of this.species) {
+      // Anteil der Nachkommen für diese Spezies
+      const share = totalScore > 0 ? Math.round((species.score / totalScore) * offspringCount) : 1;
+      for (let i = 0; i < share; i++) {
+        const genome = species.breed();
+        const client = new ClientEntity(
+          genome,
+          this._map,
+          this._index,
+          0,
+          0,
+          this._optimizationStrategy.name,
+          this._activationStrategy.name,
+        );
+        newClients.push(client);
+        if (newClients.length >= this.maxClients) break;
       }
+      if (newClients.length >= this.maxClients) break;
+    }
+
+    // Falls zu wenig Nachkommen, mit zufälligen Spezies auffüllen
+    while (newClients.length < this.maxClients) {
+      const s = this.species[Math.floor(Math.random() * this.species.length)];
+      const genome = s.breed();
+      const client = new ClientEntity(
+        genome,
+        this._map,
+        this._index,
+        0,
+        0,
+        this._optimizationStrategy.name,
+        this._activationStrategy.name,
+      );
+      newClients.push(client);
+    }
+
+    // Neue Clients übernehmen
+    this._clients.length = 0;
+    for (const c of newClients) {
+      this._clients.push(c);
     }
   }
 
@@ -353,6 +367,30 @@ export class PopulationNeatEntity extends PopulationEntity {
     return b;
   }
 
+  /**
+   * Gruppiert alle Genomen in Spezies basierend auf der Distanzfunktion
+   */
+  public speciate(): void {
+    this._species.length = 0; // Alte Spezies löschen
+    for (const client of this._clients) {
+      const genome = client.genome;
+      let assigned = false;
+      for (const species of this._species) {
+        // Distanz zum Repräsentanten der Spezies berechnen
+        if (genome.distance(species.representative.genome) < SPECIES_THRESHOLD) {
+          species.put(client);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        // Neue Spezies mit diesem Client als Repräsentant erstellen
+        const newSpecies = new SpeciesEntity(client);
+        this._species.push(newSpecies);
+      }
+    }
+  }
+
   get allConnectionGenes(): Array<ConnectionGeneEntity> {
     return this._allConnectionGenes;
   }
@@ -365,7 +403,10 @@ export class PopulationNeatEntity extends PopulationEntity {
     return this._clients;
   }
 
-  get species(): Array<SpeciesEntity> {
+  /**
+   * Gibt alle Spezies zurück
+   */
+  public get species(): Array<SpeciesEntity> {
     return this._species;
   }
 

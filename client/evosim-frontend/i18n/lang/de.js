@@ -34,6 +34,7 @@ export default {
       energy: 'Energie',
       energyCurrentTile: 'Energie aktuelles Feld',
       energyTileAhead: 'Energie voraus',
+      waterAhead: 'Wasser voraus',
     },
     outputNodeLabels: {
       rotation: 'Drehung',

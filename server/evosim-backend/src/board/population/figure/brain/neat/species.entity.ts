@@ -59,23 +59,23 @@ export class SpeciesEntity {
   }
 
   /**
-   * Resets species.
+   * Resets species. Wählt den Repräsentanten als bestes überlebendes Individuum
    */
   public reset(): void {
-    //Set a new representative of this species randomly from all the clients of this species
-    this.representative = this.clients.at(
-      Math.random() * (this.clients.length - 1),
-    );
-
-    //Removes the species of all the clients of this species and clears the client array of this species
+    // Wähle den besten Client als neuen Repräsentanten
+    if (this.clients.length > 0) {
+      this.representative = this.getElite();
+    }
+    // Entferne die Spezies-Zuordnung von allen Clients und leere die Liste
     for (const c of this.clients) {
       c.species = null;
     }
     this.clients = [];
-
-    //Add representative to the clients of this species and add species to representative. Reset score.
-    this.clients.push(this.representative);
-    this.representative.species = this;
+    // Füge den Repräsentanten wieder hinzu und setze die Spezies
+    if (this.representative) {
+      this.clients.push(this.representative);
+      this.representative.species = this;
+    }
     this.score = 0;
   }
 
@@ -98,18 +98,39 @@ export class SpeciesEntity {
   }
 
   /**
-   * Breeds a new Crossover out of two of the clients of this species.
+   * Gibt das beste Individuum der Spezies zurück
+   */
+  public getElite(): ClientEntity {
+    return this.clients.reduce(
+      (best, curr) => (curr.score() > best.score() ? curr : best),
+      this.clients[0],
+    );
+  }
+
+  /**
+   * Gibt einen Client proportional zur geteilten Fitness zurück (Roulette-Auswahl)
+   */
+  public selectParent(): ClientEntity {
+    const totalFitness = this.clients.reduce((sum, c) => sum + c.sharedFitness, 0);
+    let r = Math.random() * totalFitness;
+    for (const c of this.clients) {
+      r -= c.sharedFitness;
+      if (r <= 0) return c;
+    }
+    return this.clients[0];
+  }
+
+  /**
+   * Züchtet ein neues Genom aus zwei Eltern, bevorzugt die besten
    */
   public breed(): GenomeEntity {
-    //Get two random clients of this species
-    const c1 = this.clients.at(Math.random() * (this.clients.length - 1));
-    const c2 = this.clients.at(Math.random() * (this.clients.length - 1));
-
-    //Generate and return crossover of these clients
-    if (c1.score > c2.score) {
-      return GenomeEntity.crossover(c1.genome, c2.genome);
+    const parent1 = this.selectParent();
+    const parent2 = this.selectParent();
+    // Parent mit höherer Fitness als erster Parameter
+    if (parent1.score() >= parent2.score()) {
+      return GenomeEntity.crossover(parent1.genome, parent2.genome);
     } else {
-      return GenomeEntity.crossover(c2.genome, c1.genome);
+      return GenomeEntity.crossover(parent2.genome, parent1.genome);
     }
   }
 

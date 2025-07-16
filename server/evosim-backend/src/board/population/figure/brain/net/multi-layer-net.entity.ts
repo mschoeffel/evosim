@@ -53,6 +53,7 @@ export class MultiLayerNetEntity {
     this.inputNodes[0].value = inputs.currentEnergy;
     this.inputNodes[1].value = inputs.energyOfCurrentTile;
     this.inputNodes[2].value = inputs.energyOfTileAhead;
+    this.inputNodes[3].value = inputs.waterAhead;
   }
 
   public calculate(): void {

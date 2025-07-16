@@ -66,6 +66,7 @@ export default defineComponent({
           this.$t('netSection.inputNodeLabels.energy'),
           this.$t('netSection.inputNodeLabels.energyCurrentTile'),
           this.$t('netSection.inputNodeLabels.energyTileAhead'),
+          this.$t('netSection.inputNodeLabels.waterAhead'),
         ];
         const end = [
           this.$t('netSection.outputNodeLabels.rotation'),
@@ -131,6 +132,19 @@ export default defineComponent({
   },
   methods: {
     update(newVal: FigureClient | undefined): void {
+      // Typisierung für vis-network
+      type NetworkInstance = {
+        getViewPosition: () => { x: number; y: number };
+        getScale: () => number;
+        moveTo: (opts: { position: { x: number; y: number }; scale: number }) => void;
+      };
+      let position: { x: number; y: number } | undefined;
+      let scale: number | undefined;
+      const networkRef = this.$refs.network as { network?: NetworkInstance };
+      if (networkRef && networkRef.network) {
+        position = networkRef.network.getViewPosition();
+        scale = networkRef.network.getScale();
+      }
       if (newVal === undefined) {
         this.reset();
       } else {
@@ -146,6 +160,13 @@ export default defineComponent({
         }
         this.edges = edges;
       }
+      // Zoom und Position wiederherstellen
+      this.$nextTick(() => {
+        const networkRef = this.$refs.network as { network?: NetworkInstance };
+        if (position && scale && networkRef && networkRef.network) {
+          networkRef.network.moveTo({ position, scale });
+        }
+      });
     },
     reset(): void {
       this.nodes = [];

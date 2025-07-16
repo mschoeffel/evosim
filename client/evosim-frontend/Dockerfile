@@ -5,11 +5,11 @@ WORKDIR /usr/src/app/client
 
 COPY package*.json ./
 
-RUN npm install --only=development
+RUN npm install --legacy-peer-deps --only=development
 
 COPY . .
 
-RUN npm run build
+RUN npm run build --legacy-peer-deps
 
 FROM node:lts as production
 
@@ -20,7 +20,7 @@ WORKDIR /usr/src/app/client
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install --legacy-peer-deps --only=production
 
 COPY . .
 

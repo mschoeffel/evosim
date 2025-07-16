@@ -165,7 +165,7 @@ export default defineComponent({
       map: undefined,
       figures: [],
       p5: undefined,
-      colors: ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF'],
+      colors: ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF', '#1ABC9C', '#E61919'],
       currentTab: 'Info',
       populations: 5,
       gamestate: {} as GamestateClientDto,

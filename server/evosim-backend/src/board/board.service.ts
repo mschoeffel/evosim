@@ -14,6 +14,7 @@ export class BoardService {
   private static readonly INTERVAL_NAME = 'gametick';
   private readonly logger = new Logger(BoardService.name);
   private _board: BoardEntity;
+  private _date: Date;
 
   constructor(
     private readonly socketService: SocketService,
@@ -23,6 +24,7 @@ export class BoardService {
     private readonly snapshotService: SnapshotService,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {
+    this._date = new Date();
     this._board = new BoardEntity(generationDumpService);
   }
 
@@ -98,11 +100,15 @@ export class BoardService {
   }
 
   private writeLog(currentTick: number): void {
+    const currentDate = new Date();
     if (currentTick % BoardConfig.LOG_INTERVAL === 0) {
+      const msDiff = currentDate.getTime() - this._date.getTime();
+      const ticksPerSecond = (BoardConfig.LOG_INTERVAL / msDiff).toFixed(2);
       this.logger.log(
-        `Current Run: ${this.board.gamestate.run} Tick: ${currentTick}`,
+        `Current Run: ${this.board.gamestate.run} Tick: ${currentTick} Ticks/s: ${ticksPerSecond}`,
       );
     }
+    this._date = currentDate;
   }
 
   private writeSnapshot(currentTick: number): void {

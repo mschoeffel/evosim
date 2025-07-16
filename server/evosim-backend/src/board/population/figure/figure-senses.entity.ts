@@ -2,9 +2,10 @@ export class FigureSenses {
   private _currentEnergy: number;
   private _energyOfCurrentTile: number;
   private _energyOfTileAhead: number;
+  private _waterAhead: number;
 
   public static count(): number {
-    return 3;
+    return 4;
   }
 
   get currentEnergy(): number {
@@ -29,5 +30,13 @@ export class FigureSenses {
 
   set energyOfTileAhead(value: number) {
     this._energyOfTileAhead = value;
+  }
+
+  get waterAhead(): number {
+    return this._waterAhead;
+  }
+
+  set waterAhead(value: number) {
+    this._waterAhead = value;
   }
 }

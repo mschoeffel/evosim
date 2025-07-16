@@ -3,7 +3,7 @@ import { WaterTileEntity } from '../tile/water-tile.entity';
 import { TileEntity } from '../tile/tile.entity';
 
 export class TileMapper {
-  public static readonly BORDER = 30;
+  public static readonly BORDER = 35;
 
   public static map(mapData: Array<Array<number>>): Array<Array<TileEntity>> {
     const mappedMapColumns = [];

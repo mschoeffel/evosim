@@ -34,6 +34,7 @@ export default {
       energy: 'Energy',
       energyCurrentTile: 'Energy current Tile',
       energyTileAhead: 'Energy Tile ahead',
+      waterAhead: 'Water ahead',
     },
     outputNodeLabels: {
       rotation: 'Rotation',

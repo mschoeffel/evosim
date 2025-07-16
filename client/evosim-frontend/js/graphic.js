@@ -25,14 +25,14 @@ let p5;
 
 let canvas;
 let populationColors = [];
-let populationColorStrings = ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF'];
+let populationColorStrings = ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF', '#1ABC9C', '#E61919', ];
 
-const dirtColorRed = 117;
-const dirtColorGreen = 66;
-const dirtColorBlue = 0;
+const dirtColorRed = 70;
+const dirtColorGreen = 25;
+const dirtColorBlue = 1;
 const grassColorRed = 0;
-const grassColorGreen = 255;
-const grassColorBlue = 0;
+const grassColorGreen = 201;
+const grassColorBlue = 81;
 
 export function main(_p5) {
   p5 = _p5 || (typeof window !== 'undefined' ? window.p5 : undefined);
@@ -147,22 +147,55 @@ export function main(_p5) {
   };
 
   window.addEventListener('wheel', function(e) {
+    // Check if the mouse is inside the canvas boundaries
     if (
       p5.mouseX < p5.width &&
       p5.mouseX > 0 &&
       p5.mouseY < p5.height &&
       p5.mouseY > 0
     ) {
-      p5.applyScale(e.deltaY > 0 ? 0.95 : 1.05);
+      // Prevent the default browser action (e.g., scrolling the page)
+      e.preventDefault();
+
+      const zoomFactor = e.deltaY > 0 ? 0.95 : 1.05;
+      const mouseX = p5.mouseX;
+      const mouseY = p5.mouseY;
+
+      // Store the scale factor before zooming
+      const old_sf = sf;
+      // Apply the new scale factor
+      sf *= zoomFactor;
+
+      // Adjust the translation to keep the point under the mouse stationary
+      tx += mouseX * (1 / sf - 1 / old_sf);
+      ty += mouseY * (1 / sf - 1 / old_sf);
+
+      p5.redraw();
     }
-  });
+  }, { passive: false }); // Use { passive: false } to enable preventDefault()
 
   p5.keyPressed = () => {
+    let zoomFactor;
     if (p5.key === '-') {
-      p5.applyScale(0.95);
+      zoomFactor = 0.95;
     } else if (p5.key === '+') {
-      p5.applyScale(1.05);
+      zoomFactor = 1.05;
+    } else {
+      return; // Exit if another key is pressed
     }
+
+    // When using keys, zoom towards the center of the canvas
+    const zoomX = p5.width / 2;
+    const zoomY = p5.height / 2;
+
+    const old_sf = sf;
+    sf *= zoomFactor;
+
+    // Adjust translation to zoom at the canvas center
+    tx += zoomX * (1 / sf - 1 / old_sf);
+    ty += zoomY * (1 / sf - 1 / old_sf);
+
+    p5.redraw();
   };
 
   p5.windowResized = () => {
@@ -200,9 +233,9 @@ function drawMap() {
         dirtColorBlue + (tileEnergy / 100) * (grassColorBlue - dirtColorBlue);
       let a = 255;
       if (tileEnergy < 0) {
-        r = 35;
-        g = 74;
-        b = 230;
+        r = 0;
+        g = 105;
+        b = 168;
         a = 255;
       }
 

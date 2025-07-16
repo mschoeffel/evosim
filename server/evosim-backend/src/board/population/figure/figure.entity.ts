@@ -4,6 +4,7 @@ import { FigureDto } from './figure.dto';
 import { Utils } from '../../../utils/utils';
 import { FigureSenses } from './figure-senses.entity';
 import { MapEntity } from '../../map/map.entity';
+import { TileType } from '../../map/tile/tile-type.enum';
 
 export class FigureEntity {
   private readonly _id: string;
@@ -77,8 +78,14 @@ export class FigureEntity {
     );
     if (eyeTile === undefined) {
       senses.energyOfTileAhead = 0;
+      senses.waterAhead = 0;
     } else {
       senses.energyOfTileAhead = eyeTile.energy;
+      if (eyeTile.type === TileType.WATER) {
+        senses.waterAhead = 1;
+      } else {
+        senses.waterAhead = 0;
+      }
     }
     const actions = this.brain.useBrain(senses);
     this.eat(actions.eatAmount);

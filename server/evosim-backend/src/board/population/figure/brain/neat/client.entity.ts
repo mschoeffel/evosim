@@ -10,6 +10,8 @@ export class ClientEntity {
   private _figure: FigureEntity;
   private _generation: number;
 
+  public sharedFitness: number = 0;
+
   constructor(
     genome: GenomeEntity,
     map: MapEntity,

@@ -21,7 +21,12 @@ export default defineComponent({
 
     const updateNetwork = () => {
       if (network && networkContainer.value) {
+        // Zoom und Position speichern
+        const position = network.getViewPosition();
+        const scale = network.getScale();
         network.setData({ nodes: props.nodes, edges: props.edges });
+        // Zoom und Position wiederherstellen
+        network.moveTo({ position, scale });
       }
     };
 
@@ -50,7 +55,7 @@ export default defineComponent({
       }
     });
 
-    return { networkContainer };
+    return { networkContainer, network };
   },
 });
 </script>
@@ -63,4 +68,3 @@ export default defineComponent({
   height: 100%;
 }
 </style>
-
