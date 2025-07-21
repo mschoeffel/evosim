@@ -1,20 +1,30 @@
 export default defineNuxtConfig({
   // Global page headers: https://go.nuxtjs.dev/config-head
-  head: {
-    title: 'EvoSim',
-    htmlAttrs: {
-      lang: 'en'
+  app:{
+    head: {
+      title: 'EvoSim',
+      htmlAttrs: {
+        lang: 'en'
+      },
+      meta: [
+        {charset: 'utf-8'},
+        {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+        {hid: 'description', name: 'description', content: ''},
+        {name: 'format-detection', content: 'telephone=no'}
+      ],
+      link: [
+        {rel: 'icon', type: 'image/png', href: '/ai-favicon.png'}
+      ],
+      script: [
+        {
+          src: 'https://stats.mschoeffel.net/script.js',
+          defer: true,
+          'data-website-id': '5aca5ee7-5d53-414f-ba3b-f7ed63f87f92',
+        },
+      ],
     },
-    meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: ''},
-      {name: 'format-detection', content: 'telephone=no'}
-    ],
-    link: [
-      {rel: 'icon', type: 'image/png', href: '/ai-favicon.png'}
-    ]
   },
+
 
   server: {
     host: process.env.HOST || '0.0.0.0',

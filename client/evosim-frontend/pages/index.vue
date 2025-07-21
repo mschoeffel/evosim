@@ -8,6 +8,7 @@
 import Board from '~/components/Board.vue';
 import { defineComponent } from 'vue';
 
+
 export default defineComponent({
   components: { Board },
 });

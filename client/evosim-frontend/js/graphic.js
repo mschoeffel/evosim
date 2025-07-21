@@ -25,7 +25,7 @@ let p5;
 
 let canvas;
 let populationColors = [];
-let populationColorStrings = ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF', '#1ABC9C', '#E61919', ];
+let populationColorStrings = ['#F250A9', '#05AFF2', '#F2E205', '#F26E22', '#990FBF', '#E61919', '#1ABC9C'];
 
 const dirtColorRed = 70;
 const dirtColorGreen = 25;

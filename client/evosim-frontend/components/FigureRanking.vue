@@ -71,7 +71,7 @@
         <td
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600"
         >
-          <a class="cursor-pointer" @click="emitSelect(topFigure.id)">{{
+          <a class="cursor-pointer" data-umami-event="Select Figure" @click="emitSelect(topFigure.id)">{{
             $t('topSection.select')
           }}</a>
         </td>
